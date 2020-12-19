@@ -1,0 +1,715 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.3.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/favicon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.1/css/all.min.css">
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css">
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css">
+
+<script class="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"blog.ubin.top","root":"/","images":"/images","scheme":"Pisces","version":"8.1.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":true,"bookmark":{"enable":true,"color":"#222","save":"auto"},"fancybox":true,"mediumzoom":false,"lazyload":true,"pangu":true,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":true,"nav":null},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}};
+  </script>
+<meta name="description" content="12https:&#x2F;&#x2F;segmentfault.com&#x2F;a&#x2F;1190000013757098https:&#x2F;&#x2F;studygolang.com&#x2F;articles&#x2F;27226 目的 不关闭现有连接（正在运行中的程序） 新的进程启动并替代旧进程 新的进程接管新的连接 连接要随时响应用户的请求，当用户仍在请求旧进程时要保持连接，新用户应请求新进程，不可以出现拒绝请求的情况  流程 1、替换可执行文件或修改配置">
+<meta property="og:type" content="article">
+<meta property="og:title" content="服务优雅重启及热更新">
+<meta property="og:url" content="https://blog.ubin.top/2020/03/16/%E6%9C%8D%E5%8A%A1%E4%BC%98%E9%9B%85%E9%87%8D%E5%90%AF%E5%8F%8A%E7%83%AD%E6%9B%B4%E6%96%B0/index.html">
+<meta property="og:site_name" content="薛定谔の猫">
+<meta property="og:description" content="12https:&#x2F;&#x2F;segmentfault.com&#x2F;a&#x2F;1190000013757098https:&#x2F;&#x2F;studygolang.com&#x2F;articles&#x2F;27226 目的 不关闭现有连接（正在运行中的程序） 新的进程启动并替代旧进程 新的进程接管新的连接 连接要随时响应用户的请求，当用户仍在请求旧进程时要保持连接，新用户应请求新进程，不可以出现拒绝请求的情况  流程 1、替换可执行文件或修改配置">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2020-03-16T08:45:54.000Z">
+<meta property="article:modified_time" content="2020-12-19T03:45:51.318Z">
+<meta property="article:author" content="薛定谔の猫">
+<meta property="article:tag" content="go">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://blog.ubin.top/2020/03/16/%E6%9C%8D%E5%8A%A1%E4%BC%98%E9%9B%85%E9%87%8D%E5%90%AF%E5%8F%8A%E7%83%AD%E6%9B%B4%E6%96%B0/">
+
+
+<script class="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+<title>服务优雅重启及热更新 | 薛定谔の猫</title>
+  
+    <script>
+      function sendPageView() {
+        if (CONFIG.hostname !== location.hostname) return;
+        var uid = localStorage.getItem('uid') || (Math.random() + '.' + Math.random());
+        localStorage.setItem('uid', uid);
+        navigator.sendBeacon('https://www.google-analytics.com/collect', new URLSearchParams({
+          v  : 1,
+          tid: 'UA-151051157-1',
+          cid: uid,
+          t  : 'pageview',
+          dp : encodeURIComponent(location.pathname)
+        }));
+      }
+      document.addEventListener('pjax:complete', sendPageView);
+      sendPageView();
+    </script>
+
+  <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?306b44649c053ac56d4911f4894bcf16";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+  <noscript>
+  <style>
+  body { margin-top: 2rem; }
+
+  .use-motion .menu-item,
+  .use-motion .sidebar,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header {
+    visibility: visible;
+  }
+
+  .use-motion .header,
+  .use-motion .site-brand-container .toggle,
+  .use-motion .footer { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle,
+  .use-motion .custom-logo-image {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line {
+    transform: scaleX(1);
+  }
+
+  .search-pop-overlay, .sidebar-nav { display: none; }
+  .sidebar-panel { display: block; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <h1 class="site-title">薛定谔の猫</h1>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">鲜衣怒马提银枪，一日看尽长安花，此间少年。</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+        <li class="menu-item menu-item-commonweal">
+
+    <a href="/404/" rel="section"><i class="fa fa-heartbeat fa-fw"></i>公益 404</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <section class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%9B%AE%E7%9A%84"><span class="nav-number">1.</span> <span class="nav-text">目的</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%B5%81%E7%A8%8B"><span class="nav-number">2.</span> <span class="nav-text">流程</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#golang-hotfix%E7%83%AD%E6%9B%B4%E6%96%B0%E8%AF%A6%E8%A7%A3"><span class="nav-number">3.</span> <span class="nav-text">golang hotfix热更新详解</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BB%80%E4%B9%88%E6%98%AF%E7%83%AD%E6%9B%B4%E6%96%B0"><span class="nav-number">3.1.</span> <span class="nav-text">什么是热更新</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%83%AD%E6%9B%B4%E6%96%B0%E5%8E%9F%E7%90%86"><span class="nav-number">3.2.</span> <span class="nav-text">热更新原理</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%83%AD%E6%9B%B4%E6%96%B0%E5%AE%9E%E7%8E%B0"><span class="nav-number">3.3.</span> <span class="nav-text">热更新实现</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9C%8D%E5%8A%A1%E7%83%AD%E6%9B%B4%E6%96%B0"><span class="nav-number">3.3.1.</span> <span class="nav-text">服务热更新</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6%E7%83%AD%E6%9B%B4%E6%96%B0"><span class="nav-number">3.3.2.</span> <span class="nav-text">配置文件热更新</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%80%BB%E7%BB%93"><span class="nav-number">3.4.</span> <span class="nav-text">总结</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#References"><span class="nav-number">3.5.</span> <span class="nav-text">References</span></a></li></ol></li></ol></div>
+        </section>
+        <!--/noindex-->
+
+        <section class="site-overview-wrap sidebar-panel">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="薛定谔の猫"
+      src="https://i.loli.net/2019/11/17/I2pesHhfYv6iDCP.png">
+  <p class="site-author-name" itemprop="name">薛定谔の猫</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">26</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">3</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">29</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author site-overview-item animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/bineyond%20|%20fab%20fa-github" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;bineyond | fab fa-github" rel="noopener" target="_blank">GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://www.jetbrains.com/?from=bineyond.github.io" title="GoLand → https:&#x2F;&#x2F;www.jetbrains.com&#x2F;?from&#x3D;bineyond.github.io" rel="noopener" target="_blank"><i class="thumbs-o-up fa-fw"></i>GoLand</a>
+      </span>
+  </div>
+
+
+  <div class="links-of-blogroll site-overview-item animated">
+    <div class="links-of-blogroll-title"><i class="fa fa-globe fa-fw"></i>
+      Links
+    </div>
+    <ul class="links-of-blogroll-list">
+        <li class="links-of-blogroll-item">
+          <a href="https://talkgo.org/night/" title="https:&#x2F;&#x2F;talkgo.org&#x2F;night&#x2F;" rel="noopener" target="_blank">Go 夜读</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://github.com/xmge/gonote" title="https:&#x2F;&#x2F;github.com&#x2F;xmge&#x2F;gonote" rel="noopener" target="_blank">gopher 笔记</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://www.4async.com/" title="https:&#x2F;&#x2F;www.4async.com&#x2F;" rel="noopener" target="_blank">ipfans</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://go101.org/" title="https:&#x2F;&#x2F;go101.org" rel="noopener" target="_blank">go101</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://colobu.com/" title="https:&#x2F;&#x2F;colobu.com&#x2F;" rel="noopener" target="_blank">鸟窝</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://draveness.me/" title="https:&#x2F;&#x2F;draveness.me&#x2F;" rel="noopener" target="_blank">面向信仰编程</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://note.mogutou.xyz/" title="https:&#x2F;&#x2F;note.mogutou.xyz&#x2F;" rel="noopener" target="_blank">徐旭</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://www.hrefs.cn/articles" title="https:&#x2F;&#x2F;www.hrefs.cn&#x2F;articles" rel="noopener" target="_blank">爱施园</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="http://www.codepub.cn/" title="http:&#x2F;&#x2F;www.codepub.cn&#x2F;" rel="noopener" target="_blank">IT草根</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://xiaozhou.net/" title="https:&#x2F;&#x2F;xiaozhou.net&#x2F;" rel="noopener" target="_blank">iTimothy</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://taozj.org/" title="https:&#x2F;&#x2F;taozj.org&#x2F;" rel="noopener" target="_blank">taizj</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="http://www.wdk.pw/" title="http:&#x2F;&#x2F;www.wdk.pw&#x2F;" rel="noopener" target="_blank">王登科</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://weread.qnmlgb.tech/" title="https:&#x2F;&#x2F;weread.qnmlgb.tech&#x2F;" rel="noopener" target="_blank">微信读书组队</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://mojotv.cn/" title="https:&#x2F;&#x2F;mojotv.cn&#x2F;" rel="noopener" target="_blank">mojotv.cn</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://kany.me/" title="https:&#x2F;&#x2F;kany.me&#x2F;" rel="noopener" target="_blank">Kany.Wang</a>
+        </li>
+    </ul>
+  </div>
+
+        </section>
+      </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+  <a role="button" class="book-mark-link book-mark-link-fixed"></a>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://blog.ubin.top/2020/03/16/%E6%9C%8D%E5%8A%A1%E4%BC%98%E9%9B%85%E9%87%8D%E5%90%AF%E5%8F%8A%E7%83%AD%E6%9B%B4%E6%96%B0/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://i.loli.net/2019/11/17/I2pesHhfYv6iDCP.png">
+      <meta itemprop="name" content="薛定谔の猫">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="薛定谔の猫">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          服务优雅重启及热更新
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2020-03-16 16:45:54" itemprop="dateCreated datePublished" datetime="2020-03-16T16:45:54+08:00">2020-03-16</time>
+    </span>
+      <span class="post-meta-item">
+        <span class="post-meta-item-icon">
+          <i class="far fa-calendar-check"></i>
+        </span>
+        <span class="post-meta-item-text">更新于</span>
+        <time title="修改时间：2020-12-19 11:45:51" itemprop="dateModified" datetime="2020-12-19T11:45:51+08:00">2020-12-19</time>
+      </span>
+
+  
+      </div>
+      <div class="post-meta">
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>4k</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>4 分钟</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">https:<span class="regexp">//</span>segmentfault.com<span class="regexp">/a/</span><span class="number">1190000013757098</span></span><br><span class="line">https:<span class="regexp">//</span>studygolang.com<span class="regexp">/articles/</span><span class="number">27226</span></span><br></pre></td></tr></table></figure>
+<h1 id="目的"><a href="#目的" class="headerlink" title="目的"></a>目的</h1><ul>
+<li>不关闭现有连接（正在运行中的程序）</li>
+<li>新的进程启动并替代旧进程</li>
+<li>新的进程接管新的连接</li>
+<li>连接要随时响应用户的请求，当用户仍在请求旧进程时要保持连接，新用户应请求新进程，不可以出现拒绝请求的情况</li>
+</ul>
+<h1 id="流程"><a href="#流程" class="headerlink" title="流程"></a>流程</h1><ul>
+<li>1、替换可执行文件或修改配置文件</li>
+<li>2、发送信号量 SIGHUP</li>
+<li>3、拒绝新连接请求旧进程，但要保证已有连接正常</li>
+<li>4、启动新的子进程</li>
+<li>5、新的子进程开始 Accet</li>
+<li>6、系统将新的请求转交新的子进程</li>
+<li>7、旧进程处理完所有旧连接后正常结束</li>
+</ul>
+<blockquote>
+<p>以下内容引用</p>
+</blockquote>
+<a id="more"></a>
+
+<h1 id="golang-hotfix热更新详解"><a href="#golang-hotfix热更新详解" class="headerlink" title="golang hotfix热更新详解"></a><a target="_blank" rel="noopener" href="https://mojotv.cn/2018/12/26/golang-hot-restart">golang hotfix热更新详解</a></h1><h2 id="什么是热更新"><a href="#什么是热更新" class="headerlink" title="什么是热更新"></a>什么是热更新</h2><p>网络上有这么一个例子来形容热更新，我觉得很形象很贴切：</p>
+<blockquote>
+<p>一架行驶在高速上的大卡车，行驶过程中突然遭遇爆胎，热更新则是要求在不停车的情况下将车胎修补好，且补胎过程中卡车需要保持正常行驶.</p>
+</blockquote>
+<p>软件的热更新就是指在保持系统正常运行的情况下对系统进行更新升级.常见的情况有：系统服务升级、修复现有逻辑、服务配置更新等.</p>
+<h2 id="热更新原理"><a href="#热更新原理" class="headerlink" title="热更新原理"></a>热更新原理</h2><p>先来看下Nginx热更新是如何做的？</p>
+<p>Nginx支持运行中接收信号，方便开发者控制进程.</p>
+<ul>
+<li>1）首先备份原有的Nginx二进制文件，并用新编译好的Nginx二进制文件替换旧的</li>
+<li>2）然后向master进程发送<code>USR2</code>信号.此时Nginx进程会启动一个新版本Nginx，该新版本Nginx进程会发起一个新的master进程与work进程.即此时会有两个Nginx实例在运行，一起处理新来的请求.</li>
+<li>3）再向原master进程发送<code>WINCH</code>信号，它会逐渐关闭相关work进程，此时原master进程仍保持监听新请求但不会发送至其下work进程，而是交给新的work进程</li>
+<li>4）最后等到所有原work进程全部关闭，向原master进程发送<code>QUIT</code>信号，终止原master进程，至此，完成Nginx热升级.</li>
+</ul>
+<blockquote>
+<p>注：在*nix系统中，信号（Signal）是一种进程间通信机制，它给应用程序提供一种异步的软件中断，使应用程序有机会接受其他程序或终端发送的命令(即信号).</p>
+</blockquote>
+<p>同样地，golang热更新也可以采取类似的处理.如上篇所述，都是利用用户自定义信号USR2.</p>
+<blockquote>
+<p>注：Plugin包方式的golang热更新本文暂不讨论.</p>
+</blockquote>
+<h2 id="热更新实现"><a href="#热更新实现" class="headerlink" title="热更新实现"></a>热更新实现</h2><p>golang热更新可以细分为服务热『更新』（即热升级，类比Nginx的restart命令）与配置文件热更新（类比Nginx的reload命令）.接下来从实现细节处依次讨论.</p>
+<h3 id="服务热更新"><a href="#服务热更新" class="headerlink" title="服务热更新"></a>服务热更新</h3><p>大致流程如下：</p>
+<ul>
+<li>1）golang服务进程运行时监听USR2信号</li>
+<li>2）进程收到USR2信号后，fork子进程（启动新版本服务），并将当前socket句柄等进程环境交给它</li>
+<li>3）新进程开始监听socket请求</li>
+<li>4）等待旧服务连接停止</li>
+</ul>
+<p>主要代码示例如下：<br>监听<code>USR2</code>信号</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(a *app)</span> <span class="title">signalHandler</span><span class="params">(wg *sync.WaitGroup)</span></span> &#123;</span><br><span class="line">    ch := <span class="built_in">make</span>(<span class="keyword">chan</span> os.Signal, <span class="number">10</span>)</span><br><span class="line">    signal.Notify(ch, syscall.SIGINT, syscall.SIGTERM, syscall.SIGUSR2)</span><br><span class="line">    <span class="keyword">for</span> &#123;</span><br><span class="line">        sig := &lt;-ch</span><br><span class="line">        <span class="keyword">switch</span> sig &#123;</span><br><span class="line">        <span class="keyword">case</span> syscall.SIGINT, syscall.SIGTERM:</span><br><span class="line">            <span class="comment">// 确保接收到INT/TERM信号时可以触发golang标准的进程终止行为</span></span><br><span class="line">            signal.Stop(ch)</span><br><span class="line">            a.term(wg)</span><br><span class="line">            <span class="keyword">return</span></span><br><span class="line">        <span class="keyword">case</span> syscall.SIGUSR2:</span><br><span class="line">            err := a.preStartProcess()</span><br><span class="line">            <span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">                a.errors &lt;- err</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="comment">// 发起新进程</span></span><br><span class="line">            <span class="keyword">if</span> _, err := a.net.StartProcess(); err != <span class="literal">nil</span> &#123;</span><br><span class="line">                a.errors &lt;- err</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>复制当前进程socket连接，发起新进程</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">execSpec := &amp;syscall.ProcAttr&#123;</span><br><span class="line">       Env: os.Environ(),</span><br><span class="line">       Files: []<span class="keyword">uintptr</span>&#123;</span><br><span class="line">           os.Stdin.Fd(), </span><br><span class="line">           os.Stdout.Fd(), </span><br><span class="line">           os.Stderr.Fd()&#125;,</span><br><span class="line">   &#125;</span><br><span class="line">   fork, err := syscall.ForkExec(os.Args[<span class="number">0</span>], os.Args, execSpec)</span><br><span class="line">   ...</span><br></pre></td></tr></table></figure>
+<p>详细源码可见：<a target="_blank" rel="noopener" href="https://scalingo.com/blog/graceful-server-restart-with-go.html">https://scalingo.com/articles…</a></p>
+<p>以上仅为代码示例，目前已经成熟的开源实现主要有：endless和facebook的grace，原理基本类似，fork一个子进程，子进程监听原有父进程socket端口，父进程优雅退出.</p>
+<p>在实际的生产环境中推荐使用以上开源库，关于热更新开源库的使用非常方便，下面是facebook的grace库的例子：<br>引入<code>github.com/facebookgo/grace/gracehttp</code>包</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">    app := gin.New()<span class="comment">// 项目中时候的是gin框架</span></span><br><span class="line">    router.Route(app)</span><br><span class="line">    <span class="keyword">var</span> server *http.Server</span><br><span class="line">    server = &amp;http.Server&#123;</span><br><span class="line">        Addr:    <span class="string">&quot;:8080&quot;</span>,</span><br><span class="line">        Handler: app,</span><br><span class="line">    &#125;</span><br><span class="line">    gracehttp.Serve(server)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>利用<code>go build</code>命令编译，生成服务的可执行文件.<br>然后再用shell封装一下服务命令，生成restat.sh命令文件</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#!/bin/sh</span></span><br><span class="line"></span><br><span class="line">ps aux | grep wingo</span><br><span class="line">count=`ps -ef | grep <span class="string">&quot;wingo&quot;</span> | grep -v <span class="string">&quot;grep&quot;</span> | wc -l`</span><br><span class="line"><span class="built_in">echo</span> <span class="string">&quot;&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> [ 0 == <span class="variable">$count</span> ]; <span class="keyword">then</span></span><br><span class="line">    <span class="built_in">echo</span> <span class="string">&quot;Wingo starting...&quot;</span></span><br><span class="line">    sudo ./wingo &amp;</span><br><span class="line">    <span class="built_in">echo</span> <span class="string">&quot;Wingo started&quot;</span></span><br><span class="line"><span class="keyword">else</span></span><br><span class="line">    <span class="built_in">echo</span> <span class="string">&quot;Wingo Restarting...&quot;</span></span><br><span class="line">    sudo <span class="built_in">kill</span> -USR2 $(ps -ef | grep <span class="string">&quot;wingo&quot;</span> | grep -v grep | awk <span class="string">&#x27;&#123;print $2&#125;&#x27;</span>)</span><br><span class="line">    <span class="built_in">echo</span> <span class="string">&quot;Wingo Restarted&quot;</span></span><br><span class="line"><span class="keyword">fi</span></span><br><span class="line"></span><br><span class="line">sleep 1</span><br><span class="line"></span><br><span class="line">ps aux | grep wingo</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>注：其中wingo为服务的二进制名称.</p>
+</blockquote>
+<p>于是，便可通过执行./restart.sh命令，达到对服务的热升级目的.</p>
+<h3 id="配置文件热更新"><a href="#配置文件热更新" class="headerlink" title="配置文件热更新"></a>配置文件热更新</h3><p>配置文件热更新是指在不停止服务的情况下，重新加载服务所有配置文件.<br>与3.1服务热升级原理一样，利用用户自定义信号:<code>USR1</code>，即可实现服务的配置文件热更新.</p>
+<ul>
+<li>1）服务监听USR1信号</li>
+<li>2）服务接收到USR1信号后，停止接受新的连接，等待当前连接停止，重新载入配置文件，重启服务器，从而实现相对平滑的不停服的更改.</li>
+</ul>
+<p>主要代码实现：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// LoadAllConf 调用加载配置文件函数</span></span><br><span class="line"><span class="comment">// load为具体加载配置文件方法</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">LoadAllConf</span><span class="params">(load <span class="keyword">func</span>(<span class="keyword">bool</span>)</span>)</span> &#123;</span><br><span class="line">    load(<span class="literal">true</span>)</span><br><span class="line">    listenSIGUSR1(load)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// listenSIGUSR1 监听SIGUSR1信号</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">listenSIGUSR1</span><span class="params">(f <span class="keyword">func</span>(<span class="keyword">bool</span>)</span>)</span> &#123;</span><br><span class="line">    s := <span class="built_in">make</span>(<span class="keyword">chan</span> os.Signal, <span class="number">1</span>)</span><br><span class="line">    signal.Notify(s, syscall.SIGUSR1)</span><br><span class="line">    <span class="keyword">go</span> <span class="function"><span class="keyword">func</span><span class="params">()</span></span> &#123;</span><br><span class="line">        <span class="keyword">for</span> &#123;</span><br><span class="line">            &lt;-s</span><br><span class="line">            f(<span class="literal">false</span>)</span><br><span class="line">            log.Println(<span class="string">&quot;Reloaded&quot;</span>)</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;()</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>详细源码可见：<a target="_blank" rel="noopener" href="https://www.openmymind.net/golang-Hot-Configuration-Reload/">https://www.openmymind.net/Go…</a></p>
+<p>利用go build命令编译，生成服务的可执行文件.<br>然后再用shell封装一下配置重载命令，生成reload.sh命令文件</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#!/bin/sh</span></span><br><span class="line"></span><br><span class="line">ps aux | grep wingo</span><br><span class="line"><span class="built_in">echo</span> <span class="string">&quot;&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">echo</span> <span class="string">&quot;Wingo Reloading...&quot;</span></span><br><span class="line">sudo <span class="built_in">kill</span> -USR1 $(ps -ef | grep <span class="string">&quot;wingo&quot;</span> | grep -v grep | awk <span class="string">&#x27;&#123;print $2&#125;&#x27;</span>)</span><br><span class="line"><span class="built_in">echo</span> <span class="string">&quot;Wingo Reloaded&quot;</span></span><br><span class="line"><span class="built_in">echo</span> <span class="string">&quot;&quot;</span></span><br><span class="line"></span><br><span class="line">sleep 1</span><br><span class="line"></span><br><span class="line">ps aux | grep wingo</span><br></pre></td></tr></table></figure>
+<p>于是，便可通过执行./reload.sh命令，达到对服务的配置文件热升级目的.</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>本文主要描述了golang服务热升级与配置文件热更新原理与主要代码实现，本质上也不是什么新内容，如果之前读过《Unix环境高级编程》，就会觉得很亲切.底层原理基本上是利用了信号这个软件中断机制，在运行中改变常驻进程的行为.</p>
+<h2 id="References"><a href="#References" class="headerlink" title="References"></a>References</h2><p><a target="_blank" rel="noopener" href="https://scalingo.com/articles/2014/12/19/graceful-server-restart-with-go.html">https://scalingo.com/articles…</a></p>
+<p><a target="_blank" rel="noopener" href="http://kuangchanglang.com/golang/2017/04/27/golang-graceful-restart#%E7%BB%86%E8%8A%82">http://kuangchanglang.com/gol…</a></p>
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/black_OX/article/details/77869479">https://blog.csdn.net/black_O…</a></p>
+<p><a target="_blank" rel="noopener" href="https://www.openmymind.net/golang-Hot-Configuration-Reload/">https://www.openmymind.net/Go…</a></p>
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/qq_15437667/article/details/83796838">https://blog.csdn.net/qq_1543…</a></p>
+<p><a target="_blank" rel="noopener" href="https://wrfly.kfd.me/posts/%E7%83%AD%E5%8D%87%E7%BA%A7/">https://wrfly.kfd.me/posts/%E…</a></p>
+
+    </div>
+
+    
+    
+    
+      
+  <div class="popular-posts-header">相关文章</div>
+  <ul class="popular-posts">
+    <li class="popular-posts-item">
+      <div class="popular-posts-title"><a href="/2020/03/15/Go防缓存击穿singleflight/" rel="bookmark">Go防缓存击穿 singleflight</a></div>
+    </li>
+    <li class="popular-posts-item">
+      <div class="popular-posts-title"><a href="/2020/04/09/go-cgo-oracle/" rel="bookmark">go-cgo-oracle</a></div>
+    </li>
+    <li class="popular-posts-item">
+      <div class="popular-posts-title"><a href="/2020/03/16/select的四大用法/" rel="bookmark">select的四大用法</a></div>
+    </li>
+    <li class="popular-posts-item">
+      <div class="popular-posts-title"><a href="/2020/03/15/singleflight本地缓存实例/" rel="bookmark">singleflight本地缓存实例</a></div>
+    </li>
+  </ul>
+
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/go/" rel="tag"># go</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2020/03/16/select%E7%9A%84%E5%9B%9B%E5%A4%A7%E7%94%A8%E6%B3%95/" rel="prev" title="select的四大用法">
+                  <i class="fa fa-chevron-left"></i> select的四大用法
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2020/04/09/go-cgo-oracle/" rel="next" title="go-cgo-oracle">
+                  go-cgo-oracle <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    <div class="comments" id="gitalk-container"></div>
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      const activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      const commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="beian"><a href="https://beian.miit.gov.cn/" rel="noopener" target="_blank">浙ICP备19017268号-1 </a>
+  </div>
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">薛定谔の猫</span>
+</div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+    <span title="站点总字数">63k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="站点阅读时长">57 分钟</span>
+  </span>
+</div>
+
+    </div>
+  </footer>
+
+  
+  <script src="//cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/lozad@1.16.0/dist/lozad.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/pangu@4.0.7/dist/browser/pangu.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script><script src="/js/bookmark.js"></script>
+
+  
+
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+  
+
+
+
+
+
+  <script>
+  if (typeof MathJax === 'undefined') {
+    window.MathJax = {
+      tex: {
+        inlineMath: {'[+]': [['$', '$']]},
+        tags: 'ams'
+      },
+      options: {
+        renderActions: {
+          findScript: [10, doc => {
+            document.querySelectorAll('script[type^="math/tex"]').forEach(node => {
+              const display = !!node.type.match(/; *mode=display/);
+              const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
+              const text = document.createTextNode('');
+              node.parentNode.replaceChild(text, node);
+              math.start = {node: text, delim: '', n: 0};
+              math.end = {node: text, delim: '', n: 0};
+              doc.math.push(math);
+            });
+          }, '', false],
+          insertedScript: [200, () => {
+            document.querySelectorAll('mjx-container').forEach(node => {
+              const target = node.parentNode;
+              if (target.nodeName.toLowerCase() === 'li') {
+                target.parentNode.classList.add('has-jax');
+              }
+            });
+          }, '', false]
+        }
+      }
+    };
+    const script = document.createElement('script');
+    script.src = '//cdn.jsdelivr.net/npm/mathjax@3.1.2/es5/tex-mml-chtml.js';
+    script.defer = true;
+    document.head.appendChild(script);
+  } else {
+    MathJax.startup.document.state(0);
+    MathJax.typesetClear();
+    MathJax.texReset();
+    MathJax.typeset();
+  }
+</script>
+
+
+  <script src="//cdn.jsdelivr.net/npm/quicklink@2.0.0/dist/quicklink.umd.js"></script>
+  <script>
+      window.addEventListener('load', () => {
+      quicklink.listen({
+        timeout : 3000,
+        priority: true,
+        ignores : [uri => uri.includes('#'),uri => uri === 'https://blog.ubin.top/2020/03/16/%E6%9C%8D%E5%8A%A1%E4%BC%98%E9%9B%85%E9%87%8D%E5%90%AF%E5%8F%8A%E7%83%AD%E6%9B%B4%E6%96%B0/',]
+      });
+      });
+  </script>
+
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/gitalk@1.7.0/dist/gitalk.css">
+
+<script>
+NexT.utils.loadComments('#gitalk-container', () => {
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/gitalk@1.7.0/dist/gitalk.min.js', () => {
+    var gitalk = new Gitalk({
+      clientID    : 'f7f877653d119a713c65',
+      clientSecret: '9c7421df94ce13acbf3e825f092635181616981f',
+      repo        : 'bineyond.github.io',
+      owner       : 'bineyond',
+      admin       : ['bineyond'],
+      id          : 'da5dcaa4999eee6d5d2a19b16bf13107',
+        language: 'zh-CN',
+      distractionFreeMode: true
+    });
+    gitalk.render('gitalk-container');
+  }, window.Gitalk);
+});
+</script>
+
+</body>
+</html>

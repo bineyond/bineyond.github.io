@@ -1,0 +1,662 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.3.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/favicon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.1/css/all.min.css">
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css">
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css">
+
+<script class="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"blog.ubin.top","root":"/","images":"/images","scheme":"Pisces","version":"8.1.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":true,"bookmark":{"enable":true,"color":"#222","save":"auto"},"fancybox":true,"mediumzoom":false,"lazyload":true,"pangu":true,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":true,"nav":null},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}};
+  </script>
+<meta name="description" content="拉取镜像 https:&#x2F;&#x2F;cr.console.aliyun.com&#x2F;images&#x2F;cn-hangzhou&#x2F;oracle11-helowin&#x2F;oracle11-helowin&#x2F;detail?accounttraceid&#x3D;24cfa63bff0f483db7d63268686a7a32yabl  123docker pull registry.cn-hangzhou.aliyuncs.com&#x2F;hel">
+<meta property="og:type" content="article">
+<meta property="og:title" content="docker搭建oracle: [helowin&#x2F;oracle_11g]">
+<meta property="og:url" content="https://blog.ubin.top/2019/10/28/docker%E6%90%AD%E5%BB%BAoracle-helowin-oracle-11g/index.html">
+<meta property="og:site_name" content="薛定谔の猫">
+<meta property="og:description" content="拉取镜像 https:&#x2F;&#x2F;cr.console.aliyun.com&#x2F;images&#x2F;cn-hangzhou&#x2F;oracle11-helowin&#x2F;oracle11-helowin&#x2F;detail?accounttraceid&#x3D;24cfa63bff0f483db7d63268686a7a32yabl  123docker pull registry.cn-hangzhou.aliyuncs.com&#x2F;hel">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2019-10-28T06:30:45.000Z">
+<meta property="article:modified_time" content="2020-12-19T03:45:51.315Z">
+<meta property="article:author" content="薛定谔の猫">
+<meta property="article:tag" content="docker">
+<meta property="article:tag" content="oracle">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://blog.ubin.top/2019/10/28/docker%E6%90%AD%E5%BB%BAoracle-helowin-oracle-11g/">
+
+
+<script class="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+<title>docker搭建oracle: [helowin/oracle_11g] | 薛定谔の猫</title>
+  
+    <script>
+      function sendPageView() {
+        if (CONFIG.hostname !== location.hostname) return;
+        var uid = localStorage.getItem('uid') || (Math.random() + '.' + Math.random());
+        localStorage.setItem('uid', uid);
+        navigator.sendBeacon('https://www.google-analytics.com/collect', new URLSearchParams({
+          v  : 1,
+          tid: 'UA-151051157-1',
+          cid: uid,
+          t  : 'pageview',
+          dp : encodeURIComponent(location.pathname)
+        }));
+      }
+      document.addEventListener('pjax:complete', sendPageView);
+      sendPageView();
+    </script>
+
+  <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?306b44649c053ac56d4911f4894bcf16";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+  <noscript>
+  <style>
+  body { margin-top: 2rem; }
+
+  .use-motion .menu-item,
+  .use-motion .sidebar,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header {
+    visibility: visible;
+  }
+
+  .use-motion .header,
+  .use-motion .site-brand-container .toggle,
+  .use-motion .footer { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle,
+  .use-motion .custom-logo-image {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line {
+    transform: scaleX(1);
+  }
+
+  .search-pop-overlay, .sidebar-nav { display: none; }
+  .sidebar-panel { display: block; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <h1 class="site-title">薛定谔の猫</h1>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">鲜衣怒马提银枪，一日看尽长安花，此间少年。</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+        <li class="menu-item menu-item-commonweal">
+
+    <a href="/404/" rel="section"><i class="fa fa-heartbeat fa-fw"></i>公益 404</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <section class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%8B%89%E5%8F%96%E9%95%9C%E5%83%8F"><span class="nav-number">1.</span> <span class="nav-text">拉取镜像</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%90%AF%E5%8A%A8%E5%AE%B9%E5%99%A8"><span class="nav-number">2.</span> <span class="nav-text">启动容器</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%95%B0%E6%8D%AE%E6%8C%81%E4%B9%85%E5%8C%96"><span class="nav-number">3.</span> <span class="nav-text">数据持久化</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#oracle%E9%BB%98%E8%AE%A4%E5%8F%82%E6%95%B0"><span class="nav-number">4.</span> <span class="nav-text">oracle默认参数</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BF%AE%E6%94%B9%E9%BB%98%E8%AE%A4%E5%8F%82%E6%95%B0"><span class="nav-number">5.</span> <span class="nav-text">修改默认参数</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%BF%9B%E5%85%A5%E5%AE%B9%E5%99%A8"><span class="nav-number">5.1.</span> <span class="nav-text">进入容器</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BF%AE%E6%94%B9-etc-profile"><span class="nav-number">5.2.</span> <span class="nav-text">修改 &#x2F;etc&#x2F;profile</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%99%BB%E5%BD%95oracle%E6%95%B0%E6%8D%AE%E5%BA%93%EF%BC%8C%E4%BF%AE%E6%94%B9%E5%AF%86%E7%A0%81"><span class="nav-number">5.3.</span> <span class="nav-text">登录oracle数据库，修改密码</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BF%AE%E6%94%B9%E5%AD%97%E7%AC%A6%E9%9B%86"><span class="nav-number">5.4.</span> <span class="nav-text">修改字符集</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%88%9B%E5%BB%BA%E6%99%AE%E9%80%9A%E7%94%A8%E6%88%B7"><span class="nav-number">5.5.</span> <span class="nav-text">创建普通用户</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%94%A8system%E7%99%BB%E5%BD%95"><span class="nav-number">5.5.1.</span> <span class="nav-text">用system登录</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8%E6%99%AE%E9%80%9A%E7%94%A8%E6%88%B7%E7%99%BB%E9%99%86"><span class="nav-number">5.5.2.</span> <span class="nav-text">使用普通用户登陆</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E9%85%8D%E7%BD%AEnginx%EF%BC%9A-%E5%8F%8D%E5%90%91%E4%BB%A3%E7%90%86oracle%E6%9C%8D%E5%8A%A1"><span class="nav-number">6.</span> <span class="nav-text">配置nginx： 反向代理oracle服务</span></a></li></ol></div>
+        </section>
+        <!--/noindex-->
+
+        <section class="site-overview-wrap sidebar-panel">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="薛定谔の猫"
+      src="https://i.loli.net/2019/11/17/I2pesHhfYv6iDCP.png">
+  <p class="site-author-name" itemprop="name">薛定谔の猫</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">26</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">3</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">29</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author site-overview-item animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/bineyond%20|%20fab%20fa-github" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;bineyond | fab fa-github" rel="noopener" target="_blank">GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://www.jetbrains.com/?from=bineyond.github.io" title="GoLand → https:&#x2F;&#x2F;www.jetbrains.com&#x2F;?from&#x3D;bineyond.github.io" rel="noopener" target="_blank"><i class="thumbs-o-up fa-fw"></i>GoLand</a>
+      </span>
+  </div>
+
+
+  <div class="links-of-blogroll site-overview-item animated">
+    <div class="links-of-blogroll-title"><i class="fa fa-globe fa-fw"></i>
+      Links
+    </div>
+    <ul class="links-of-blogroll-list">
+        <li class="links-of-blogroll-item">
+          <a href="https://talkgo.org/night/" title="https:&#x2F;&#x2F;talkgo.org&#x2F;night&#x2F;" rel="noopener" target="_blank">Go 夜读</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://github.com/xmge/gonote" title="https:&#x2F;&#x2F;github.com&#x2F;xmge&#x2F;gonote" rel="noopener" target="_blank">gopher 笔记</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://www.4async.com/" title="https:&#x2F;&#x2F;www.4async.com&#x2F;" rel="noopener" target="_blank">ipfans</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://go101.org/" title="https:&#x2F;&#x2F;go101.org" rel="noopener" target="_blank">go101</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://colobu.com/" title="https:&#x2F;&#x2F;colobu.com&#x2F;" rel="noopener" target="_blank">鸟窝</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://draveness.me/" title="https:&#x2F;&#x2F;draveness.me&#x2F;" rel="noopener" target="_blank">面向信仰编程</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://note.mogutou.xyz/" title="https:&#x2F;&#x2F;note.mogutou.xyz&#x2F;" rel="noopener" target="_blank">徐旭</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://www.hrefs.cn/articles" title="https:&#x2F;&#x2F;www.hrefs.cn&#x2F;articles" rel="noopener" target="_blank">爱施园</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="http://www.codepub.cn/" title="http:&#x2F;&#x2F;www.codepub.cn&#x2F;" rel="noopener" target="_blank">IT草根</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://xiaozhou.net/" title="https:&#x2F;&#x2F;xiaozhou.net&#x2F;" rel="noopener" target="_blank">iTimothy</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://taozj.org/" title="https:&#x2F;&#x2F;taozj.org&#x2F;" rel="noopener" target="_blank">taizj</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="http://www.wdk.pw/" title="http:&#x2F;&#x2F;www.wdk.pw&#x2F;" rel="noopener" target="_blank">王登科</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://weread.qnmlgb.tech/" title="https:&#x2F;&#x2F;weread.qnmlgb.tech&#x2F;" rel="noopener" target="_blank">微信读书组队</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://mojotv.cn/" title="https:&#x2F;&#x2F;mojotv.cn&#x2F;" rel="noopener" target="_blank">mojotv.cn</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://kany.me/" title="https:&#x2F;&#x2F;kany.me&#x2F;" rel="noopener" target="_blank">Kany.Wang</a>
+        </li>
+    </ul>
+  </div>
+
+        </section>
+      </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+  <a role="button" class="book-mark-link book-mark-link-fixed"></a>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://blog.ubin.top/2019/10/28/docker%E6%90%AD%E5%BB%BAoracle-helowin-oracle-11g/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://i.loli.net/2019/11/17/I2pesHhfYv6iDCP.png">
+      <meta itemprop="name" content="薛定谔の猫">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="薛定谔の猫">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          docker搭建oracle: [helowin/oracle_11g]
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2019-10-28 14:30:45" itemprop="dateCreated datePublished" datetime="2019-10-28T14:30:45+08:00">2019-10-28</time>
+    </span>
+      <span class="post-meta-item">
+        <span class="post-meta-item-icon">
+          <i class="far fa-calendar-check"></i>
+        </span>
+        <span class="post-meta-item-text">更新于</span>
+        <time title="修改时间：2020-12-19 11:45:51" itemprop="dateModified" datetime="2020-12-19T11:45:51+08:00">2020-12-19</time>
+      </span>
+
+  
+      </div>
+      <div class="post-meta">
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>2.4k</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>2 分钟</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <h1 id="拉取镜像"><a href="#拉取镜像" class="headerlink" title="拉取镜像"></a>拉取镜像</h1><blockquote>
+<p><a target="_blank" rel="noopener" href="https://cr.console.aliyun.com/images/cn-hangzhou/oracle11-helowin/oracle11-helowin/detail?accounttraceid=24cfa63bff0f483db7d63268686a7a32yabl">https://cr.console.aliyun.com/images/cn-hangzhou/oracle11-helowin/oracle11-helowin/detail?accounttraceid=24cfa63bff0f483db7d63268686a7a32yabl</a></p>
+</blockquote>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">docker pull registry.cn-hangzhou.aliyuncs.com/helowin/oracle_11g</span><br><span class="line">docker tag  registry.cn-hangzhou.aliyuncs.com/helowin/oracle_11g oracle_11g</span><br><span class="line">docker rmi  registry.cn-hangzhou.aliyuncs.com/helowin/oracle_11</span><br></pre></td></tr></table></figure>
+<a id="more"></a>
+
+<h1 id="启动容器"><a href="#启动容器" class="headerlink" title="启动容器"></a>启动容器</h1><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker run -d -p 1521:1521 --name oracle_11g oracle_11g</span><br></pre></td></tr></table></figure>
+<h1 id="数据持久化"><a href="#数据持久化" class="headerlink" title="数据持久化"></a>数据持久化</h1><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">docker volume create oracle-11g</span><br><span class="line">docker run -d -p 1521:1521 --name oracle_11g -v oracle-11g:/home/oracle/app/oracle/oradata/ oracle_11g </span><br></pre></td></tr></table></figure>
+<h1 id="oracle默认参数"><a href="#oracle默认参数" class="headerlink" title="oracle默认参数"></a>oracle默认参数</h1><figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">hostname:</span> <span class="string">localhost</span></span><br><span class="line"><span class="attr">port:</span> <span class="number">1521</span></span><br><span class="line"><span class="attr">sid:</span> <span class="string">helowin</span></span><br><span class="line"><span class="attr">username:</span> <span class="string">system</span></span><br><span class="line"><span class="attr">password:</span> <span class="string">helowin</span></span><br></pre></td></tr></table></figure>
+<h1 id="修改默认参数"><a href="#修改默认参数" class="headerlink" title="修改默认参数"></a>修改默认参数</h1><h2 id="进入容器"><a href="#进入容器" class="headerlink" title="进入容器"></a>进入容器</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker <span class="built_in">exec</span> -it oracle_11g  bash -c <span class="string">&quot;su - root&quot;</span></span><br></pre></td></tr></table></figure>
+<h2 id="修改-etc-profile"><a href="#修改-etc-profile" class="headerlink" title="修改 /etc/profile"></a>修改 /etc/profile</h2><blockquote>
+<p>vi /etc/profile</p>
+</blockquote>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># add</span></span><br><span class="line"><span class="built_in">export</span> ORACLE_HOME=/home/oracle/app/oracle/product/11.2.0/dbhome_2</span><br><span class="line"><span class="built_in">export</span> ORACLE_SID=helowin</span><br><span class="line"><span class="built_in">export</span> PATH=<span class="variable">$ORACLE_HOME</span>/bin:<span class="variable">$PATH</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 执行</span></span><br><span class="line"><span class="built_in">source</span> /etc/profile</span><br><span class="line">ln -s <span class="variable">$ORACLE_HOME</span>/bin/sqlplus /usr/bin</span><br></pre></td></tr></table></figure>
+<h2 id="登录oracle数据库，修改密码"><a href="#登录oracle数据库，修改密码" class="headerlink" title="登录oracle数据库，修改密码"></a>登录oracle数据库，修改密码</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">su oracle</span><br><span class="line">sqlplus /nolog</span><br><span class="line">conn /as sysdba</span><br></pre></td></tr></table></figure>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">alter</span> <span class="keyword">user</span> <span class="keyword">system</span> <span class="keyword">identified</span> <span class="keyword">by</span> <span class="keyword">password</span>;</span><br><span class="line"><span class="keyword">alter</span> <span class="keyword">user</span> <span class="keyword">sys</span> <span class="keyword">identified</span> <span class="keyword">by</span> <span class="keyword">password</span>;</span><br><span class="line"><span class="keyword">ALTER</span> PROFILE <span class="keyword">DEFAULT</span> <span class="keyword">LIMIT</span> PASSWORD_LIFE_TIME <span class="keyword">UNLIMITED</span>;</span><br></pre></td></tr></table></figure>
+<h2 id="修改字符集"><a href="#修改字符集" class="headerlink" title="修改字符集"></a>修改字符集</h2><figure class="highlight pgsql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"># 默认字符集 AL32UTF8 <span class="comment">--&gt; ZHS16GBK</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">SQL</span>&gt; conn /<span class="keyword">as</span> sysdba</span><br><span class="line"><span class="keyword">SQL</span>&gt; shutdown <span class="keyword">immediate</span>;</span><br><span class="line"><span class="keyword">SQL</span>&gt; startup mount</span><br><span class="line"></span><br><span class="line"><span class="keyword">SQL</span>&gt; <span class="keyword">ALTER</span> <span class="keyword">SYSTEM</span> <span class="keyword">ENABLE</span> RESTRICTED <span class="keyword">SESSION</span>;</span><br><span class="line"><span class="keyword">SQL</span>&gt; <span class="keyword">ALTER</span> <span class="keyword">SYSTEM</span> <span class="keyword">SET</span> AQ_TM_PROCESSES=<span class="number">0</span>;</span><br><span class="line"><span class="keyword">SQL</span>&gt; <span class="keyword">alter</span> <span class="keyword">database</span> <span class="keyword">open</span>;</span><br><span class="line"><span class="keyword">SQL</span>&gt; <span class="keyword">ALTER</span> <span class="keyword">DATABASE</span> <span class="type">CHARACTER</span> <span class="keyword">SET</span> ZHS16GBK;</span><br><span class="line">ERROR at <span class="type">line</span> <span class="number">1</span>:</span><br><span class="line">ORA<span class="number">-12712</span>: <span class="built_in">new</span> <span class="type">character</span> <span class="keyword">set</span> must be a superset <span class="keyword">of</span> <span class="built_in">old</span> <span class="type">character</span> <span class="keyword">set</span></span><br><span class="line">提示我们的字符集：新字符集必须为旧字符集的超集，这时我们可以跳过超集的检查做更改(但是已有数据这样做会乱码)：</span><br><span class="line"><span class="keyword">SQL</span>&gt; <span class="keyword">ALTER</span> <span class="keyword">DATABASE</span> <span class="type">character</span> <span class="keyword">set</span> INTERNAL_USE ZHS16GBK;</span><br><span class="line"></span><br><span class="line"><span class="keyword">SQL</span>&gt; <span class="keyword">select</span> * <span class="keyword">from</span> v$nls_parameters;</span><br><span class="line"></span><br><span class="line"><span class="keyword">SQL</span>&gt; shutdown <span class="keyword">immediate</span>;</span><br><span class="line"><span class="keyword">SQL</span>&gt; startup</span><br><span class="line"></span><br><span class="line">至此，字符集的修改就完成了，我们可以通过输入命令验证一下，其结果已经变成了ZHS16GBK了。</span><br><span class="line"><span class="keyword">SQL</span>&gt; <span class="keyword">select</span> userenv(<span class="string">&#x27;language&#x27;</span>) <span class="keyword">from</span> dual;</span><br></pre></td></tr></table></figure>
+
+<h2 id="创建普通用户"><a href="#创建普通用户" class="headerlink" title="创建普通用户"></a>创建普通用户</h2><h3 id="用system登录"><a href="#用system登录" class="headerlink" title="用system登录"></a>用system登录</h3><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">create</span> <span class="keyword">user</span> <span class="keyword">test</span> <span class="keyword">identified</span> <span class="keyword">by</span> <span class="number">123456</span>;</span><br><span class="line"><span class="keyword">grant</span> <span class="keyword">connect</span>, <span class="keyword">resource</span>, dba <span class="keyword">to</span> <span class="keyword">test</span>;</span><br></pre></td></tr></table></figure>
+<h3 id="使用普通用户登陆"><a href="#使用普通用户登陆" class="headerlink" title="使用普通用户登陆"></a>使用普通用户登陆</h3><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">-- 查询数据库名， 表名</span></span><br><span class="line"><span class="keyword">select</span> <span class="keyword">name</span> <span class="keyword">from</span> v$<span class="keyword">database</span>;</span><br><span class="line"><span class="keyword">select</span> table_name <span class="keyword">from</span> all_tables  <span class="comment">-- where table_name like &#x27;%PER&#x27; ; --where ROWNUM &lt;10 ;</span></span><br></pre></td></tr></table></figure>
+<h1 id="配置nginx：-反向代理oracle服务"><a href="#配置nginx：-反向代理oracle服务" class="headerlink" title="配置nginx： 反向代理oracle服务"></a>配置nginx： 反向代理oracle服务</h1><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># nginx 反向代理</span></span><br><span class="line">stream &#123;    </span><br><span class="line">	upstream oracle&#123;</span><br><span class="line">		<span class="built_in">hash</span> <span class="variable">$remote_addr</span> consistent;</span><br><span class="line">		server 192.168.99.101:1521 max_fails=3 fail_timeout=30s;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	server &#123;</span><br><span class="line">		listen 1521;</span><br><span class="line">		proxy_connect_timeout 3000s;</span><br><span class="line">		proxy_timeout 6000s;</span><br><span class="line">		proxy_pass oracle;</span><br><span class="line">	&#125;    </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<blockquote>
+<ul>
+<li>1、网上还有针对sath89/oracle-xe-11g这个镜像的教程，需要注意的是：Oracle快捷版（Oracle XE）是一款基于 Oracle 11g 第2版代码库的小型入门级数据库。Oracle Database XE对安装主机的规模和CPU数量不作限制（每台计算机一个数据库）， 但XE将最多存储11GB的用户数据，同时最多使用1GB内存和主机上的一个CPU。</li>
+<li>2、如果仅作测试也可以安装这个镜像，镜像大约700兆。而教程中的镜像大约近7G。</li>
+<li>3、<a target="_blank" rel="noopener" href="https://github.com/wnameless/docker-oracle-xe-11g">https://github.com/wnameless/docker-oracle-xe-11g</a></li>
+</ul>
+</blockquote>
+
+    </div>
+
+    
+    
+    
+      
+  <div class="popular-posts-header">相关文章</div>
+  <ul class="popular-posts">
+    <li class="popular-posts-item">
+      <div class="popular-posts-title"><a href="/2019/10/23/docker安装DB2/" rel="bookmark">docker安装DB2</a></div>
+    </li>
+    <li class="popular-posts-item">
+      <div class="popular-posts-title"><a href="/2019/10/12/docker镜像自动编译程序/" rel="bookmark">docker镜像自动编译程序</a></div>
+    </li>
+    <li class="popular-posts-item">
+      <div class="popular-posts-title"><a href="/2020/04/09/go-cgo-oracle/" rel="bookmark">go-cgo-oracle</a></div>
+    </li>
+  </ul>
+
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/docker/" rel="tag"># docker</a>
+              <a href="/tags/oracle/" rel="tag"># oracle</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2019/10/24/DB2%E9%85%8D%E7%BD%AE%E8%BF%9C%E7%A8%8B%E6%95%B0%E6%8D%AE%E5%BA%93/" rel="prev" title="DB2配置远程数据库">
+                  <i class="fa fa-chevron-left"></i> DB2配置远程数据库
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2020/01/30/Ticker%E8%B5%84%E6%BA%90%E6%B3%84%E9%9C%B2/" rel="next" title="Ticker资源泄露">
+                  Ticker资源泄露 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    <div class="comments" id="gitalk-container"></div>
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      const activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      const commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="beian"><a href="https://beian.miit.gov.cn/" rel="noopener" target="_blank">浙ICP备19017268号-1 </a>
+  </div>
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">薛定谔の猫</span>
+</div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+    <span title="站点总字数">63k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="站点阅读时长">57 分钟</span>
+  </span>
+</div>
+
+    </div>
+  </footer>
+
+  
+  <script src="//cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/lozad@1.16.0/dist/lozad.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/pangu@4.0.7/dist/browser/pangu.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script><script src="/js/bookmark.js"></script>
+
+  
+
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+  
+
+
+
+
+
+  <script>
+  if (typeof MathJax === 'undefined') {
+    window.MathJax = {
+      tex: {
+        inlineMath: {'[+]': [['$', '$']]},
+        tags: 'ams'
+      },
+      options: {
+        renderActions: {
+          findScript: [10, doc => {
+            document.querySelectorAll('script[type^="math/tex"]').forEach(node => {
+              const display = !!node.type.match(/; *mode=display/);
+              const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
+              const text = document.createTextNode('');
+              node.parentNode.replaceChild(text, node);
+              math.start = {node: text, delim: '', n: 0};
+              math.end = {node: text, delim: '', n: 0};
+              doc.math.push(math);
+            });
+          }, '', false],
+          insertedScript: [200, () => {
+            document.querySelectorAll('mjx-container').forEach(node => {
+              const target = node.parentNode;
+              if (target.nodeName.toLowerCase() === 'li') {
+                target.parentNode.classList.add('has-jax');
+              }
+            });
+          }, '', false]
+        }
+      }
+    };
+    const script = document.createElement('script');
+    script.src = '//cdn.jsdelivr.net/npm/mathjax@3.1.2/es5/tex-mml-chtml.js';
+    script.defer = true;
+    document.head.appendChild(script);
+  } else {
+    MathJax.startup.document.state(0);
+    MathJax.typesetClear();
+    MathJax.texReset();
+    MathJax.typeset();
+  }
+</script>
+
+
+  <script src="//cdn.jsdelivr.net/npm/quicklink@2.0.0/dist/quicklink.umd.js"></script>
+  <script>
+      window.addEventListener('load', () => {
+      quicklink.listen({
+        timeout : 3000,
+        priority: true,
+        ignores : [uri => uri.includes('#'),uri => uri === 'https://blog.ubin.top/2019/10/28/docker%E6%90%AD%E5%BB%BAoracle-helowin-oracle-11g/',]
+      });
+      });
+  </script>
+
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/gitalk@1.7.0/dist/gitalk.css">
+
+<script>
+NexT.utils.loadComments('#gitalk-container', () => {
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/gitalk@1.7.0/dist/gitalk.min.js', () => {
+    var gitalk = new Gitalk({
+      clientID    : 'f7f877653d119a713c65',
+      clientSecret: '9c7421df94ce13acbf3e825f092635181616981f',
+      repo        : 'bineyond.github.io',
+      owner       : 'bineyond',
+      admin       : ['bineyond'],
+      id          : '1fcea565a633a0f7182dbdb7a3b96ad7',
+        language: 'zh-CN',
+      distractionFreeMode: true
+    });
+    gitalk.render('gitalk-container');
+  }, window.Gitalk);
+});
+</script>
+
+</body>
+</html>

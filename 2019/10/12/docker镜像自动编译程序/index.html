@@ -1,0 +1,658 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.3.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/favicon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.1/css/all.min.css">
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css">
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css">
+
+<script class="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"blog.ubin.top","root":"/","images":"/images","scheme":"Pisces","version":"8.1.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":true,"bookmark":{"enable":true,"color":"#222","save":"auto"},"fancybox":true,"mediumzoom":false,"lazyload":true,"pangu":true,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":true,"nav":null},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}};
+  </script>
+<meta name="description" content="使用docker创建C++编译环境，自动创建二进制执行程序。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="docker镜像自动编译程序">
+<meta property="og:url" content="https://blog.ubin.top/2019/10/12/docker%E9%95%9C%E5%83%8F%E8%87%AA%E5%8A%A8%E7%BC%96%E8%AF%91%E7%A8%8B%E5%BA%8F/index.html">
+<meta property="og:site_name" content="薛定谔の猫">
+<meta property="og:description" content="使用docker创建C++编译环境，自动创建二进制执行程序。">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2019-10-12T13:48:51.000Z">
+<meta property="article:modified_time" content="2020-12-19T03:45:51.316Z">
+<meta property="article:author" content="薛定谔の猫">
+<meta property="article:tag" content="docker">
+<meta property="article:tag" content="acl">
+<meta property="article:tag" content="nginx">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://blog.ubin.top/2019/10/12/docker%E9%95%9C%E5%83%8F%E8%87%AA%E5%8A%A8%E7%BC%96%E8%AF%91%E7%A8%8B%E5%BA%8F/">
+
+
+<script class="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+<title>docker镜像自动编译程序 | 薛定谔の猫</title>
+  
+    <script>
+      function sendPageView() {
+        if (CONFIG.hostname !== location.hostname) return;
+        var uid = localStorage.getItem('uid') || (Math.random() + '.' + Math.random());
+        localStorage.setItem('uid', uid);
+        navigator.sendBeacon('https://www.google-analytics.com/collect', new URLSearchParams({
+          v  : 1,
+          tid: 'UA-151051157-1',
+          cid: uid,
+          t  : 'pageview',
+          dp : encodeURIComponent(location.pathname)
+        }));
+      }
+      document.addEventListener('pjax:complete', sendPageView);
+      sendPageView();
+    </script>
+
+  <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?306b44649c053ac56d4911f4894bcf16";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+  <noscript>
+  <style>
+  body { margin-top: 2rem; }
+
+  .use-motion .menu-item,
+  .use-motion .sidebar,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header {
+    visibility: visible;
+  }
+
+  .use-motion .header,
+  .use-motion .site-brand-container .toggle,
+  .use-motion .footer { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle,
+  .use-motion .custom-logo-image {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line {
+    transform: scaleX(1);
+  }
+
+  .search-pop-overlay, .sidebar-nav { display: none; }
+  .sidebar-panel { display: block; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <h1 class="site-title">薛定谔の猫</h1>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">鲜衣怒马提银枪，一日看尽长安花，此间少年。</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+        <li class="menu-item menu-item-commonweal">
+
+    <a href="/404/" rel="section"><i class="fa fa-heartbeat fa-fw"></i>公益 404</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <section class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#docker-run-%E4%B8%80%E6%AC%A1%E6%89%A7%E8%A1%8C%E5%A4%9A%E6%9D%A1%E5%91%BD%E4%BB%A4%E7%9A%84%E6%96%B9%E6%B3%95"><span class="nav-number">1.</span> <span class="nav-text">docker run 一次执行多条命令的方法</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%BC%96%E8%AF%91-acl-rpm-%E5%8C%85"><span class="nav-number">2.</span> <span class="nav-text">编译 acl rpm 包</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%96%B9%E6%B3%95%E4%B8%80%EF%BC%9A-%E5%88%9B%E5%BB%BA-acl-%E7%BC%96%E8%AF%91%E9%95%9C%E5%83%8F"><span class="nav-number">2.1.</span> <span class="nav-text">方法一： 创建 acl 编译镜像</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BC%96%E5%86%99-Dokcerfile"><span class="nav-number">2.1.1.</span> <span class="nav-text">编写 Dokcerfile</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%88%9B%E5%BB%BA%E9%95%9C%E5%83%8F"><span class="nav-number">2.1.2.</span> <span class="nav-text">创建镜像</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%88%9B%E5%BB%BA%E5%AE%B9%E5%99%A8%E7%BC%96%E8%AF%91"><span class="nav-number">2.1.3.</span> <span class="nav-text">创建容器编译</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%96%B9%E6%B3%95%E4%BA%8C-%E4%B8%8D%E5%88%9B%E5%BB%BA%E9%95%9C%E5%83%8F%EF%BC%8C%E7%9B%B4%E6%8E%A5%E4%BD%BF%E7%94%A8%E4%B8%B4%E6%97%B6%E5%AE%B9%E5%99%A8"><span class="nav-number">2.2.</span> <span class="nav-text">方法二: 不创建镜像，直接使用临时容器</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#CentOS-nginx-%E6%B7%BB%E5%8A%A0-ngx-http-proxy-connect-module"><span class="nav-number">3.</span> <span class="nav-text">CentOS nginx 添加 ngx_http_proxy_connect_module</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9B%B4%E6%96%B0%E7%B3%BB%E7%BB%9F%E8%BD%AF%E4%BB%B6%E5%88%B0%E6%9C%80%E6%96%B0"><span class="nav-number">3.1.</span> <span class="nav-text">更新系统软件到最新</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AE%89%E8%A3%85%E7%BC%96%E8%AF%91%E7%8E%AF%E5%A2%83%EF%BC%9A"><span class="nav-number">3.2.</span> <span class="nav-text">安装编译环境：</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AE%89%E8%A3%85Nginx%E6%89%80%E4%BE%9D%E8%B5%96%E7%9A%84%E5%8C%85%EF%BC%9A"><span class="nav-number">3.3.</span> <span class="nav-text">安装Nginx所依赖的包：</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%96%B0%E5%BB%BA%E7%94%A8%E6%88%B7rpmbuild"><span class="nav-number">3.4.</span> <span class="nav-text">新建用户rpmbuild</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%88%9B%E5%BB%BArpm%E7%9B%AE%E5%BD%95"><span class="nav-number">3.5.</span> <span class="nav-text">创建rpm目录</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%8B%E8%BD%BD%E6%BA%90%E7%A0%81"><span class="nav-number">3.6.</span> <span class="nav-text">下载源码</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%96%87%E4%BB%B6%E5%88%97%E8%A1%A8"><span class="nav-number">3.7.</span> <span class="nav-text">文件列表</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BC%96%E8%AF%91"><span class="nav-number">3.8.</span> <span class="nav-text">编译</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AE%8C%E6%88%90"><span class="nav-number">3.9.</span> <span class="nav-text">完成</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#patch-%E8%A1%A5%E4%B8%81-ngx-http-proxy-connect-module"><span class="nav-number">3.10.</span> <span class="nav-text">patch 补丁 ngx_http_proxy_connect_module</span></a></li></ol></li></ol></div>
+        </section>
+        <!--/noindex-->
+
+        <section class="site-overview-wrap sidebar-panel">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="薛定谔の猫"
+      src="https://i.loli.net/2019/11/17/I2pesHhfYv6iDCP.png">
+  <p class="site-author-name" itemprop="name">薛定谔の猫</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">26</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">3</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">29</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author site-overview-item animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/bineyond%20|%20fab%20fa-github" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;bineyond | fab fa-github" rel="noopener" target="_blank">GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://www.jetbrains.com/?from=bineyond.github.io" title="GoLand → https:&#x2F;&#x2F;www.jetbrains.com&#x2F;?from&#x3D;bineyond.github.io" rel="noopener" target="_blank"><i class="thumbs-o-up fa-fw"></i>GoLand</a>
+      </span>
+  </div>
+
+
+  <div class="links-of-blogroll site-overview-item animated">
+    <div class="links-of-blogroll-title"><i class="fa fa-globe fa-fw"></i>
+      Links
+    </div>
+    <ul class="links-of-blogroll-list">
+        <li class="links-of-blogroll-item">
+          <a href="https://talkgo.org/night/" title="https:&#x2F;&#x2F;talkgo.org&#x2F;night&#x2F;" rel="noopener" target="_blank">Go 夜读</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://github.com/xmge/gonote" title="https:&#x2F;&#x2F;github.com&#x2F;xmge&#x2F;gonote" rel="noopener" target="_blank">gopher 笔记</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://www.4async.com/" title="https:&#x2F;&#x2F;www.4async.com&#x2F;" rel="noopener" target="_blank">ipfans</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://go101.org/" title="https:&#x2F;&#x2F;go101.org" rel="noopener" target="_blank">go101</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://colobu.com/" title="https:&#x2F;&#x2F;colobu.com&#x2F;" rel="noopener" target="_blank">鸟窝</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://draveness.me/" title="https:&#x2F;&#x2F;draveness.me&#x2F;" rel="noopener" target="_blank">面向信仰编程</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://note.mogutou.xyz/" title="https:&#x2F;&#x2F;note.mogutou.xyz&#x2F;" rel="noopener" target="_blank">徐旭</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://www.hrefs.cn/articles" title="https:&#x2F;&#x2F;www.hrefs.cn&#x2F;articles" rel="noopener" target="_blank">爱施园</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="http://www.codepub.cn/" title="http:&#x2F;&#x2F;www.codepub.cn&#x2F;" rel="noopener" target="_blank">IT草根</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://xiaozhou.net/" title="https:&#x2F;&#x2F;xiaozhou.net&#x2F;" rel="noopener" target="_blank">iTimothy</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://taozj.org/" title="https:&#x2F;&#x2F;taozj.org&#x2F;" rel="noopener" target="_blank">taizj</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="http://www.wdk.pw/" title="http:&#x2F;&#x2F;www.wdk.pw&#x2F;" rel="noopener" target="_blank">王登科</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://weread.qnmlgb.tech/" title="https:&#x2F;&#x2F;weread.qnmlgb.tech&#x2F;" rel="noopener" target="_blank">微信读书组队</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://mojotv.cn/" title="https:&#x2F;&#x2F;mojotv.cn&#x2F;" rel="noopener" target="_blank">mojotv.cn</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://kany.me/" title="https:&#x2F;&#x2F;kany.me&#x2F;" rel="noopener" target="_blank">Kany.Wang</a>
+        </li>
+    </ul>
+  </div>
+
+        </section>
+      </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+  <a role="button" class="book-mark-link book-mark-link-fixed"></a>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://blog.ubin.top/2019/10/12/docker%E9%95%9C%E5%83%8F%E8%87%AA%E5%8A%A8%E7%BC%96%E8%AF%91%E7%A8%8B%E5%BA%8F/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://i.loli.net/2019/11/17/I2pesHhfYv6iDCP.png">
+      <meta itemprop="name" content="薛定谔の猫">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="薛定谔の猫">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          docker镜像自动编译程序
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2019-10-12 21:48:51" itemprop="dateCreated datePublished" datetime="2019-10-12T21:48:51+08:00">2019-10-12</time>
+    </span>
+      <span class="post-meta-item">
+        <span class="post-meta-item-icon">
+          <i class="far fa-calendar-check"></i>
+        </span>
+        <span class="post-meta-item-text">更新于</span>
+        <time title="修改时间：2020-12-19 11:45:51" itemprop="dateModified" datetime="2020-12-19T11:45:51+08:00">2020-12-19</time>
+      </span>
+
+  
+      </div>
+      <div class="post-meta">
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>2.9k</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>3 分钟</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <p>使用docker创建C++编译环境，自动创建二进制执行程序。</p>
+<a id="more"></a>
+
+
+<h1 id="docker-run-一次执行多条命令的方法"><a href="#docker-run-一次执行多条命令的方法" class="headerlink" title="docker run 一次执行多条命令的方法"></a>docker run 一次执行多条命令的方法</h1><p>有时在启动docker container时需要同时运行不止一条命令，这时在command处使用：sh -c ‘ cmd1 &amp;&amp; cmd2 ‘即可。</p>
+<p>如，docker run -it myimage sh -c ‘service mysql start &amp;&amp; python test.py’</p>
+<h1 id="编译-acl-rpm-包"><a href="#编译-acl-rpm-包" class="headerlink" title="编译 acl rpm 包"></a>编译 acl rpm 包</h1><h2 id="方法一：-创建-acl-编译镜像"><a href="#方法一：-创建-acl-编译镜像" class="headerlink" title="方法一： 创建 acl 编译镜像"></a>方法一： 创建 acl 编译镜像</h2><h3 id="编写-Dokcerfile"><a href="#编写-Dokcerfile" class="headerlink" title="编写 Dokcerfile"></a>编写 Dokcerfile</h3><figure class="highlight dockerfile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">FROM</span> centos:<span class="number">6.10</span></span><br><span class="line"><span class="keyword">RUN</span><span class="bash"> yum -y install gcc gcc-c++ zlib-devel git rpm-build</span></span><br></pre></td></tr></table></figure>
+<h3 id="创建镜像"><a href="#创建镜像" class="headerlink" title="创建镜像"></a>创建镜像</h3><figure class="highlight mipsasm"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker <span class="keyword">build </span>-t rpm-<span class="keyword">build-image </span>.</span><br></pre></td></tr></table></figure>
+<h3 id="创建容器编译"><a href="#创建容器编译" class="headerlink" title="创建容器编译"></a>创建容器编译</h3><figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 本地拉取</span></span><br><span class="line">git clone https:<span class="regexp">//gi</span>tee.com<span class="regexp">/acl-dev/</span>acl.git</span><br><span class="line"></span><br><span class="line"><span class="comment"># 编译宿主机代码</span></span><br><span class="line">docker run --rm -v <span class="string">&quot;$(pwd)&quot;</span>:<span class="regexp">/usr/</span>app<span class="regexp">/ -w /u</span>sr<span class="regexp">/app/</span>acl/packaging  rpm-build-image make</span><br></pre></td></tr></table></figure>
+<p>or</p>
+<figure class="highlight elixir"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 保留git仓库</span></span><br><span class="line">docker run --rm -v <span class="string">&quot;$(pwd)&quot;</span><span class="symbol">:/usr/app/</span> -w /usr/app rpm-build-image sh -c <span class="string">&#x27;git clone https://gitee.com/acl-dev/acl.git &amp;&amp; cd acl/packaging &amp;&amp; make &#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 只保留rpm包</span></span><br><span class="line">docker run --rm -v <span class="string">&quot;$(pwd)&quot;</span><span class="symbol">:/usr/app/</span> rpm-build-image sh -c <span class="string">&#x27;git clone https://gitee.com/acl-dev/acl.git &amp;&amp; cd acl/packaging &amp;&amp; make &amp;&amp; mv x86_64 /usr/app&#x27;</span></span><br></pre></td></tr></table></figure>
+<h2 id="方法二-不创建镜像，直接使用临时容器"><a href="#方法二-不创建镜像，直接使用临时容器" class="headerlink" title="方法二: 不创建镜像，直接使用临时容器"></a>方法二: 不创建镜像，直接使用临时容器</h2><figure class="highlight stata"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">docker <span class="keyword">run</span> --<span class="keyword">rm</span> -v <span class="string">&quot;$(pwd)&quot;</span>:/usr/<span class="keyword">app</span>/ centos:6.10 <span class="keyword">su</span> -c &#x27;yum -y install gcc gcc-c++ zlib-devel git rpm-build \</span><br><span class="line">&amp;&amp; git clone https:<span class="comment">//gitee.com/acl-dev/acl.git \</span></span><br><span class="line">&amp;&amp; <span class="keyword">cd</span> acl/packaging \</span><br><span class="line">&amp;&amp; make \</span><br><span class="line">&amp;&amp; mv x86_64 /usr/<span class="keyword">app</span>&#x27;</span><br></pre></td></tr></table></figure>
+
+<h1 id="CentOS-nginx-添加-ngx-http-proxy-connect-module"><a href="#CentOS-nginx-添加-ngx-http-proxy-connect-module" class="headerlink" title="CentOS nginx 添加 ngx_http_proxy_connect_module"></a>CentOS nginx 添加 ngx_http_proxy_connect_module</h1><h2 id="更新系统软件到最新"><a href="#更新系统软件到最新" class="headerlink" title="更新系统软件到最新"></a>更新系统软件到最新</h2><figure class="highlight ebnf"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="attribute">yum -y update</span></span><br></pre></td></tr></table></figure>
+<h2 id="安装编译环境："><a href="#安装编译环境：" class="headerlink" title="安装编译环境："></a>安装编译环境：</h2><figure class="highlight angelscript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yum -y install gcc gcc-c++ <span class="built_in">auto</span>make <span class="built_in">auto</span>conf libtool make rpm-build rpmdevtools rpmlint wget</span><br></pre></td></tr></table></figure>
+<h2 id="安装Nginx所依赖的包："><a href="#安装Nginx所依赖的包：" class="headerlink" title="安装Nginx所依赖的包："></a>安装Nginx所依赖的包：</h2><figure class="highlight gml"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yum -<span class="symbol">y</span> install -<span class="symbol">y</span> openssl-devel zlib-devel pcre-devel gd-devel</span><br></pre></td></tr></table></figure>
+<h2 id="新建用户rpmbuild"><a href="#新建用户rpmbuild" class="headerlink" title="新建用户rpmbuild"></a>新建用户rpmbuild</h2><figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="attribute">name</span>=rpmbuild</span><br><span class="line">useradd <span class="variable">$name</span></span><br><span class="line">echo <span class="string">&quot;<span class="variable">$name</span> ALL=(ALL) NOPASSWD:ALL&quot;</span> &gt;&gt; /etc/sudoers</span><br><span class="line">su - <span class="variable">$name</span></span><br></pre></td></tr></table></figure>
+<h2 id="创建rpm目录"><a href="#创建rpm目录" class="headerlink" title="创建rpm目录"></a>创建rpm目录</h2><figure class="highlight mipsasm"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">rpmdev-setuptree</span><br><span class="line"></span><br><span class="line"><span class="comment"># 在rpmbuild的home目录下面有了这几个目录</span></span><br><span class="line"><span class="keyword">BUILD </span><span class="keyword">BUILDROOT </span>RPMS SOURCES SPECS SRPMS</span><br></pre></td></tr></table></figure>
+<h2 id="下载源码"><a href="#下载源码" class="headerlink" title="下载源码"></a>下载源码</h2><figure class="highlight apache"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="attribute">cd</span> ~/rpmbuild/SOURCES</span><br><span class="line"><span class="attribute">wget</span> http://nginx.org/packages/centos/<span class="number">7</span>/SRPMS/nginx-<span class="number">1</span>.<span class="number">16</span>.<span class="number">1</span>-<span class="number">1</span>.el<span class="number">7</span>.ngx.src.rpm</span><br><span class="line"></span><br><span class="line"><span class="comment"># 解压</span></span><br><span class="line"><span class="attribute">rpm2cpio</span> nginx-<span class="number">1</span>.<span class="number">16</span>.<span class="number">1</span>-<span class="number">1</span>.el<span class="number">7</span>.ngx.src.rpm |cpio -dvi</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<h2 id="文件列表"><a href="#文件列表" class="headerlink" title="文件列表"></a>文件列表</h2><figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-tag">COPYRIGHT</span> </span><br><span class="line"><span class="selector-tag">nginx-debug</span><span class="selector-class">.service</span>  <span class="selector-tag">nginx</span><span class="selector-class">.check-reload</span><span class="selector-class">.sh</span>  </span><br><span class="line"><span class="selector-tag">nginx</span><span class="selector-class">.init</span><span class="selector-class">.in</span>  <span class="selector-tag">nginx</span><span class="selector-class">.spec</span>            </span><br><span class="line"><span class="selector-tag">nginx</span><span class="selector-class">.sysconf</span>  <span class="selector-tag">nginx</span><span class="selector-class">.vh</span><span class="selector-class">.default</span><span class="selector-class">.conf</span></span><br><span class="line"><span class="selector-tag">logrotate</span>  <span class="selector-tag">nginx-1</span>.16.1<span class="selector-class">.tar</span><span class="selector-class">.gz</span></span><br><span class="line"><span class="selector-tag">nginx-debug</span><span class="selector-class">.sysconf</span>  <span class="selector-tag">nginx</span><span class="selector-class">.conf</span></span><br><span class="line"><span class="selector-tag">nginx</span><span class="selector-class">.service</span>  <span class="selector-tag">nginx</span><span class="selector-class">.suse</span><span class="selector-class">.logrotate</span></span><br><span class="line"><span class="selector-tag">nginx</span><span class="selector-class">.upgrade</span><span class="selector-class">.sh</span></span><br></pre></td></tr></table></figure>
+<h2 id="编译"><a href="#编译" class="headerlink" title="编译"></a>编译</h2><figure class="highlight crmsh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 制作二进制包</span></span><br><span class="line">rpmbuild -bb nginx.<span class="keyword">spec</span> </span><br><span class="line"><span class="comment"># 表示既制作二进制包又制作src格式包</span></span><br><span class="line">rpmbuild -ba nginx.<span class="keyword">spec</span> </span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<h2 id="完成"><a href="#完成" class="headerlink" title="完成"></a>完成</h2><figure class="highlight apache"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># ~/rpmbuild/RPMS/x86_64</span></span><br><span class="line"><span class="attribute">nginx</span>-<span class="number">1</span>.<span class="number">16</span>.<span class="number">1</span>-<span class="number">1</span>.el<span class="number">7</span>.ngx.x<span class="number">86</span>_<span class="number">64</span>.rpm</span><br><span class="line"><span class="attribute">nginx</span>-debuginfo-<span class="number">1</span>.<span class="number">16</span>.<span class="number">1</span>-<span class="number">1</span>.el<span class="number">7</span>.ngx.x<span class="number">86</span>_<span class="number">64</span>.rpm</span><br></pre></td></tr></table></figure>
+<h2 id="patch-补丁-ngx-http-proxy-connect-module"><a href="#patch-补丁-ngx-http-proxy-connect-module" class="headerlink" title="patch 补丁 ngx_http_proxy_connect_module"></a>patch 补丁 ngx_http_proxy_connect_module</h2><p>example:</p>
+<figure class="highlight livescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line">cd nginx-<span class="number">1.16</span>.<span class="number">1</span></span><br><span class="line">patch -p1 &lt; /nginx/ngx_http_proxy_connect_module-master/patch/proxy_connect_rewrite_101504.patch</span><br><span class="line"></span><br><span class="line">./configure <span class="string">\</span></span><br><span class="line">--add-<span class="built_in">module</span>=/nginx/ngx_http_proxy_connect_module-master <span class="string">\</span></span><br><span class="line">--<span class="keyword">with</span>-http_ssl_module <span class="string">\</span></span><br><span class="line">--<span class="keyword">with</span>-http_realip_module <span class="string">\</span></span><br><span class="line">--<span class="keyword">with</span>-http_addition_module <span class="string">\</span></span><br><span class="line">--<span class="keyword">with</span>-http_sub_module <span class="string">\</span></span><br><span class="line">--<span class="keyword">with</span>-http_dav_module <span class="string">\</span></span><br><span class="line">--<span class="keyword">with</span>-http_flv_module <span class="string">\</span></span><br><span class="line">--<span class="keyword">with</span>-http_mp4_module <span class="string">\</span></span><br><span class="line">--<span class="keyword">with</span>-http_gunzip_module <span class="string">\</span></span><br><span class="line">--<span class="keyword">with</span>-http_gzip_static_module <span class="string">\</span></span><br><span class="line">--<span class="keyword">with</span>-http_random_index_module <span class="string">\</span></span><br><span class="line">--<span class="keyword">with</span>-http_secure_link_module <span class="string">\</span></span><br><span class="line">--<span class="keyword">with</span>-http_stub_status_module <span class="string">\</span></span><br><span class="line">--<span class="keyword">with</span>-http_auth_request_module <span class="string">\</span></span><br><span class="line">--<span class="keyword">with</span>-threads --<span class="keyword">with</span>-stream <span class="string">\</span></span><br><span class="line">--<span class="keyword">with</span>-stream_ssl_module <span class="string">\</span></span><br><span class="line">--<span class="keyword">with</span>-http_slice_module <span class="string">\</span></span><br><span class="line">--<span class="keyword">with</span>-file-aio <span class="string">\</span></span><br><span class="line">--<span class="keyword">with</span>-http_v2_module <span class="string">\</span></span><br><span class="line">--user=nginx <span class="string">\</span></span><br><span class="line">--group=nginx</span><br><span class="line"></span><br><span class="line">make &amp;&amp; make install</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+    </div>
+
+    
+    
+    
+      
+  <div class="popular-posts-header">相关文章</div>
+  <ul class="popular-posts">
+    <li class="popular-posts-item">
+      <div class="popular-posts-title"><a href="/2019/10/23/docker安装DB2/" rel="bookmark">docker安装DB2</a></div>
+    </li>
+    <li class="popular-posts-item">
+      <div class="popular-posts-title"><a href="/2019/10/28/docker搭建oracle-helowin-oracle-11g/" rel="bookmark">docker搭建oracle: [helowin/oracle_11g]</a></div>
+    </li>
+    <li class="popular-posts-item">
+      <div class="popular-posts-title"><a href="/2019/10/22/在nginx proxy-pass中禁用IPv6/" rel="bookmark">在nginx proxy_pass中禁用IPv6</a></div>
+    </li>
+  </ul>
+
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/docker/" rel="tag"># docker</a>
+              <a href="/tags/acl/" rel="tag"># acl</a>
+              <a href="/tags/nginx/" rel="tag"># nginx</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2019/09/29/ssltools/" rel="prev" title="在线ssl工具集">
+                  <i class="fa fa-chevron-left"></i> 在线ssl工具集
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2019/10/22/%E5%9C%A8nginx%20proxy-pass%E4%B8%AD%E7%A6%81%E7%94%A8IPv6/" rel="next" title="在nginx proxy_pass中禁用IPv6">
+                  在nginx proxy_pass中禁用IPv6 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    <div class="comments" id="gitalk-container"></div>
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      const activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      const commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="beian"><a href="https://beian.miit.gov.cn/" rel="noopener" target="_blank">浙ICP备19017268号-1 </a>
+  </div>
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">薛定谔の猫</span>
+</div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+    <span title="站点总字数">63k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="站点阅读时长">57 分钟</span>
+  </span>
+</div>
+
+    </div>
+  </footer>
+
+  
+  <script src="//cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/lozad@1.16.0/dist/lozad.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/pangu@4.0.7/dist/browser/pangu.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script><script src="/js/bookmark.js"></script>
+
+  
+
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+  
+
+
+
+
+
+  <script>
+  if (typeof MathJax === 'undefined') {
+    window.MathJax = {
+      tex: {
+        inlineMath: {'[+]': [['$', '$']]},
+        tags: 'ams'
+      },
+      options: {
+        renderActions: {
+          findScript: [10, doc => {
+            document.querySelectorAll('script[type^="math/tex"]').forEach(node => {
+              const display = !!node.type.match(/; *mode=display/);
+              const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
+              const text = document.createTextNode('');
+              node.parentNode.replaceChild(text, node);
+              math.start = {node: text, delim: '', n: 0};
+              math.end = {node: text, delim: '', n: 0};
+              doc.math.push(math);
+            });
+          }, '', false],
+          insertedScript: [200, () => {
+            document.querySelectorAll('mjx-container').forEach(node => {
+              const target = node.parentNode;
+              if (target.nodeName.toLowerCase() === 'li') {
+                target.parentNode.classList.add('has-jax');
+              }
+            });
+          }, '', false]
+        }
+      }
+    };
+    const script = document.createElement('script');
+    script.src = '//cdn.jsdelivr.net/npm/mathjax@3.1.2/es5/tex-mml-chtml.js';
+    script.defer = true;
+    document.head.appendChild(script);
+  } else {
+    MathJax.startup.document.state(0);
+    MathJax.typesetClear();
+    MathJax.texReset();
+    MathJax.typeset();
+  }
+</script>
+
+
+  <script src="//cdn.jsdelivr.net/npm/quicklink@2.0.0/dist/quicklink.umd.js"></script>
+  <script>
+      window.addEventListener('load', () => {
+      quicklink.listen({
+        timeout : 3000,
+        priority: true,
+        ignores : [uri => uri.includes('#'),uri => uri === 'https://blog.ubin.top/2019/10/12/docker%E9%95%9C%E5%83%8F%E8%87%AA%E5%8A%A8%E7%BC%96%E8%AF%91%E7%A8%8B%E5%BA%8F/',]
+      });
+      });
+  </script>
+
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/gitalk@1.7.0/dist/gitalk.css">
+
+<script>
+NexT.utils.loadComments('#gitalk-container', () => {
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/gitalk@1.7.0/dist/gitalk.min.js', () => {
+    var gitalk = new Gitalk({
+      clientID    : 'f7f877653d119a713c65',
+      clientSecret: '9c7421df94ce13acbf3e825f092635181616981f',
+      repo        : 'bineyond.github.io',
+      owner       : 'bineyond',
+      admin       : ['bineyond'],
+      id          : '6bf2ce425429a3d80f52592a47736e5a',
+        language: 'zh-CN',
+      distractionFreeMode: true
+    });
+    gitalk.render('gitalk-container');
+  }, window.Gitalk);
+});
+</script>
+
+</body>
+</html>

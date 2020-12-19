@@ -1,0 +1,676 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.3.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/favicon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.1/css/all.min.css">
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css">
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css">
+
+<script class="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"blog.ubin.top","root":"/","images":"/images","scheme":"Pisces","version":"8.1.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":true,"bookmark":{"enable":true,"color":"#222","save":"auto"},"fancybox":true,"mediumzoom":false,"lazyload":true,"pangu":true,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":true,"nav":null},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}};
+  </script>
+<meta name="description" content="select 跟 switch 有个共同特性就是都通过 case 的方式来处理，但是 select 跟 switch 处理的事情完全不同，也完全不相容。 switch特性:   1.各种类型及型别操作，接口 interface{} 型别判断 variable.(type) 2.会依照 case 顺序依序执行">
+<meta property="og:type" content="article">
+<meta property="og:title" content="select的四大用法">
+<meta property="og:url" content="https://blog.ubin.top/2020/03/16/select%E7%9A%84%E5%9B%9B%E5%A4%A7%E7%94%A8%E6%B3%95/index.html">
+<meta property="og:site_name" content="薛定谔の猫">
+<meta property="og:description" content="select 跟 switch 有个共同特性就是都通过 case 的方式来处理，但是 select 跟 switch 处理的事情完全不同，也完全不相容。 switch特性:   1.各种类型及型别操作，接口 interface{} 型别判断 variable.(type) 2.会依照 case 顺序依序执行">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2020-03-16T01:50:05.000Z">
+<meta property="article:modified_time" content="2020-12-19T03:45:51.316Z">
+<meta property="article:author" content="薛定谔の猫">
+<meta property="article:tag" content="go">
+<meta property="article:tag" content="select">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://blog.ubin.top/2020/03/16/select%E7%9A%84%E5%9B%9B%E5%A4%A7%E7%94%A8%E6%B3%95/">
+
+
+<script class="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+<title>select的四大用法 | 薛定谔の猫</title>
+  
+    <script>
+      function sendPageView() {
+        if (CONFIG.hostname !== location.hostname) return;
+        var uid = localStorage.getItem('uid') || (Math.random() + '.' + Math.random());
+        localStorage.setItem('uid', uid);
+        navigator.sendBeacon('https://www.google-analytics.com/collect', new URLSearchParams({
+          v  : 1,
+          tid: 'UA-151051157-1',
+          cid: uid,
+          t  : 'pageview',
+          dp : encodeURIComponent(location.pathname)
+        }));
+      }
+      document.addEventListener('pjax:complete', sendPageView);
+      sendPageView();
+    </script>
+
+  <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?306b44649c053ac56d4911f4894bcf16";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+  <noscript>
+  <style>
+  body { margin-top: 2rem; }
+
+  .use-motion .menu-item,
+  .use-motion .sidebar,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header {
+    visibility: visible;
+  }
+
+  .use-motion .header,
+  .use-motion .site-brand-container .toggle,
+  .use-motion .footer { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle,
+  .use-motion .custom-logo-image {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line {
+    transform: scaleX(1);
+  }
+
+  .search-pop-overlay, .sidebar-nav { display: none; }
+  .sidebar-panel { display: block; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <h1 class="site-title">薛定谔の猫</h1>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">鲜衣怒马提银枪，一日看尽长安花，此间少年。</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+        <li class="menu-item menu-item-commonweal">
+
+    <a href="/404/" rel="section"><i class="fa fa-heartbeat fa-fw"></i>公益 404</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <section class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#switch"><span class="nav-number">1.</span> <span class="nav-text">switch</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#select"><span class="nav-number">2.</span> <span class="nav-text">select</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Random-Select"><span class="nav-number">2.1.</span> <span class="nav-text">Random Select</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Timeout-%E8%B6%85%E6%97%B6%E6%9C%BA%E5%88%B6"><span class="nav-number">2.2.</span> <span class="nav-text">Timeout 超时机制</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%A3%80%E6%9F%A5-channel-%E6%98%AF%E5%90%A6%E5%B7%B2%E6%BB%A1"><span class="nav-number">2.3.</span> <span class="nav-text">检查 channel 是否已满</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#select-for-loop-%E7%94%A8%E6%B3%95"><span class="nav-number">2.4.</span> <span class="nav-text">select for loop 用法</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99"><span class="nav-number">3.</span> <span class="nav-text">参考资料</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Thinks"><span class="nav-number">4.</span> <span class="nav-text">Thinks</span></a></li></ol></div>
+        </section>
+        <!--/noindex-->
+
+        <section class="site-overview-wrap sidebar-panel">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="薛定谔の猫"
+      src="https://i.loli.net/2019/11/17/I2pesHhfYv6iDCP.png">
+  <p class="site-author-name" itemprop="name">薛定谔の猫</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">26</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">3</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">29</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author site-overview-item animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/bineyond%20|%20fab%20fa-github" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;bineyond | fab fa-github" rel="noopener" target="_blank">GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://www.jetbrains.com/?from=bineyond.github.io" title="GoLand → https:&#x2F;&#x2F;www.jetbrains.com&#x2F;?from&#x3D;bineyond.github.io" rel="noopener" target="_blank"><i class="thumbs-o-up fa-fw"></i>GoLand</a>
+      </span>
+  </div>
+
+
+  <div class="links-of-blogroll site-overview-item animated">
+    <div class="links-of-blogroll-title"><i class="fa fa-globe fa-fw"></i>
+      Links
+    </div>
+    <ul class="links-of-blogroll-list">
+        <li class="links-of-blogroll-item">
+          <a href="https://talkgo.org/night/" title="https:&#x2F;&#x2F;talkgo.org&#x2F;night&#x2F;" rel="noopener" target="_blank">Go 夜读</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://github.com/xmge/gonote" title="https:&#x2F;&#x2F;github.com&#x2F;xmge&#x2F;gonote" rel="noopener" target="_blank">gopher 笔记</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://www.4async.com/" title="https:&#x2F;&#x2F;www.4async.com&#x2F;" rel="noopener" target="_blank">ipfans</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://go101.org/" title="https:&#x2F;&#x2F;go101.org" rel="noopener" target="_blank">go101</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://colobu.com/" title="https:&#x2F;&#x2F;colobu.com&#x2F;" rel="noopener" target="_blank">鸟窝</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://draveness.me/" title="https:&#x2F;&#x2F;draveness.me&#x2F;" rel="noopener" target="_blank">面向信仰编程</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://note.mogutou.xyz/" title="https:&#x2F;&#x2F;note.mogutou.xyz&#x2F;" rel="noopener" target="_blank">徐旭</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://www.hrefs.cn/articles" title="https:&#x2F;&#x2F;www.hrefs.cn&#x2F;articles" rel="noopener" target="_blank">爱施园</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="http://www.codepub.cn/" title="http:&#x2F;&#x2F;www.codepub.cn&#x2F;" rel="noopener" target="_blank">IT草根</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://xiaozhou.net/" title="https:&#x2F;&#x2F;xiaozhou.net&#x2F;" rel="noopener" target="_blank">iTimothy</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://taozj.org/" title="https:&#x2F;&#x2F;taozj.org&#x2F;" rel="noopener" target="_blank">taizj</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="http://www.wdk.pw/" title="http:&#x2F;&#x2F;www.wdk.pw&#x2F;" rel="noopener" target="_blank">王登科</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://weread.qnmlgb.tech/" title="https:&#x2F;&#x2F;weread.qnmlgb.tech&#x2F;" rel="noopener" target="_blank">微信读书组队</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://mojotv.cn/" title="https:&#x2F;&#x2F;mojotv.cn&#x2F;" rel="noopener" target="_blank">mojotv.cn</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://kany.me/" title="https:&#x2F;&#x2F;kany.me&#x2F;" rel="noopener" target="_blank">Kany.Wang</a>
+        </li>
+    </ul>
+  </div>
+
+        </section>
+      </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+  <a role="button" class="book-mark-link book-mark-link-fixed"></a>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://blog.ubin.top/2020/03/16/select%E7%9A%84%E5%9B%9B%E5%A4%A7%E7%94%A8%E6%B3%95/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://i.loli.net/2019/11/17/I2pesHhfYv6iDCP.png">
+      <meta itemprop="name" content="薛定谔の猫">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="薛定谔の猫">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          select的四大用法
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2020-03-16 09:50:05" itemprop="dateCreated datePublished" datetime="2020-03-16T09:50:05+08:00">2020-03-16</time>
+    </span>
+      <span class="post-meta-item">
+        <span class="post-meta-item-icon">
+          <i class="far fa-calendar-check"></i>
+        </span>
+        <span class="post-meta-item-text">更新于</span>
+        <time title="修改时间：2020-12-19 11:45:51" itemprop="dateModified" datetime="2020-12-19T11:45:51+08:00">2020-12-19</time>
+      </span>
+
+  
+      </div>
+      <div class="post-meta">
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>4.1k</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>4 分钟</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <p><a target="_blank" rel="noopener" href="https://tour.golang.org/concurrency/5">select</a> 跟 <a target="_blank" rel="noopener" href="https://tour.golang.org/flowcontrol/9">switch</a> 有个共同特性就是都通过 case 的方式来处理，但是 select 跟 switch 处理的事情完全不同，也完全不相容。</p>
+<h1 id="switch"><a href="#switch" class="headerlink" title="switch"></a>switch</h1><p>特性: </p>
+<ul>
+<li>1.各种类型及型别操作，接口 interface{} 型别判断 variable.(type)</li>
+<li>2.会依照 case <code>顺序依序执行</code></li>
+</ul>
+<a id="more"></a>
+
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> (</span><br><span class="line">    i <span class="keyword">interface</span>&#123;&#125;</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">convert</span><span class="params">(i <span class="keyword">interface</span>&#123;&#125;)</span></span> &#123;</span><br><span class="line">    <span class="keyword">switch</span> t := i.(<span class="keyword">type</span>) &#123;</span><br><span class="line">    caseint:</span><br><span class="line">        <span class="built_in">println</span>(<span class="string">&quot;i is interger&quot;</span>, t)</span><br><span class="line">    casestring:</span><br><span class="line">        <span class="built_in">println</span>(<span class="string">&quot;i is string&quot;</span>, t)</span><br><span class="line">    casefloat64:</span><br><span class="line">        <span class="built_in">println</span>(<span class="string">&quot;i is float64&quot;</span>, t)</span><br><span class="line">    <span class="keyword">default</span>:</span><br><span class="line">        <span class="built_in">println</span>(<span class="string">&quot;type not found&quot;</span>)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">    i = <span class="number">100</span></span><br><span class="line">    convert(i)</span><br><span class="line">    i = <span class="keyword">float64</span>(<span class="number">45.55</span>)</span><br><span class="line">    convert(i)</span><br><span class="line">    i = <span class="string">&quot;foo&quot;</span></span><br><span class="line">    convert(i)</span><br><span class="line">    convert(<span class="keyword">float32</span>(<span class="number">10.0</span>))</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>运行出来的结果如下:</p>
+<figure class="highlight angelscript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">i <span class="keyword">is</span> <span class="built_in">int</span>erger <span class="number">100</span></span><br><span class="line">i <span class="keyword">is</span> <span class="built_in">float</span>64 +<span class="number">4.555000e+001</span></span><br><span class="line">i <span class="keyword">is</span> <span class="built_in">string</span> foo</span><br><span class="line">type <span class="keyword">not</span> found</span><br></pre></td></tr></table></figure>
+<p>而 select 的特性就不同了，只能接收 channel，否则会出错，而 default 会直接执行，所以<code>没有 default 的 select 就会遇到 blocking</code>，假设没有送 value 进去 Channel 就会造成 panic，底下拿几个实际例子来解说。</p>
+<h1 id="select"><a href="#select" class="headerlink" title="select"></a>select</h1><h2 id="Random-Select"><a href="#Random-Select" class="headerlink" title="Random Select"></a>Random Select</h2><p>同一个 channel 在 select 会随机选取，底下看个例子:</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span><span class="string">&quot;fmt&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">    ch := <span class="built_in">make</span>(<span class="keyword">chan</span> <span class="keyword">int</span>, <span class="number">1</span>)</span><br><span class="line"></span><br><span class="line">    ch &lt;- <span class="number">1</span></span><br><span class="line">    <span class="keyword">select</span> &#123;</span><br><span class="line">    <span class="keyword">case</span> &lt;-ch:</span><br><span class="line">        fmt.Println(<span class="string">&quot;random 01&quot;</span>)</span><br><span class="line">    <span class="keyword">case</span> &lt;-ch:</span><br><span class="line">        fmt.Println(<span class="string">&quot;random 02&quot;</span>)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>执行后会发现有时候拿到 random 01 有时候拿到 random 02，这就是 select 的特性之一，case 是随机选取，所以当 select 有两个 channel 以上时，如果同时对全部 channel 送资料，则会随机选取到不同的 Channel。而上面有提到另一个特性『假设没有送 value 进入 Channel 就会造成 panic』，拿上面例子来改:</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">    ch := <span class="built_in">make</span>(<span class="keyword">chan</span> <span class="keyword">int</span>, <span class="number">1</span>)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">select</span> &#123;</span><br><span class="line">    <span class="keyword">case</span> &lt;-ch:</span><br><span class="line">        fmt.Println(<span class="string">&quot;random 01&quot;</span>)</span><br><span class="line">    <span class="keyword">case</span> &lt;-ch:</span><br><span class="line">        fmt.Println(<span class="string">&quot;random 02&quot;</span>)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>执行后会发现变成 deadlock，造成 main 主程式爆炸，这时候可以直接用 default 方式解决此问题:</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">    ch := <span class="built_in">make</span>(<span class="keyword">chan</span> <span class="keyword">int</span>, <span class="number">1</span>)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">select</span> &#123;</span><br><span class="line">    <span class="keyword">case</span> &lt;-ch:</span><br><span class="line">        fmt.Println(<span class="string">&quot;random 01&quot;</span>)</span><br><span class="line">    <span class="keyword">case</span> &lt;-ch:</span><br><span class="line">        fmt.Println(<span class="string">&quot;random 02&quot;</span>)</span><br><span class="line">    <span class="keyword">default</span>:</span><br><span class="line">        fmt.Println(<span class="string">&quot;exit&quot;</span>)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>主程式 main 就不会因为读不到 channel value 造成整个程式 deadlock。</p>
+<h2 id="Timeout-超时机制"><a href="#Timeout-超时机制" class="headerlink" title="Timeout 超时机制"></a>Timeout 超时机制</h2><p>用 select 读取 channle 时，一定会实作超过一定时间后就做其他事情，而不是一直 blocking 在 select 内。底下是简单的例子:</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">    <span class="string">&quot;fmt&quot;</span></span><br><span class="line">    <span class="string">&quot;time&quot;</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">    timeout := <span class="built_in">make</span>(<span class="keyword">chan</span> <span class="keyword">bool</span>, <span class="number">1</span>)</span><br><span class="line">    <span class="keyword">go</span> <span class="function"><span class="keyword">func</span><span class="params">()</span></span> &#123;</span><br><span class="line">        time.Sleep(<span class="number">2</span> * time.Second)</span><br><span class="line">        timeout &lt;- <span class="literal">true</span></span><br><span class="line">    &#125;()</span><br><span class="line">    ch := <span class="built_in">make</span>(<span class="keyword">chan</span> <span class="keyword">int</span>)</span><br><span class="line">    <span class="keyword">select</span> &#123;</span><br><span class="line">    <span class="keyword">case</span> &lt;-ch:</span><br><span class="line">    <span class="keyword">case</span> &lt;-timeout:</span><br><span class="line">        fmt.Println(<span class="string">&quot;timeout 01&quot;</span>)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>建立 timeout channel，让其他地方可以透过 trigger timeout channel 达到让 select 执行结束，也或者有另一个写法是透握 time.After 机制</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> &#123;</span><br><span class="line"><span class="keyword">case</span> &lt;-ch:</span><br><span class="line"><span class="keyword">case</span> &lt;-timeout:</span><br><span class="line">    fmt.Println(<span class="string">&quot;timeout 01&quot;</span>)</span><br><span class="line"><span class="keyword">case</span> &lt;-time.After(time.Second * <span class="number">1</span>):</span><br><span class="line">    fmt.Println(<span class="string">&quot;timeout 02&quot;</span>)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>可以注意 time.After 是回传 chan time.Time，所以执行 select 超过一秒时，就会输出 timeout 02。</p>
+<h2 id="检查-channel-是否已满"><a href="#检查-channel-是否已满" class="headerlink" title="检查 channel 是否已满"></a>检查 channel 是否已满</h2><p>直接来看例子比较快:</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">    <span class="string">&quot;fmt&quot;</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">    ch := <span class="built_in">make</span>(<span class="keyword">chan</span> <span class="keyword">int</span>, <span class="number">1</span>)</span><br><span class="line">    ch &lt;- <span class="number">1</span></span><br><span class="line">    <span class="keyword">select</span> &#123;</span><br><span class="line">    <span class="keyword">case</span> ch &lt;- <span class="number">2</span>:</span><br><span class="line">        fmt.Println(<span class="string">&quot;channel value is&quot;</span>, &lt;-ch)</span><br><span class="line">        fmt.Println(<span class="string">&quot;channel value is&quot;</span>, &lt;-ch)</span><br><span class="line">    <span class="keyword">default</span>:</span><br><span class="line">        fmt.Println(<span class="string">&quot;channel blocking&quot;</span>)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>先宣告 buffer size 为 1 的 channel，先丢值把 channel 填满。这时候可以透过 select + default 方式来确保 channel 是否已满，上面例子会输出 channel blocking，我们再把程式改成底下</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">    ch := <span class="built_in">make</span>(chanint, <span class="number">2</span>)</span><br><span class="line">    ch &lt;- <span class="number">1</span></span><br><span class="line">    <span class="keyword">select</span> &#123;</span><br><span class="line">    <span class="keyword">case</span> ch &lt;- <span class="number">2</span>:</span><br><span class="line">        fmt.Println(<span class="string">&quot;channel value is&quot;</span>, &lt;-ch)</span><br><span class="line">        fmt.Println(<span class="string">&quot;channel value is&quot;</span>, &lt;-ch)</span><br><span class="line">    <span class="keyword">default</span>:</span><br><span class="line">        fmt.Println(<span class="string">&quot;channel blocking&quot;</span>)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>把 buffer size 改为 2 后，就可以继续在塞 value 进去 channel 了，这边的 buffer channel 观念可以看之前的文章『用五分钟了解什么是 unbuffered vs buffered channel』[1]</p>
+<h2 id="select-for-loop-用法"><a href="#select-for-loop-用法" class="headerlink" title="select for loop 用法"></a>select for loop 用法</h2><p>如果你有多个 channel 需要读取，而读取是不间断的，就必须使用 for + select 机制来实现，更详细的实作可以参考『15 分钟学习 Go 语言如何处理多个 Channel 通道』</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">    <span class="string">&quot;fmt&quot;</span></span><br><span class="line">    <span class="string">&quot;time&quot;</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">    i := <span class="number">0</span></span><br><span class="line">    ch := <span class="built_in">make</span>(<span class="keyword">chan</span> <span class="keyword">string</span>, <span class="number">0</span>)</span><br><span class="line">    <span class="keyword">defer</span> <span class="function"><span class="keyword">func</span><span class="params">()</span></span> &#123;</span><br><span class="line">        <span class="built_in">close</span>(ch)</span><br><span class="line">    &#125;()</span><br><span class="line"></span><br><span class="line">    <span class="keyword">go</span> <span class="function"><span class="keyword">func</span><span class="params">()</span></span> &#123;</span><br><span class="line">    LOOP:</span><br><span class="line">        <span class="keyword">for</span> &#123;</span><br><span class="line">            time.Sleep(<span class="number">1</span> * time.Second)</span><br><span class="line">            fmt.Println(time.Now().Unix())</span><br><span class="line">            i++</span><br><span class="line"></span><br><span class="line">            <span class="keyword">select</span> &#123;</span><br><span class="line">            <span class="keyword">case</span> m := &lt;-ch:</span><br><span class="line">                <span class="built_in">println</span>(m)</span><br><span class="line">                <span class="keyword">break</span> LOOP</span><br><span class="line">            <span class="keyword">default</span>:</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;()</span><br><span class="line"></span><br><span class="line">    time.Sleep(time.Second * <span class="number">4</span>)</span><br><span class="line">    ch &lt;- <span class="string">&quot;stop&quot;</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>上面例子可以发现执行后如下:</p>
+<figure class="highlight dns"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">1257894001</span></span><br><span class="line"><span class="number">1257894002</span></span><br><span class="line"><span class="number">1257894003</span></span><br><span class="line"><span class="number">1257894004</span></span><br><span class="line"><span class="number">1257894005</span></span><br><span class="line">stop</span><br></pre></td></tr></table></figure>
+<p>其实把 default 拿掉也可以达到目的</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> &#123;</span><br><span class="line"><span class="keyword">case</span> m := &lt;-ch:</span><br><span class="line">    <span class="built_in">println</span>(m)</span><br><span class="line">    <span class="keyword">break</span> LOOP</span><br></pre></td></tr></table></figure>
+<p>当没有值送进来时，就会一直停在 select 区段，所以其实没有 default 也是可以正常运作的，而要结束 for 或 select 都需要透过 break 来结束，但是要<code>在 select 区间直接结束掉 for 回圈，只能使用 break variable 来结束，这边是大家需要注意的地方</code>。</p>
+<h1 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h1><p>[1]『用五分钟了解什么是 unbuffered vs buffered channel』: <a target="_blank" rel="noopener" href="https://blog.wu-boy.com/2019/04/understand-unbuffered-vs-buffered-channel-in-five-minutes/">https://blog.wu-boy.com/2019/04/understand-unbuffered-vs-buffered-channel-in-five-minutes/</a></p>
+<h1 id="Thinks"><a href="#Thinks" class="headerlink" title="Thinks"></a>Thinks</h1><blockquote>
+<p>原文链接：<a target="_blank" rel="noopener" href="https://blog.wu-boy.com/2019/11/four-tips-with-select-in-golang/">https://blog.wu-boy.com/2019/11/four-tips-with-select-in-golang/</a></p>
+</blockquote>
+
+    </div>
+
+    
+    
+    
+      
+  <div class="popular-posts-header">相关文章</div>
+  <ul class="popular-posts">
+    <li class="popular-posts-item">
+      <div class="popular-posts-title"><a href="/2020/03/15/Go防缓存击穿singleflight/" rel="bookmark">Go防缓存击穿 singleflight</a></div>
+    </li>
+    <li class="popular-posts-item">
+      <div class="popular-posts-title"><a href="/2020/04/09/go-cgo-oracle/" rel="bookmark">go-cgo-oracle</a></div>
+    </li>
+    <li class="popular-posts-item">
+      <div class="popular-posts-title"><a href="/2020/03/15/singleflight本地缓存实例/" rel="bookmark">singleflight本地缓存实例</a></div>
+    </li>
+    <li class="popular-posts-item">
+      <div class="popular-posts-title"><a href="/2020/03/16/服务优雅重启及热更新/" rel="bookmark">服务优雅重启及热更新</a></div>
+    </li>
+  </ul>
+
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/go/" rel="tag"># go</a>
+              <a href="/tags/select/" rel="tag"># select</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2020/03/15/singleflight%E6%9C%AC%E5%9C%B0%E7%BC%93%E5%AD%98%E5%AE%9E%E4%BE%8B/" rel="prev" title="singleflight本地缓存实例">
+                  <i class="fa fa-chevron-left"></i> singleflight本地缓存实例
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2020/03/16/%E6%9C%8D%E5%8A%A1%E4%BC%98%E9%9B%85%E9%87%8D%E5%90%AF%E5%8F%8A%E7%83%AD%E6%9B%B4%E6%96%B0/" rel="next" title="服务优雅重启及热更新">
+                  服务优雅重启及热更新 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    <div class="comments" id="gitalk-container"></div>
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      const activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      const commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="beian"><a href="https://beian.miit.gov.cn/" rel="noopener" target="_blank">浙ICP备19017268号-1 </a>
+  </div>
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">薛定谔の猫</span>
+</div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+    <span title="站点总字数">63k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="站点阅读时长">57 分钟</span>
+  </span>
+</div>
+
+    </div>
+  </footer>
+
+  
+  <script src="//cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/lozad@1.16.0/dist/lozad.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/pangu@4.0.7/dist/browser/pangu.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script><script src="/js/bookmark.js"></script>
+
+  
+
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+  
+
+
+
+
+
+  <script>
+  if (typeof MathJax === 'undefined') {
+    window.MathJax = {
+      tex: {
+        inlineMath: {'[+]': [['$', '$']]},
+        tags: 'ams'
+      },
+      options: {
+        renderActions: {
+          findScript: [10, doc => {
+            document.querySelectorAll('script[type^="math/tex"]').forEach(node => {
+              const display = !!node.type.match(/; *mode=display/);
+              const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
+              const text = document.createTextNode('');
+              node.parentNode.replaceChild(text, node);
+              math.start = {node: text, delim: '', n: 0};
+              math.end = {node: text, delim: '', n: 0};
+              doc.math.push(math);
+            });
+          }, '', false],
+          insertedScript: [200, () => {
+            document.querySelectorAll('mjx-container').forEach(node => {
+              const target = node.parentNode;
+              if (target.nodeName.toLowerCase() === 'li') {
+                target.parentNode.classList.add('has-jax');
+              }
+            });
+          }, '', false]
+        }
+      }
+    };
+    const script = document.createElement('script');
+    script.src = '//cdn.jsdelivr.net/npm/mathjax@3.1.2/es5/tex-mml-chtml.js';
+    script.defer = true;
+    document.head.appendChild(script);
+  } else {
+    MathJax.startup.document.state(0);
+    MathJax.typesetClear();
+    MathJax.texReset();
+    MathJax.typeset();
+  }
+</script>
+
+
+  <script src="//cdn.jsdelivr.net/npm/quicklink@2.0.0/dist/quicklink.umd.js"></script>
+  <script>
+      window.addEventListener('load', () => {
+      quicklink.listen({
+        timeout : 3000,
+        priority: true,
+        ignores : [uri => uri.includes('#'),uri => uri === 'https://blog.ubin.top/2020/03/16/select%E7%9A%84%E5%9B%9B%E5%A4%A7%E7%94%A8%E6%B3%95/',]
+      });
+      });
+  </script>
+
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/gitalk@1.7.0/dist/gitalk.css">
+
+<script>
+NexT.utils.loadComments('#gitalk-container', () => {
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/gitalk@1.7.0/dist/gitalk.min.js', () => {
+    var gitalk = new Gitalk({
+      clientID    : 'f7f877653d119a713c65',
+      clientSecret: '9c7421df94ce13acbf3e825f092635181616981f',
+      repo        : 'bineyond.github.io',
+      owner       : 'bineyond',
+      admin       : ['bineyond'],
+      id          : 'e49c3af5678821f4ee204bd8efa356cb',
+        language: 'zh-CN',
+      distractionFreeMode: true
+    });
+    gitalk.render('gitalk-container');
+  }, window.Gitalk);
+});
+</script>
+
+</body>
+</html>
