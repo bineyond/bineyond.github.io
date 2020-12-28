@@ -100,39 +100,6 @@
       </tags>
   </entry>
   <entry>
-    <title>在Mac上安装db2 driver</title>
-    <url>/2020/12/28/db2-driver-on-macos/</url>
-    <content><![CDATA[<h1 id="选择版本"><a href="#选择版本" class="headerlink" title="选择版本"></a>选择版本</h1><p><a href="https://www.ibm.com/support/pages/node/323035">此处选择</a></p>
-<p>11 版本开始有 MacOS 版本支持，需下载11版本。<br>选择 【IBM Data Server Driver Package】</p>
-<p><img data-src="https://i.loli.net/2020/12/28/neVHN5uGARgD9bM.png" alt="IBM Data Server Driver Package"></p>
-<a id="more"></a>
-
-
-<h1 id="安装或更新"><a href="#安装或更新" class="headerlink" title="安装或更新"></a>安装或更新</h1><p><img data-src="https://i.loli.net/2020/12/28/TVkvqnWQhU7BjzL.png" alt="安装或更新步骤"></p>
-<ul>
-<li><p>通过双击 v11.5.5_macos_dsdriver.dmg 文件，装载磁盘映像</p>
-</li>
-<li><p>这将打开新的 Finder 窗口，其中会显示该磁盘映像的内容</p>
-</li>
-<li><p>如果 Finder 窗口未打开，请双击桌面上的 dsvriver 图标</p>
-</li>
-<li><p>在 Finder 窗口中，双击 installDSDriver.sh 文件</p>
-</li>
-<li><p>驱动程序包将安装在以下缺省位置：/Applications/dsdriver</p>
-</li>
-<li><p>配置环境变量 vi ~/.zshrc</p>
-<figure class="highlight zsh"><table><tr><td class="code"><pre><span class="line"><span class="comment"># db2</span></span><br><span class="line"><span class="keyword">if</span> [ -f /Applications/dsdriver/db2profile ]; <span class="keyword">then</span></span><br><span class="line">    . /Applications/dsdriver/db2profile</span><br><span class="line"><span class="keyword">fi</span></span><br></pre></td></tr></table></figure>
-<h1 id="配置"><a href="#配置" class="headerlink" title="配置"></a>配置</h1></li>
-<li><p><a href="https://www.ibm.com/support/knowledgecenter/zh/SS6NHC/com.ibm.swg.im.dashdb.doc/connecting/connect_driver_package_config.html">配置本地环境以连接到 Db2 数据库</a></p>
-</li>
-</ul>
-]]></content>
-      <tags>
-        <tag>db2</tag>
-        <tag>MacOS</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>Go防缓存击穿 singleflight</title>
     <url>/2020/03/15/Go%E9%98%B2%E7%BC%93%E5%AD%98%E5%87%BB%E7%A9%BFsingleflight/</url>
     <content><![CDATA[<h1 id="缓存更新问题"><a href="#缓存更新问题" class="headerlink" title="缓存更新问题"></a>缓存更新问题</h1><p>缓存是高并发业务的基石，当访问量突然上升的时候，缓存失效回源时会将请求打到后台数据库，导致服务器响应延迟或者宕机的情况。</p>
@@ -190,6 +157,39 @@
       <tags>
         <tag>Golang</tag>
         <tag>协程</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>在Mac上安装db2 driver</title>
+    <url>/2020/12/28/db2-driver-on-macos/</url>
+    <content><![CDATA[<h1 id="选择版本"><a href="#选择版本" class="headerlink" title="选择版本"></a>选择版本</h1><p><a href="https://www.ibm.com/support/pages/node/323035">此处选择</a></p>
+<p>11 版本开始有 MacOS 版本支持，需下载11版本。<br>选择 【IBM Data Server Driver Package】</p>
+<p><img data-src="https://i.loli.net/2020/12/28/neVHN5uGARgD9bM.png" alt="IBM Data Server Driver Package"></p>
+<a id="more"></a>
+
+
+<h1 id="安装或更新"><a href="#安装或更新" class="headerlink" title="安装或更新"></a>安装或更新</h1><p><img data-src="https://i.loli.net/2020/12/28/TVkvqnWQhU7BjzL.png" alt="安装或更新步骤"></p>
+<ul>
+<li><p>通过双击 v11.5.5_macos_dsdriver.dmg 文件，装载磁盘映像</p>
+</li>
+<li><p>这将打开新的 Finder 窗口，其中会显示该磁盘映像的内容</p>
+</li>
+<li><p>如果 Finder 窗口未打开，请双击桌面上的 dsvriver 图标</p>
+</li>
+<li><p>在 Finder 窗口中，双击 installDSDriver.sh 文件</p>
+</li>
+<li><p>驱动程序包将安装在以下缺省位置：/Applications/dsdriver</p>
+</li>
+<li><p>配置环境变量 vi ~/.zshrc</p>
+<figure class="highlight zsh"><table><tr><td class="code"><pre><span class="line"><span class="comment"># db2</span></span><br><span class="line"><span class="keyword">if</span> [ -f /Applications/dsdriver/db2profile ]; <span class="keyword">then</span></span><br><span class="line">    . /Applications/dsdriver/db2profile</span><br><span class="line"><span class="keyword">fi</span></span><br></pre></td></tr></table></figure>
+<h1 id="配置"><a href="#配置" class="headerlink" title="配置"></a>配置</h1></li>
+<li><p><a href="https://www.ibm.com/support/knowledgecenter/zh/SS6NHC/com.ibm.swg.im.dashdb.doc/connecting/connect_driver_package_config.html">配置本地环境以连接到 Db2 数据库</a></p>
+</li>
+</ul>
+]]></content>
+      <tags>
+        <tag>db2</tag>
+        <tag>MacOS</tag>
       </tags>
   </entry>
   <entry>
@@ -410,45 +410,6 @@
       </tags>
   </entry>
   <entry>
-    <title>singleflight本地缓存实例</title>
-    <url>/2020/03/15/singleflight%E6%9C%AC%E5%9C%B0%E7%BC%93%E5%AD%98%E5%AE%9E%E4%BE%8B/</url>
-    <content><![CDATA[<p>本地保存商户信息，模拟并发情况下缓存穿透情况，到 DB 获取 MCH 信息。</p>
-<a id="more"></a>
-
-<figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">	<span class="string">&quot;errors&quot;</span></span><br><span class="line">	<span class="string">&quot;fmt&quot;</span></span><br><span class="line">	<span class="string">&quot;sync&quot;</span></span><br><span class="line"></span><br><span class="line">	<span class="string">&quot;github.com/golang/groupcache/singleflight&quot;</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	<span class="keyword">var</span> wg sync.WaitGroup</span><br><span class="line">	<span class="keyword">for</span> i := <span class="number">0</span>; i &lt; <span class="number">500</span>; i++ &#123;</span><br><span class="line">		wg.Add(<span class="number">1</span>)</span><br><span class="line">		<span class="keyword">go</span> <span class="function"><span class="keyword">func</span><span class="params">(n <span class="keyword">int</span>)</span></span> &#123;</span><br><span class="line">			<span class="keyword">var</span> mchId = <span class="string">&quot;12345&quot;</span></span><br><span class="line">			<span class="keyword">var</span> mch, err = mchCache.GetMch(mchId)</span><br><span class="line">			fmt.Println(n, mch, err)</span><br><span class="line">			wg.Done()</span><br><span class="line">		&#125;(i)</span><br><span class="line">	&#125;</span><br><span class="line">	wg.Wait()</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">type</span> MchCache <span class="keyword">struct</span> &#123;</span><br><span class="line">	Mchs <span class="keyword">map</span>[<span class="keyword">string</span>]MchInfo</span><br><span class="line">	sync.RWMutex</span><br><span class="line">	g singleflight.Group</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">type</span> MchInfo <span class="keyword">struct</span> &#123;</span><br><span class="line">	ID   <span class="keyword">string</span></span><br><span class="line">	Name <span class="keyword">string</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> mchCache MchCache</span><br><span class="line"><span class="keyword">var</span> errMchNotFound = errors.New(<span class="string">&quot;mch not found in cache&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(c *MchCache)</span> <span class="title">GetMch</span><span class="params">(id <span class="keyword">string</span>)</span> <span class="params">(mch MchInfo, err error)</span></span> &#123;</span><br><span class="line">	mch, err = c.getMch(id)</span><br><span class="line">	<span class="keyword">if</span> err == <span class="literal">nil</span> &#123;</span><br><span class="line">		<span class="keyword">return</span></span><br><span class="line">	&#125;</span><br><span class="line">	m, err := c.g.Do(id, <span class="function"><span class="keyword">func</span><span class="params">()</span> <span class="params">(<span class="keyword">interface</span>&#123;&#125;, error)</span></span> &#123;</span><br><span class="line">		<span class="keyword">return</span> c.getMchFromDB(id)</span><br><span class="line">	&#125;)</span><br><span class="line">	<span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">		<span class="keyword">return</span></span><br><span class="line">	&#125;</span><br><span class="line">	mch = m.(MchInfo)</span><br><span class="line">	<span class="keyword">return</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(c *MchCache)</span> <span class="title">getMch</span><span class="params">(id <span class="keyword">string</span>)</span> <span class="params">(mch MchInfo, err error)</span></span> &#123;</span><br><span class="line">	c.RLock()</span><br><span class="line">	<span class="keyword">defer</span> c.RUnlock()</span><br><span class="line">	<span class="keyword">if</span> c.Mchs == <span class="literal">nil</span> &#123;</span><br><span class="line">		c.Mchs = <span class="built_in">make</span>(<span class="keyword">map</span>[<span class="keyword">string</span>]MchInfo)</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">if</span> mch, ok := c.Mchs[id]; ok &#123;</span><br><span class="line">		<span class="keyword">return</span> mch, <span class="literal">nil</span></span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span> mch, errMchNotFound</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(c *MchCache)</span> <span class="title">SetMch</span><span class="params">(mch MchInfo)</span></span> &#123;</span><br><span class="line">	c.Lock()</span><br><span class="line">	<span class="keyword">defer</span> c.Unlock()</span><br><span class="line">	<span class="keyword">if</span> c.Mchs == <span class="literal">nil</span> &#123;</span><br><span class="line">		c.Mchs = <span class="built_in">make</span>(<span class="keyword">map</span>[<span class="keyword">string</span>]MchInfo)</span><br><span class="line">	&#125;</span><br><span class="line">	c.Mchs[mch.ID] = mch</span><br><span class="line">	<span class="keyword">return</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(c *MchCache)</span> <span class="title">getMchFromDB</span><span class="params">(id <span class="keyword">string</span>)</span> <span class="params">(mch MchInfo, err error)</span></span> &#123;</span><br><span class="line">	mch = MchInfo&#123;</span><br><span class="line">		ID:   id,</span><br><span class="line">		Name: <span class="string">&quot;星巴克&quot;</span>,</span><br><span class="line">	&#125;</span><br><span class="line">	c.SetMch(mch)</span><br><span class="line">	<span class="keyword">return</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>]]></content>
-      <tags>
-        <tag>cache</tag>
-        <tag>go</tag>
-        <tag>singleflight</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>在线ssl工具集</title>
-    <url>/2019/09/29/ssltools/</url>
-    <content><![CDATA[<p>最近遇到部署https网站，在iOS端访问正常，在Android端访问异常，检查发现是证书链补全导致，缺少中间证书。</p>
-<a id="more"></a>
-
-<h1 id="myssl-cn"><a href="#myssl-cn" class="headerlink" title="myssl.cn"></a>myssl.cn</h1><ul>
-<li><a href="https://www.myssl.cn/tools/check-server-cert.html">SSL服务器证书安装检查器</a></li>
-<li><a href="https://www.myssl.cn/tools/create-csr.html">CSR 在线生成</a></li>
-<li><a href="https://www.myssl.cn/tools/downloadchain.html">获取证书信息 及 下载中间证书(可用于证书链修复)</a></li>
-</ul>
-<h1 id="myssl-com"><a href="#myssl-com" class="headerlink" title="myssl.com"></a>myssl.com</h1><ul>
-<li><a href="https://myssl.com/chain_download.html">证书链下载／证书链修复</a></li>
-<li><a href="https://myssl.com/ssl.html">SSL状态检测</a></li>
-<li><a href="https://myssl.com/csr_create.html">CSR 在线生成</a></li>
-<li><a href="https://myssl.com/cert_convert.html">证书格式转换</a></li>
-</ul>
-<h1 id="web-chacuo-net"><a href="#web-chacuo-net" class="headerlink" title="web.chacuo.net"></a>web.chacuo.net</h1><ul>
-<li><a href="http://web.chacuo.net/netcsrdecoder">CSR请求证书文件信息</a></li>
-</ul>
-]]></content>
-      <tags>
-        <tag>ssl</tag>
-        <tag>https</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>Hello World</title>
     <url>/2015/03/27/hello-world/</url>
     <content><![CDATA[<p>Welcome to <a href="http://hexo.io/">Hexo</a>! This is your very first post. Check <a href="http://hexo.io/docs/">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="http://hexo.io/docs/troubleshooting.html">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues">GitHub</a>.</p>
@@ -464,45 +425,6 @@
 <p>More info: <a href="http://hexo.io/docs/deployment.html">Deployment</a></p>
 <iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width=330 height=86 src="http://music.163.com/outchain/player?type=2&id=28947001&auto=1&height=66"></iframe>
 ]]></content>
-  </entry>
-  <entry>
-    <title>利用python发邮件</title>
-    <url>/2016/01/19/%E5%88%A9%E7%94%A8python%E5%8F%91%E9%82%AE%E4%BB%B6/</url>
-    <content><![CDATA[<p>在刚开始学习python的时候就听有的人说，用python发邮件简直太轻松了，随着学习的深入，今天学习了一下python的smtplib模块，果不其然，只需几行代码就可以轻松实现发邮件的功能。<br>在本例中，使用自己的163邮箱给qq邮箱发测试样例。</p>
-<a id="more"></a>
-
-<hr>
-<p>一共需要四部即可</p>
-<blockquote>
-<ul>
-<li>连接到服务器</li>
-<li>登录</li>
-<li>发出服务请求</li>
-<li>退出</li>
-</ul>
-</blockquote>
-<p>遵从这四步，首先一段简单的：</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment">#coding: utf-8</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> smtplib</span><br><span class="line"></span><br><span class="line">msg = <span class="string">&#x27;From: xxx@163.com\r\nTo: xxx@qq.com\r\nSubject: Test smtp by python\r\n\r\nJust for test&#x27;</span></span><br><span class="line">handle = smtplib.SMTP(<span class="string">&#x27;smtp.163.com&#x27;</span>, <span class="string">&#x27;25&#x27;</span>)          <span class="comment">#第一步</span></span><br><span class="line">handle.login(<span class="string">&#x27;xxx@163.com&#x27;</span>, <span class="string">&#x27;xxxxx&#x27;</span>)                 <span class="comment">#第二步  用户名和密码</span></span><br><span class="line">handle.sendmail(<span class="string">&#x27;xxx@163.com&#x27;</span>, <span class="string">&#x27;xxx@qq.com&#x27;</span>, msg)    <span class="comment">#第三步</span></span><br><span class="line">handle.quit()                                        <span class="comment">#第四步</span></span><br><span class="line"><span class="built_in">print</span> <span class="string">&#x27;send successfully&#x27;</span></span><br></pre></td></tr></table></figure>
-<blockquote>
-<ul>
-<li><code>sendmail()</code>的所有参数要遵循RFC 2822，即电子邮件的地址必须要有正确的格式，消息体要有正确的前导头，前导头后是两个回车和换行(<code>\r\n</code>)对</li>
-<li>SMTP通讯时，只要一个端口<code>25</code></li>
-</ul>
-</blockquote>
-<hr>
-<p>以上很简单的就实现了利用python自带的<code>smtplib</code>模块实现了发送邮件的功能，但是在现实发邮件中，肯定比这样的要复杂。这时需要另一个模块<code>email</code>，<code>email</code>负责构造邮件，<code>smtplib</code>负责发送邮件。</p>
-<p>构造一个邮件对象就是一个<code>Messag</code>对象，如果构造一个<code>MIMEText</code>对象，就表示一个文本邮件对象，如果构造一个<code>MIMEImage</code>对象，就表示一个作为附件的图片，要把多个对象组合起来，就用<code>MIMEMultipart</code>对象，而<code>MIMEBase</code>可以表示任何对象。<br>一个例子：</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment"># -*- coding: utf-8 -*-</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">from</span> email <span class="keyword">import</span> encoders</span><br><span class="line"><span class="keyword">from</span> email.header <span class="keyword">import</span> Header</span><br><span class="line"><span class="keyword">from</span> email.mime.text <span class="keyword">import</span> MIMEText</span><br><span class="line"><span class="keyword">from</span> email.utils <span class="keyword">import</span> parseaddr, formataddr</span><br><span class="line"><span class="keyword">import</span> smtplib</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">_format_addr</span>(<span class="params">s</span>):</span></span><br><span class="line">    name, addr = parseaddr(s)</span><br><span class="line">    <span class="keyword">return</span> formataddr(( \</span><br><span class="line">        Header(name, <span class="string">&#x27;utf-8&#x27;</span>).encode(), \</span><br><span class="line">        addr.encode(<span class="string">&#x27;utf-8&#x27;</span>) <span class="keyword">if</span> <span class="built_in">isinstance</span>(addr, unicode) <span class="keyword">else</span> addr))</span><br><span class="line"></span><br><span class="line">from_addr = raw_input(<span class="string">&#x27;From: &#x27;</span>)</span><br><span class="line">password = raw_input(<span class="string">&#x27;Password: &#x27;</span>)</span><br><span class="line">to_addr = raw_input(<span class="string">&#x27;To: &#x27;</span>)</span><br><span class="line">smtp_server = raw_input(<span class="string">&#x27;SMTP server: &#x27;</span>)</span><br><span class="line"></span><br><span class="line">msg = MIMEText(<span class="string">&#x27;hello, send by Python...&#x27;</span>, <span class="string">&#x27;plain&#x27;</span>, <span class="string">&#x27;utf-8&#x27;</span>)</span><br><span class="line">msg[<span class="string">&#x27;From&#x27;</span>] = _format_addr(<span class="string">u&#x27;Python爱好者 &lt;%s&gt;&#x27;</span> % from_addr)</span><br><span class="line">msg[<span class="string">&#x27;To&#x27;</span>] = _format_addr(<span class="string">u&#x27;管理员 &lt;%s&gt;&#x27;</span> % to_addr)</span><br><span class="line">msg[<span class="string">&#x27;Subject&#x27;</span>] = Header(<span class="string">u&#x27;来自SMTP的问候……&#x27;</span>, <span class="string">&#x27;utf-8&#x27;</span>).encode()</span><br><span class="line"></span><br><span class="line">server = smtplib.SMTP(smtp_server, <span class="number">25</span>)</span><br><span class="line">server.set_debuglevel(<span class="number">1</span>)</span><br><span class="line">server.login(from_addr, password)</span><br><span class="line">server.sendmail(from_addr, [to_addr], msg.as_string())</span><br><span class="line">server.quit()</span><br></pre></td></tr></table></figure>
-<p>编写了一个函数<code>_format_addr()</code>来格式化一个邮件地址。注意不能简单地传入<code>name &lt;addr@example.com&gt;</code>，因为包含中文，所以需要使用<code>Header</code>对象进行编码。</p>
-<hr>
-<p>若需要添加附件时，可以构造一个<code>MIMEMultipart</code>对象代表邮件本身，然后往里面加上一个<code>MIMEText</code>作为邮件正文，再继续往里面加上表示附件的<code>MIMEBase</code>对象即可。</p>
-<blockquote>
-<p>原文出处： <a href="http://www.yehbeats.com/2015/03/31/python-smtp1/">利用python发邮件（一）</a><br>原文出处： <a href="http://www.yehbeats.com/2015/04/06/python-smtp2/">利用python发邮件（二）</a></p>
-</blockquote>
-]]></content>
-      <tags>
-        <tag>python</tag>
-      </tags>
   </entry>
   <entry>
     <title>select的四大用法</title>
@@ -554,23 +476,87 @@
       </tags>
   </entry>
   <entry>
-    <title>在nginx proxy_pass中禁用IPv6</title>
-    <url>/2019/10/22/%E5%9C%A8nginx%20proxy-pass%E4%B8%AD%E7%A6%81%E7%94%A8IPv6/</url>
-    <content><![CDATA[<p>最近在生产服务上遇到 nginx 正向代理连接失败的问题。</p>
-<figure class="highlight css"><table><tr><td class="code"><pre><span class="line">2019/10/22 15<span class="selector-pseudo">:25</span><span class="selector-pseudo">:21</span> <span class="selector-attr">[error]</span> 1930<span class="selector-id">#0</span>: *1482670 <span class="selector-tag">connect</span>() <span class="selector-tag">to</span> <span class="selector-attr">[AAAA:BBBB:C:DDD:E:F:GGG:HHH]</span><span class="selector-pseudo">:443</span> <span class="selector-tag">failed</span> (101: <span class="selector-tag">Network</span> <span class="selector-tag">is</span> <span class="selector-tag">unreachable</span>) <span class="selector-tag">while</span> <span class="selector-tag">connecting</span> <span class="selector-tag">to</span> <span class="selector-tag">upstream</span>, <span class="selector-tag">client</span>: <span class="selector-tag">AA</span><span class="selector-class">.BB</span><span class="selector-class">.CC</span><span class="selector-class">.DD</span>, <span class="selector-tag">server</span>: <span class="selector-tag">example</span><span class="selector-class">.com</span>, <span class="selector-tag">request</span>: &quot;<span class="selector-tag">GET</span> /<span class="selector-tag">download</span>/<span class="selector-tag">file</span> <span class="selector-tag">HTTP</span>/1.0&quot;, <span class="selector-tag">upstream</span>: &quot;<span class="selector-tag">https</span>://<span class="selector-attr">[AAAA:BBBB:C:DDD:E:F:GGG:HHH]</span><span class="selector-pseudo">:443</span>/<span class="selector-tag">download</span>/<span class="selector-tag">file</span>&quot;, <span class="selector-tag">host</span>: &quot;<span class="selector-tag">example</span><span class="selector-class">.com</span>&quot;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-<p>分析错误日志，应答是nginx尝试连接目标的 IPv6 地址端口时失败，错误<code>101: Network is unreachable</code></p>
-<p>服务器没有IPv6地址，那就禁用nginx的IPv6解析</p>
-<p>禁用IPv6很简单</p>
-<figure class="highlight apache"><table><tr><td class="code"><pre><span class="line"><span class="attribute">resolver</span> <span class="number">8.8.8.8</span> ipv<span class="number">6</span>=<span class="literal">off</span>;</span><br></pre></td></tr></table></figure>]]></content>
+    <title>singleflight本地缓存实例</title>
+    <url>/2020/03/15/singleflight%E6%9C%AC%E5%9C%B0%E7%BC%93%E5%AD%98%E5%AE%9E%E4%BE%8B/</url>
+    <content><![CDATA[<p>本地保存商户信息，模拟并发情况下缓存穿透情况，到 DB 获取 MCH 信息。</p>
+<a id="more"></a>
+
+<figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">	<span class="string">&quot;errors&quot;</span></span><br><span class="line">	<span class="string">&quot;fmt&quot;</span></span><br><span class="line">	<span class="string">&quot;sync&quot;</span></span><br><span class="line"></span><br><span class="line">	<span class="string">&quot;github.com/golang/groupcache/singleflight&quot;</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	<span class="keyword">var</span> wg sync.WaitGroup</span><br><span class="line">	<span class="keyword">for</span> i := <span class="number">0</span>; i &lt; <span class="number">500</span>; i++ &#123;</span><br><span class="line">		wg.Add(<span class="number">1</span>)</span><br><span class="line">		<span class="keyword">go</span> <span class="function"><span class="keyword">func</span><span class="params">(n <span class="keyword">int</span>)</span></span> &#123;</span><br><span class="line">			<span class="keyword">var</span> mchId = <span class="string">&quot;12345&quot;</span></span><br><span class="line">			<span class="keyword">var</span> mch, err = mchCache.GetMch(mchId)</span><br><span class="line">			fmt.Println(n, mch, err)</span><br><span class="line">			wg.Done()</span><br><span class="line">		&#125;(i)</span><br><span class="line">	&#125;</span><br><span class="line">	wg.Wait()</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">type</span> MchCache <span class="keyword">struct</span> &#123;</span><br><span class="line">	Mchs <span class="keyword">map</span>[<span class="keyword">string</span>]MchInfo</span><br><span class="line">	sync.RWMutex</span><br><span class="line">	g singleflight.Group</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">type</span> MchInfo <span class="keyword">struct</span> &#123;</span><br><span class="line">	ID   <span class="keyword">string</span></span><br><span class="line">	Name <span class="keyword">string</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> mchCache MchCache</span><br><span class="line"><span class="keyword">var</span> errMchNotFound = errors.New(<span class="string">&quot;mch not found in cache&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(c *MchCache)</span> <span class="title">GetMch</span><span class="params">(id <span class="keyword">string</span>)</span> <span class="params">(mch MchInfo, err error)</span></span> &#123;</span><br><span class="line">	mch, err = c.getMch(id)</span><br><span class="line">	<span class="keyword">if</span> err == <span class="literal">nil</span> &#123;</span><br><span class="line">		<span class="keyword">return</span></span><br><span class="line">	&#125;</span><br><span class="line">	m, err := c.g.Do(id, <span class="function"><span class="keyword">func</span><span class="params">()</span> <span class="params">(<span class="keyword">interface</span>&#123;&#125;, error)</span></span> &#123;</span><br><span class="line">		<span class="keyword">return</span> c.getMchFromDB(id)</span><br><span class="line">	&#125;)</span><br><span class="line">	<span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">		<span class="keyword">return</span></span><br><span class="line">	&#125;</span><br><span class="line">	mch = m.(MchInfo)</span><br><span class="line">	<span class="keyword">return</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(c *MchCache)</span> <span class="title">getMch</span><span class="params">(id <span class="keyword">string</span>)</span> <span class="params">(mch MchInfo, err error)</span></span> &#123;</span><br><span class="line">	c.RLock()</span><br><span class="line">	<span class="keyword">defer</span> c.RUnlock()</span><br><span class="line">	<span class="keyword">if</span> c.Mchs == <span class="literal">nil</span> &#123;</span><br><span class="line">		c.Mchs = <span class="built_in">make</span>(<span class="keyword">map</span>[<span class="keyword">string</span>]MchInfo)</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">if</span> mch, ok := c.Mchs[id]; ok &#123;</span><br><span class="line">		<span class="keyword">return</span> mch, <span class="literal">nil</span></span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span> mch, errMchNotFound</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(c *MchCache)</span> <span class="title">SetMch</span><span class="params">(mch MchInfo)</span></span> &#123;</span><br><span class="line">	c.Lock()</span><br><span class="line">	<span class="keyword">defer</span> c.Unlock()</span><br><span class="line">	<span class="keyword">if</span> c.Mchs == <span class="literal">nil</span> &#123;</span><br><span class="line">		c.Mchs = <span class="built_in">make</span>(<span class="keyword">map</span>[<span class="keyword">string</span>]MchInfo)</span><br><span class="line">	&#125;</span><br><span class="line">	c.Mchs[mch.ID] = mch</span><br><span class="line">	<span class="keyword">return</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(c *MchCache)</span> <span class="title">getMchFromDB</span><span class="params">(id <span class="keyword">string</span>)</span> <span class="params">(mch MchInfo, err error)</span></span> &#123;</span><br><span class="line">	mch = MchInfo&#123;</span><br><span class="line">		ID:   id,</span><br><span class="line">		Name: <span class="string">&quot;星巴克&quot;</span>,</span><br><span class="line">	&#125;</span><br><span class="line">	c.SetMch(mch)</span><br><span class="line">	<span class="keyword">return</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>]]></content>
       <tags>
-        <tag>nginx</tag>
-        <tag>IPv6</tag>
+        <tag>cache</tag>
+        <tag>go</tag>
+        <tag>singleflight</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>在线ssl工具集</title>
+    <url>/2019/09/29/ssltools/</url>
+    <content><![CDATA[<p>最近遇到部署https网站，在iOS端访问正常，在Android端访问异常，检查发现是证书链补全导致，缺少中间证书。</p>
+<a id="more"></a>
+
+<h1 id="myssl-cn"><a href="#myssl-cn" class="headerlink" title="myssl.cn"></a>myssl.cn</h1><ul>
+<li><a href="https://www.myssl.cn/tools/check-server-cert.html">SSL服务器证书安装检查器</a></li>
+<li><a href="https://www.myssl.cn/tools/create-csr.html">CSR 在线生成</a></li>
+<li><a href="https://www.myssl.cn/tools/downloadchain.html">获取证书信息 及 下载中间证书(可用于证书链修复)</a></li>
+</ul>
+<h1 id="myssl-com"><a href="#myssl-com" class="headerlink" title="myssl.com"></a>myssl.com</h1><ul>
+<li><a href="https://myssl.com/chain_download.html">证书链下载／证书链修复</a></li>
+<li><a href="https://myssl.com/ssl.html">SSL状态检测</a></li>
+<li><a href="https://myssl.com/csr_create.html">CSR 在线生成</a></li>
+<li><a href="https://myssl.com/cert_convert.html">证书格式转换</a></li>
+</ul>
+<h1 id="web-chacuo-net"><a href="#web-chacuo-net" class="headerlink" title="web.chacuo.net"></a>web.chacuo.net</h1><ul>
+<li><a href="http://web.chacuo.net/netcsrdecoder">CSR请求证书文件信息</a></li>
+</ul>
+]]></content>
+      <tags>
+        <tag>ssl</tag>
+        <tag>https</tag>
       </tags>
   </entry>
   <entry>
     <title>微信支付踩坑</title>
     <url>/2020/01/31/%E5%BE%AE%E4%BF%A1%E6%94%AF%E4%BB%98%E8%B8%A9%E5%9D%91/</url>
     <content><![CDATA[]]></content>
+  </entry>
+  <entry>
+    <title>利用python发邮件</title>
+    <url>/2016/01/19/%E5%88%A9%E7%94%A8python%E5%8F%91%E9%82%AE%E4%BB%B6/</url>
+    <content><![CDATA[<p>在刚开始学习python的时候就听有的人说，用python发邮件简直太轻松了，随着学习的深入，今天学习了一下python的smtplib模块，果不其然，只需几行代码就可以轻松实现发邮件的功能。<br>在本例中，使用自己的163邮箱给qq邮箱发测试样例。</p>
+<a id="more"></a>
+
+<hr>
+<p>一共需要四部即可</p>
+<blockquote>
+<ul>
+<li>连接到服务器</li>
+<li>登录</li>
+<li>发出服务请求</li>
+<li>退出</li>
+</ul>
+</blockquote>
+<p>遵从这四步，首先一段简单的：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment">#coding: utf-8</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> smtplib</span><br><span class="line"></span><br><span class="line">msg = <span class="string">&#x27;From: xxx@163.com\r\nTo: xxx@qq.com\r\nSubject: Test smtp by python\r\n\r\nJust for test&#x27;</span></span><br><span class="line">handle = smtplib.SMTP(<span class="string">&#x27;smtp.163.com&#x27;</span>, <span class="string">&#x27;25&#x27;</span>)          <span class="comment">#第一步</span></span><br><span class="line">handle.login(<span class="string">&#x27;xxx@163.com&#x27;</span>, <span class="string">&#x27;xxxxx&#x27;</span>)                 <span class="comment">#第二步  用户名和密码</span></span><br><span class="line">handle.sendmail(<span class="string">&#x27;xxx@163.com&#x27;</span>, <span class="string">&#x27;xxx@qq.com&#x27;</span>, msg)    <span class="comment">#第三步</span></span><br><span class="line">handle.quit()                                        <span class="comment">#第四步</span></span><br><span class="line"><span class="built_in">print</span> <span class="string">&#x27;send successfully&#x27;</span></span><br></pre></td></tr></table></figure>
+<blockquote>
+<ul>
+<li><code>sendmail()</code>的所有参数要遵循RFC 2822，即电子邮件的地址必须要有正确的格式，消息体要有正确的前导头，前导头后是两个回车和换行(<code>\r\n</code>)对</li>
+<li>SMTP通讯时，只要一个端口<code>25</code></li>
+</ul>
+</blockquote>
+<hr>
+<p>以上很简单的就实现了利用python自带的<code>smtplib</code>模块实现了发送邮件的功能，但是在现实发邮件中，肯定比这样的要复杂。这时需要另一个模块<code>email</code>，<code>email</code>负责构造邮件，<code>smtplib</code>负责发送邮件。</p>
+<p>构造一个邮件对象就是一个<code>Messag</code>对象，如果构造一个<code>MIMEText</code>对象，就表示一个文本邮件对象，如果构造一个<code>MIMEImage</code>对象，就表示一个作为附件的图片，要把多个对象组合起来，就用<code>MIMEMultipart</code>对象，而<code>MIMEBase</code>可以表示任何对象。<br>一个例子：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment"># -*- coding: utf-8 -*-</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">from</span> email <span class="keyword">import</span> encoders</span><br><span class="line"><span class="keyword">from</span> email.header <span class="keyword">import</span> Header</span><br><span class="line"><span class="keyword">from</span> email.mime.text <span class="keyword">import</span> MIMEText</span><br><span class="line"><span class="keyword">from</span> email.utils <span class="keyword">import</span> parseaddr, formataddr</span><br><span class="line"><span class="keyword">import</span> smtplib</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">_format_addr</span>(<span class="params">s</span>):</span></span><br><span class="line">    name, addr = parseaddr(s)</span><br><span class="line">    <span class="keyword">return</span> formataddr(( \</span><br><span class="line">        Header(name, <span class="string">&#x27;utf-8&#x27;</span>).encode(), \</span><br><span class="line">        addr.encode(<span class="string">&#x27;utf-8&#x27;</span>) <span class="keyword">if</span> <span class="built_in">isinstance</span>(addr, unicode) <span class="keyword">else</span> addr))</span><br><span class="line"></span><br><span class="line">from_addr = raw_input(<span class="string">&#x27;From: &#x27;</span>)</span><br><span class="line">password = raw_input(<span class="string">&#x27;Password: &#x27;</span>)</span><br><span class="line">to_addr = raw_input(<span class="string">&#x27;To: &#x27;</span>)</span><br><span class="line">smtp_server = raw_input(<span class="string">&#x27;SMTP server: &#x27;</span>)</span><br><span class="line"></span><br><span class="line">msg = MIMEText(<span class="string">&#x27;hello, send by Python...&#x27;</span>, <span class="string">&#x27;plain&#x27;</span>, <span class="string">&#x27;utf-8&#x27;</span>)</span><br><span class="line">msg[<span class="string">&#x27;From&#x27;</span>] = _format_addr(<span class="string">u&#x27;Python爱好者 &lt;%s&gt;&#x27;</span> % from_addr)</span><br><span class="line">msg[<span class="string">&#x27;To&#x27;</span>] = _format_addr(<span class="string">u&#x27;管理员 &lt;%s&gt;&#x27;</span> % to_addr)</span><br><span class="line">msg[<span class="string">&#x27;Subject&#x27;</span>] = Header(<span class="string">u&#x27;来自SMTP的问候……&#x27;</span>, <span class="string">&#x27;utf-8&#x27;</span>).encode()</span><br><span class="line"></span><br><span class="line">server = smtplib.SMTP(smtp_server, <span class="number">25</span>)</span><br><span class="line">server.set_debuglevel(<span class="number">1</span>)</span><br><span class="line">server.login(from_addr, password)</span><br><span class="line">server.sendmail(from_addr, [to_addr], msg.as_string())</span><br><span class="line">server.quit()</span><br></pre></td></tr></table></figure>
+<p>编写了一个函数<code>_format_addr()</code>来格式化一个邮件地址。注意不能简单地传入<code>name &lt;addr@example.com&gt;</code>，因为包含中文，所以需要使用<code>Header</code>对象进行编码。</p>
+<hr>
+<p>若需要添加附件时，可以构造一个<code>MIMEMultipart</code>对象代表邮件本身，然后往里面加上一个<code>MIMEText</code>作为邮件正文，再继续往里面加上表示附件的<code>MIMEBase</code>对象即可。</p>
+<blockquote>
+<p>原文出处： <a href="http://www.yehbeats.com/2015/03/31/python-smtp1/">利用python发邮件（一）</a><br>原文出处： <a href="http://www.yehbeats.com/2015/04/06/python-smtp2/">利用python发邮件（二）</a></p>
+</blockquote>
+]]></content>
+      <tags>
+        <tag>python</tag>
+      </tags>
   </entry>
   <entry>
     <title>服务优雅重启及热更新</title>
@@ -662,6 +648,20 @@
       </tags>
   </entry>
   <entry>
+    <title>在nginx proxy_pass中禁用IPv6</title>
+    <url>/2019/10/22/%E5%9C%A8nginx%20proxy-pass%E4%B8%AD%E7%A6%81%E7%94%A8IPv6/</url>
+    <content><![CDATA[<p>最近在生产服务上遇到 nginx 正向代理连接失败的问题。</p>
+<figure class="highlight css"><table><tr><td class="code"><pre><span class="line">2019/10/22 15<span class="selector-pseudo">:25</span><span class="selector-pseudo">:21</span> <span class="selector-attr">[error]</span> 1930<span class="selector-id">#0</span>: *1482670 <span class="selector-tag">connect</span>() <span class="selector-tag">to</span> <span class="selector-attr">[AAAA:BBBB:C:DDD:E:F:GGG:HHH]</span><span class="selector-pseudo">:443</span> <span class="selector-tag">failed</span> (101: <span class="selector-tag">Network</span> <span class="selector-tag">is</span> <span class="selector-tag">unreachable</span>) <span class="selector-tag">while</span> <span class="selector-tag">connecting</span> <span class="selector-tag">to</span> <span class="selector-tag">upstream</span>, <span class="selector-tag">client</span>: <span class="selector-tag">AA</span><span class="selector-class">.BB</span><span class="selector-class">.CC</span><span class="selector-class">.DD</span>, <span class="selector-tag">server</span>: <span class="selector-tag">example</span><span class="selector-class">.com</span>, <span class="selector-tag">request</span>: &quot;<span class="selector-tag">GET</span> /<span class="selector-tag">download</span>/<span class="selector-tag">file</span> <span class="selector-tag">HTTP</span>/1.0&quot;, <span class="selector-tag">upstream</span>: &quot;<span class="selector-tag">https</span>://<span class="selector-attr">[AAAA:BBBB:C:DDD:E:F:GGG:HHH]</span><span class="selector-pseudo">:443</span>/<span class="selector-tag">download</span>/<span class="selector-tag">file</span>&quot;, <span class="selector-tag">host</span>: &quot;<span class="selector-tag">example</span><span class="selector-class">.com</span>&quot;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>分析错误日志，应答是nginx尝试连接目标的 IPv6 地址端口时失败，错误<code>101: Network is unreachable</code></p>
+<p>服务器没有IPv6地址，那就禁用nginx的IPv6解析</p>
+<p>禁用IPv6很简单</p>
+<figure class="highlight apache"><table><tr><td class="code"><pre><span class="line"><span class="attribute">resolver</span> <span class="number">8.8.8.8</span> ipv<span class="number">6</span>=<span class="literal">off</span>;</span><br></pre></td></tr></table></figure>]]></content>
+      <tags>
+        <tag>nginx</tag>
+        <tag>IPv6</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>源码阅读——十个C开源项目</title>
     <url>/2016/01/19/%E6%BA%90%E7%A0%81%E9%98%85%E8%AF%BB%E2%80%94%E2%80%94%E5%8D%81%E4%B8%AAC%E5%BC%80%E6%BA%90%E9%A1%B9%E7%9B%AE/</url>
     <content><![CDATA[<h3 id="1-Webbench"><a href="#1-Webbench" class="headerlink" title="1. Webbench"></a>1. Webbench</h3><p>Webbench是一个在linux下使用的非常简单的网站压测工具。它使用fork()模拟多个客户端同时访问我们设定的URL，测试网站在压力下工作的性能，最多可以模拟3万个并发连接去测试网站的负载能力。Webbench使用C语言编写, 代码实在太简洁，源码加起来不到600行。下载链接：<a href="http://home.tiscali.cz/~cz210552/webbench.html">http://home.tiscali.cz/~cz210552/webbench.html</a></p>
@@ -701,25 +701,6 @@
     <url>/2015/12/13/%E7%B3%BB%E7%BB%9F%E4%B8%8A%E7%BA%BF/</url>
     <content><![CDATA[<h2 id="系统上线，通宵"><a href="#系统上线，通宵" class="headerlink" title="系统上线，通宵"></a>系统上线，通宵</h2><p>晚上4个系统要上线，通宵的节奏，预祝一切顺利！！！</p>
 ]]></content>
-  </entry>
-  <entry>
-    <title>讲给谁听</title>
-    <url>/2015/03/29/%E8%AE%B2%E7%BB%99%E8%B0%81%E5%90%AC/</url>
-    <content><![CDATA[<div id="hexo-blog-encrypt" data-wpm="抱歉, 这个密码看着不太对, 请再试试." data-whm="抱歉, 这个文章不能被校验, 不过您还是能看看解密后的内容.">
-  <div class="hbe-input-container">
-  <input type="password" id="hbePass" placeholder="" />
-    <label for="hbePass">您好, 这里需要密码.</label>
-    <div class="bottom-line"></div>
-  </div>
-  <script id="hbeData" type="hbeData" data-hmacdigest="184a30cb3629d18329a12da7f2b818117c31df18b09ea1ed5db1336effaa9d5f">b14fc54338ecf205576f41ed6cf37d2b46c3646fbecb298d435d5d5b1fbd946628da96951068332ce5776ae2f835992ae79563ef0bf6f063e41ffc0ea3dba22fd3cc5318c298b7862ef800b06183f944b4cfcc4e2be07f87dcf12fadbd045a2ad7a6a9dd125380eb46a55d93a09e1cba5a2efe0d96761f9bc6cba6f27f77843f20eff1b34ee1b78a5747d25091b047c54d6423bd95b1e5fab78341810e9d22502a21616dbfbdf9a27ef77ed0a56138f9242a0a1992c76c05969f54d7e3047f4c14c0b7ad10f8fe00c2afe679ec79e9e8f2edd7ac789bee9debaa6896a77bb4098fce652a33f6b34b40afa1187fb4395751ff4da3a48e8bef901d4985122af777d4cd0b44762579553cbf204ff3ca8756bc1e35d6a9a510ba89536b124a140fd48ee41c4887f7367026c46bad6cc77704939ff83f52ec5fb243cb889060653a9570ff2ebf93d54b49962a89828a56bb7eedb5e4fcc9eb44be0a815aa11e262c3540ea90b7dbe4d79a5ad9b2b36551b80fa797b7de122605b2423f709031e975b4416ac9486b8daa65f2412af1a1986c6b7e93adcb2ff84ed7a37bea99775af6377cda7213d365389a8b2733d08979067663c1cdf40a59ae2b6c615c5ee18563ae42b109a286c0f562d89a636e956db4c2ccc30f049c7ad42e6df38ff4159503c5c47f719925b230cb4d1f05920b24fb9a82f2353bfaf42dc12c8d3c1195a1206418066b7f8205f974ef8c89fbb8256d9d2f27f65aa9c67471d0690f59905527bfb3804afa5ae0745d71ab6196bfbaa2dec4a1c033c59432beb31ea0fc8abdbeb4c825ff8de845f1700fec0b3cd4cfbd34c2a918fb7077ac772b98874cf7acbf52e4055d4c74441fca2e29319fe9614b226a5d5f5cb72dc774a1efb2c10f76e91a892dd69796b765b23611cd31e819b0c6529d5d41cd20bca3b5fd5d74db095b9e9799384d8a403f7b9efc6f220addc2961606a6b7fb88ee273f0a3d2e70d87713dfedc416c195c5fa1635c808ef670d2d214fd077e447db1e87d92465a2c6e767dc0285388f13472746b5e1c7389ba2e5d7a7b0a302d1e86a69689b0d0f139e4997107f12a20c3c2ca6381ad0579c9f3beb9767bab9ae558b8d05754013d877a7d5535b053e2e0b2e877c7b76662cd96a3917a49bb5a7339069fa310d00b3e6d10a8ee631f4dae2db43f72fd15baf5a5125e47bda73d0e82f897d0d9faddb33a98d55dad5d79f29dc49f6fc0a4f8f8e56dff3f3bd1d4ce70da448c4fabb15f322ebbc0efbfc6ea9da77691c61a0f4dce6509ee1527ad05ab2dac3b501a6b49e0c307182213b0f962dd6628498c1efa6a8eec7d0599e10b76d3750b0cda1385d3e2231e61fccf4ae779c617778ad5a7ecef9f702fd262bfddb8e2dbbca3a926c3e2964effcf051d399597ab8b5da2382fdda1f0d6b1b7dbbe81f52f6ce564bd8f4e42995fdd482ca7bf7b7396dd79a64fd3515b26a61a52825ead2e3ba27609294577048b7e1b1335d36f7d37e1b640e5f0fb2442c4ed4c3eb50c0e82146b36ffd0207c81cca5ebfaf2829b3c2702df43fb379421ed5e2d61a86185db7a83d8b8a4b6b0e32ee4b1914bd66e1f512dc9e328d243075acc6938538d22819c2a789bce8083af5e965cec01c9089fe8737877760c2820d68bb1031120ab2443fbb98e3ba96a35ecd0fb0a8c007baa3ac00ef21fbd03d16acb1eae26c944892bc20a22ab82cfcd63a70584c4b6ff16c0ded7fe8600989a2544089f0cb5b62324657d40b93c607be475de0f326c4c6089430bc80478be0816aa0aa9ea89fc461964808c92edc52465e61dba5316a76b603765c6141cc96d022dd7f52ffca9a322fd6a02b7c4263a295f1b0edfede1f18fd088c618aeb1c37d69f4f1851c2eb761c3754cdac960d3ff8fd0971397621a0fb275665cb4c3c7d9776224eb0c144e62e02c68ee188e23b7bd0b2bd788fcd682a036603baf4b99d81dc10d94dc5c0450c1551083820ac8f3d1f9c5e8586b9d2c7524e254d605a9d54cd2edd6d44d1380acabfb169d34822a8e7354516a0b701d558df3de411996093f411879dfb476f8ff8775256d32493dbe45516efb841d80614936cf7198355cd493406a06ed67a7fde3ee298e935cec19f950c0ba389fa5dd57468402f01156acd1a59df32497181abfe45cfd3496c07c281955783fba8597fd2cec8b6eb6ded0635f4afd537daaeb0c75ce0902c6b8e5f3766456be8be992b24322c0b8a4d4c1e5cbab4f2e77fc5518c0b2f000f5d1e9cf2ba1c82e8cc0a63f3dbc3d0d84f57c9026701003e7c0c56bde51f99c5e02e416a3c350b0af9191e32ae44a3ebc89bb0d08c22669090d3ee82f192cc603629b250b331bbd287c6dfb57ade7721712b08994734fab9a8e9f070d6c9f7d4bfb63163e148415bf472c204dea8a300beeee4701b7479b079febbd41a3b5d44c82a8da7f544e45c529c583affa814e339363de009eb0b16d3e5311d4aa59b33cae463abfb668afc5b0822594d25b5da9ba6221ae5bd475b70b9d1864026b07eb21c2902690ccf5a1207d8e8f53cc389849a060eebc9edd3471f1de1999e38d531263dcdf3587cfc51e17057ec0a00519d9a0f94426553e960bb9ad6df5040a6ced4446a6c2c020f1568913803ce4e6479a952a1ab51ca52f70471ae70c4744253f5d8a56c3f6bdff7064f71aa274ce36eb06cdf8f5c4256662b80dce889979f2f5cae1cecfae7ceaddcda6a175ed47d3e2c2c3d3dc14045b2864d0205e537dd3a0ef1f00da139e985cf70babb471bdd6fed408e964e0b844f2770dbd7215777481fa6b6bf0f69dfbda24616cddb5f192c4747d932a2946c03eb5eaaed701002f4fee5ee72e8b253ba174eaebecf83622b37e9b10f9154e2a7a91b6fced8afea0cad0a7f0b8e634aa4f822b6140a3ac47b673081ce67b5debf06a12b4021ae2852de076d00ec4f0fd92a3579a6c968e52cee46865983acef430c4c240eee3ee918dc296f6d5f8570e7f8d86ec9c9053f24f45d2c7bfeba34cfc061262b218ebe07a70b23c695f28ad59ca4e4cfc7433fe1e8c7b66cba615afe124d90fb87324ca6da120fb859eda843928953bf98a15d9b251e2b1c5e6d254de64e0c307a4fa25da20322fb46bfe06aa7e80fb7fe92bda790274034088353ea8b9012c3f57354cf816ec84ed545f84cfde35a90ad25dffe727a9d83c2a1080d333d3e45bf843c8d9104d77b18ad79e7c65a49d33cb51ba4203cda92a406392d9e870a9f45cddd984190b0dd8b3f13ae160f931fc87a566a98d498671e0cb49566126633554cb8ad8e8d20926f136fd9a90625baf13afb22905c95fe3da7b3223578aff59cb4c5f4ea9b7b6b891090fdd0e8029fbc9d093ae87cc757af528f53310c13dbe5c3cb6257c2626761d9ee2824619755149b78032c07a3ad32a10bf24511c5353e1fa6804e9303fb11d21d1db671dc1a8b317ffb2ffa7c75cacd9375d1a8e5daf629437589bd1cf995725f443d156c329819abc1e3885b6803ee7c868d4ab8d2309ed82d5a4ccbee585acbb0ee681528d73feca97af28ce61c7d0109730d0e3441c87fa17796ccfa1bb0fc2dc943871d37c14b35f8f89deb29e8b37e54a8f8ece16174e39291a1f6c8439e14d723913b84a195498a2b8d38305688d9496f306506df1ff793dccef022f52cb2fa5ebcebdb064580dc0738b74b28451f274c877a791fc81ad894fa229808a0180f54a001664d0013bbe393c5058c917e910cc8cb6d0e021dbf7872499b925f2a40ad4723d280957d6bea9623f4272f6324137cd48f6810f64c67e2355f975a51af4c2a522bdd10f52bef5ef4ac929b4a28d8a9f7d4446401e31f1694bb2f0da5b4a8aaf662800fe891d8ca2d29447cc7c7477819e13e2c8ece0488e7b251ef144e1a47e375f182e5e2110c45cf9744e1640c4ac4c434f03d0c05a6eb071f759a660c87605172eefb2dfa9fb67f8cba16ffbbc51b2e02eff8adc2092ff673ac8bb673c2c5723b7475f6921b3863afd687fc90ffc2c8ee7448e66be4c5417043077078c5ddae71a09f7886754b74fed3853ce75121676bf3940ee16a8e5ded3b5a5621ff260964ec2cd548d88653381607d6b6a27f51c8e947ae89f1f6517ddaf8cd0d1e7206596c9794362a14d0be2d947c0b6d4914d55c82e2b0aabaa5889e85c8f1e345e966ba3cc8e19fc72b35bad5dafb86b82a449e799565ad955f2e34102c836eea10b8a62bdec9ce2ef07c7761345c3231b19fbd65e2df6cc1f6737f6f14b2719aaa5e5331037a00b7cbb87d387124846b8bc59d4e2fbbadb8c71fac21d0ab197e039cafc47ec929830b6bd44328f1e26eba2cab68ba8795a639185a1ef8a7e02e695e4f7a3ddaf14bca4728ad92eb6fd32933de7ec28926ac7ad8fdb073e3f63201109d29ed992d2c64a270a7c1f787223c7e22e926a065922b74b08de23d289eb91dc66a2e98170d29a4dc84cd75d53724df61922aae9f14c432363c1c87f17ff965c7623820d552e2d227b3a704a842cead96967646b4dd87b6e5daad133998880f921c53ba02e83fef152b1d80ad77c21aa0cbd11bb632419dfb17e9274879db2ab452394c159d5a1480932065e1c2abfe8890767111dddbc8872ff5901d19f6a6c27f6a3166596879edcaebf328a7eb0dfefed4eb70a63c6da51bea0ddeb3b90e783fc9221a08dcd7c84c66a85f8534b650379249456ae0dab735c1cf7221408a5f447c4014055b4fc4203f4a065e5c3cb975f6df7c6c330ed8bd77e2fd85b8dd0670941f226ef8d7c096acf29d45a388538b2b86786f6ee5bd3283bdaaab7b7d91b7fd3d3966f4e6abe79c2bd8380fd000736211781aafc82bd728011c88587cc7bc7f1f6b223b821372cd6e2ca12f8ebf48ee2f0d29d78fb90134ede3b6a2afd20819c1e19076e5c2442c1cc9edbdfeec72945a38a88b78725bae925412c9953ea26a8899509ae339e6b759681a5c6d588b0cdddade0ad9c820ca4f5a0083e176bf1b778f693d1758a512902251bacccdc452952836b0ccf74735ce4c14588dae277979d1318bea1189a47d2e190ce9c183a096198faccd06be1f5c265cb63fec3cc9f128e738b7bd16861dd223e00feef0205ff8b375b8463ea038d0ccee05a9cb56aca2acfe920237a8aba31e449cd3074037f4abe8ed363d80fd0199d9a15453ef989eeb24746ac30a40042ef07592bc64af05d3c0d766dd3b5a7d5278a232071ae7e35478e36782f0d8b69d88c0f89466d57f2ddb478136bb3fad253b3d1c64efedca0f7a50435496b24a99ef6519ef8504a4b54462556ab783b744f1c655848e5f8dc06da195073fa8c42449c1de59a28306c8781832f2ea933f46200f7564e8ef9dc86bd6cb8f30343dce628912b72c6d61188826af6e7c0ffe88c20869544d88d3bee19ed0692af59637cdf3b9692363a7e01dd4f27f168975058dddffb5676eb626a1475ebfc0894a4c7ca7a3158b87820adce69b69c4a327715fd8cf65213e73ce66422c453faeb987586c8e0ffc00bd77d803ab8e8bac67cdd351469aa777af9f81f050a94cfe4ed6f61677438c6f6f53aec17de3032cd5d9fe5e435ffd91d7d4d31b7f9ef893296ae68dd0170f198cd87d0a8c8869ac5d27e568db43b6c4fd59651695881abfd4404ab55b98257d4e399fb759016925696431f6d51464a192387efbaee873b61e3172676d40f22e305505b42c9050661b9a4b609eb379dc401aba78300c6a2df749b41ba4db355819a4b0af02e555281d9c4776f082347ce4aa8c52cfa57ca0049258dd6f354f95bf1cb714811a353c9cf98180122021d83ee8f33c52c8506ee2cea86f082ef66ac6c3cdb920d538b034339f15a6982194696fa3684e48d7c1d1ad84202feebdcea53507e7c1d81358172e1e0f19c28b55b9e1a65824f4b964fca75f881fe5577c9b3771ea119b3a7c436ee07bfdfb237c4fc82343048f1103e3aef8d98815e21c1f0524c6b04a6c0407ced44b07a768f343b0c9026083870540e473f8c40182a2e279d2db5845eaa713242775189f0e497eeab911645791180fa2c1c7fc7835600631ee1596da53a93d9b205e4176ea02814388fd81ba90c6a54495b1caafc154bc2e4df10e41fe99c6014798b675c36096c7d34eb51453104d20563d6a41a270dec2bc688a859d4786e5864642395c697661b62b3c25bb60a7d6cc577684e8c6bbfb1c8cdaf4f2f3df18828bd7b5423d767f5b3b0e18980c82b7c6fba5cc4680d62dab5f20b5cffffe5c767131d433887ebde236a05f08eeb7a22f2676f07a783f9e293ae188a98146419184f8615e470569828bedd3b845d538d65c52e58de6295ffd8a8e57cf2ea1044df3eeb180207fcfb08868268e87d72c25b5e7ef2624c8f03405addc57f55f305a251bcc360b33b9892091401315ba103199f5c94345f08b22c992ff92cbf01c70ca27f2d11eb0bbd52279ef5c87d9f9</script>
-</div>
-<script src="/lib/blog-encrypt.js"></script><link href="/css/blog-encrypt.css" rel="stylesheet" type="text/css">]]></content>
-      <categories>
-        <category>随笔</category>
-      </categories>
-      <tags>
-        <tag>随笔</tag>
-      </tags>
   </entry>
   <entry>
     <title>编译Gargoyle</title>
@@ -791,6 +772,25 @@
 ]]></content>
       <tags>
         <tag>socket</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>讲给谁听</title>
+    <url>/2015/03/29/%E8%AE%B2%E7%BB%99%E8%B0%81%E5%90%AC/</url>
+    <content><![CDATA[<div id="hexo-blog-encrypt" data-wpm="抱歉, 这个密码看着不太对, 请再试试." data-whm="抱歉, 这个文章不能被校验, 不过您还是能看看解密后的内容.">
+  <div class="hbe-input-container">
+  <input type="password" id="hbePass" placeholder="" />
+    <label for="hbePass">您好, 这里需要密码.</label>
+    <div class="bottom-line"></div>
+  </div>
+  <script id="hbeData" type="hbeData" data-hmacdigest="184a30cb3629d18329a12da7f2b818117c31df18b09ea1ed5db1336effaa9d5f">b14fc54338ecf205576f41ed6cf37d2b46c3646fbecb298d435d5d5b1fbd946628da96951068332ce5776ae2f835992ae79563ef0bf6f063e41ffc0ea3dba22fd3cc5318c298b7862ef800b06183f944b4cfcc4e2be07f87dcf12fadbd045a2ad7a6a9dd125380eb46a55d93a09e1cba5a2efe0d96761f9bc6cba6f27f77843f20eff1b34ee1b78a5747d25091b047c54d6423bd95b1e5fab78341810e9d22502a21616dbfbdf9a27ef77ed0a56138f9242a0a1992c76c05969f54d7e3047f4c14c0b7ad10f8fe00c2afe679ec79e9e8f2edd7ac789bee9debaa6896a77bb4098fce652a33f6b34b40afa1187fb4395751ff4da3a48e8bef901d4985122af777d4cd0b44762579553cbf204ff3ca8756bc1e35d6a9a510ba89536b124a140fd48ee41c4887f7367026c46bad6cc77704939ff83f52ec5fb243cb889060653a9570ff2ebf93d54b49962a89828a56bb7eedb5e4fcc9eb44be0a815aa11e262c3540ea90b7dbe4d79a5ad9b2b36551b80fa797b7de122605b2423f709031e975b4416ac9486b8daa65f2412af1a1986c6b7e93adcb2ff84ed7a37bea99775af6377cda7213d365389a8b2733d08979067663c1cdf40a59ae2b6c615c5ee18563ae42b109a286c0f562d89a636e956db4c2ccc30f049c7ad42e6df38ff4159503c5c47f719925b230cb4d1f05920b24fb9a82f2353bfaf42dc12c8d3c1195a1206418066b7f8205f974ef8c89fbb8256d9d2f27f65aa9c67471d0690f59905527bfb3804afa5ae0745d71ab6196bfbaa2dec4a1c033c59432beb31ea0fc8abdbeb4c825ff8de845f1700fec0b3cd4cfbd34c2a918fb7077ac772b98874cf7acbf52e4055d4c74441fca2e29319fe9614b226a5d5f5cb72dc774a1efb2c10f76e91a892dd69796b765b23611cd31e819b0c6529d5d41cd20bca3b5fd5d74db095b9e9799384d8a403f7b9efc6f220addc2961606a6b7fb88ee273f0a3d2e70d87713dfedc416c195c5fa1635c808ef670d2d214fd077e447db1e87d92465a2c6e767dc0285388f13472746b5e1c7389ba2e5d7a7b0a302d1e86a69689b0d0f139e4997107f12a20c3c2ca6381ad0579c9f3beb9767bab9ae558b8d05754013d877a7d5535b053e2e0b2e877c7b76662cd96a3917a49bb5a7339069fa310d00b3e6d10a8ee631f4dae2db43f72fd15baf5a5125e47bda73d0e82f897d0d9faddb33a98d55dad5d79f29dc49f6fc0a4f8f8e56dff3f3bd1d4ce70da448c4fabb15f322ebbc0efbfc6ea9da77691c61a0f4dce6509ee1527ad05ab2dac3b501a6b49e0c307182213b0f962dd6628498c1efa6a8eec7d0599e10b76d3750b0cda1385d3e2231e61fccf4ae779c617778ad5a7ecef9f702fd262bfddb8e2dbbca3a926c3e2964effcf051d399597ab8b5da2382fdda1f0d6b1b7dbbe81f52f6ce564bd8f4e42995fdd482ca7bf7b7396dd79a64fd3515b26a61a52825ead2e3ba27609294577048b7e1b1335d36f7d37e1b640e5f0fb2442c4ed4c3eb50c0e82146b36ffd0207c81cca5ebfaf2829b3c2702df43fb379421ed5e2d61a86185db7a83d8b8a4b6b0e32ee4b1914bd66e1f512dc9e328d243075acc6938538d22819c2a789bce8083af5e965cec01c9089fe8737877760c2820d68bb1031120ab2443fbb98e3ba96a35ecd0fb0a8c007baa3ac00ef21fbd03d16acb1eae26c944892bc20a22ab82cfcd63a70584c4b6ff16c0ded7fe8600989a2544089f0cb5b62324657d40b93c607be475de0f326c4c6089430bc80478be0816aa0aa9ea89fc461964808c92edc52465e61dba5316a76b603765c6141cc96d022dd7f52ffca9a322fd6a02b7c4263a295f1b0edfede1f18fd088c618aeb1c37d69f4f1851c2eb761c3754cdac960d3ff8fd0971397621a0fb275665cb4c3c7d9776224eb0c144e62e02c68ee188e23b7bd0b2bd788fcd682a036603baf4b99d81dc10d94dc5c0450c1551083820ac8f3d1f9c5e8586b9d2c7524e254d605a9d54cd2edd6d44d1380acabfb169d34822a8e7354516a0b701d558df3de411996093f411879dfb476f8ff8775256d32493dbe45516efb841d80614936cf7198355cd493406a06ed67a7fde3ee298e935cec19f950c0ba389fa5dd57468402f01156acd1a59df32497181abfe45cfd3496c07c281955783fba8597fd2cec8b6eb6ded0635f4afd537daaeb0c75ce0902c6b8e5f3766456be8be992b24322c0b8a4d4c1e5cbab4f2e77fc5518c0b2f000f5d1e9cf2ba1c82e8cc0a63f3dbc3d0d84f57c9026701003e7c0c56bde51f99c5e02e416a3c350b0af9191e32ae44a3ebc89bb0d08c22669090d3ee82f192cc603629b250b331bbd287c6dfb57ade7721712b08994734fab9a8e9f070d6c9f7d4bfb63163e148415bf472c204dea8a300beeee4701b7479b079febbd41a3b5d44c82a8da7f544e45c529c583affa814e339363de009eb0b16d3e5311d4aa59b33cae463abfb668afc5b0822594d25b5da9ba6221ae5bd475b70b9d1864026b07eb21c2902690ccf5a1207d8e8f53cc389849a060eebc9edd3471f1de1999e38d531263dcdf3587cfc51e17057ec0a00519d9a0f94426553e960bb9ad6df5040a6ced4446a6c2c020f1568913803ce4e6479a952a1ab51ca52f70471ae70c4744253f5d8a56c3f6bdff7064f71aa274ce36eb06cdf8f5c4256662b80dce889979f2f5cae1cecfae7ceaddcda6a175ed47d3e2c2c3d3dc14045b2864d0205e537dd3a0ef1f00da139e985cf70babb471bdd6fed408e964e0b844f2770dbd7215777481fa6b6bf0f69dfbda24616cddb5f192c4747d932a2946c03eb5eaaed701002f4fee5ee72e8b253ba174eaebecf83622b37e9b10f9154e2a7a91b6fced8afea0cad0a7f0b8e634aa4f822b6140a3ac47b673081ce67b5debf06a12b4021ae2852de076d00ec4f0fd92a3579a6c968e52cee46865983acef430c4c240eee3ee918dc296f6d5f8570e7f8d86ec9c9053f24f45d2c7bfeba34cfc061262b218ebe07a70b23c695f28ad59ca4e4cfc7433fe1e8c7b66cba615afe124d90fb87324ca6da120fb859eda843928953bf98a15d9b251e2b1c5e6d254de64e0c307a4fa25da20322fb46bfe06aa7e80fb7fe92bda790274034088353ea8b9012c3f57354cf816ec84ed545f84cfde35a90ad25dffe727a9d83c2a1080d333d3e45bf843c8d9104d77b18ad79e7c65a49d33cb51ba4203cda92a406392d9e870a9f45cddd984190b0dd8b3f13ae160f931fc87a566a98d498671e0cb49566126633554cb8ad8e8d20926f136fd9a90625baf13afb22905c95fe3da7b3223578aff59cb4c5f4ea9b7b6b891090fdd0e8029fbc9d093ae87cc757af528f53310c13dbe5c3cb6257c2626761d9ee2824619755149b78032c07a3ad32a10bf24511c5353e1fa6804e9303fb11d21d1db671dc1a8b317ffb2ffa7c75cacd9375d1a8e5daf629437589bd1cf995725f443d156c329819abc1e3885b6803ee7c868d4ab8d2309ed82d5a4ccbee585acbb0ee681528d73feca97af28ce61c7d0109730d0e3441c87fa17796ccfa1bb0fc2dc943871d37c14b35f8f89deb29e8b37e54a8f8ece16174e39291a1f6c8439e14d723913b84a195498a2b8d38305688d9496f306506df1ff793dccef022f52cb2fa5ebcebdb064580dc0738b74b28451f274c877a791fc81ad894fa229808a0180f54a001664d0013bbe393c5058c917e910cc8cb6d0e021dbf7872499b925f2a40ad4723d280957d6bea9623f4272f6324137cd48f6810f64c67e2355f975a51af4c2a522bdd10f52bef5ef4ac929b4a28d8a9f7d4446401e31f1694bb2f0da5b4a8aaf662800fe891d8ca2d29447cc7c7477819e13e2c8ece0488e7b251ef144e1a47e375f182e5e2110c45cf9744e1640c4ac4c434f03d0c05a6eb071f759a660c87605172eefb2dfa9fb67f8cba16ffbbc51b2e02eff8adc2092ff673ac8bb673c2c5723b7475f6921b3863afd687fc90ffc2c8ee7448e66be4c5417043077078c5ddae71a09f7886754b74fed3853ce75121676bf3940ee16a8e5ded3b5a5621ff260964ec2cd548d88653381607d6b6a27f51c8e947ae89f1f6517ddaf8cd0d1e7206596c9794362a14d0be2d947c0b6d4914d55c82e2b0aabaa5889e85c8f1e345e966ba3cc8e19fc72b35bad5dafb86b82a449e799565ad955f2e34102c836eea10b8a62bdec9ce2ef07c7761345c3231b19fbd65e2df6cc1f6737f6f14b2719aaa5e5331037a00b7cbb87d387124846b8bc59d4e2fbbadb8c71fac21d0ab197e039cafc47ec929830b6bd44328f1e26eba2cab68ba8795a639185a1ef8a7e02e695e4f7a3ddaf14bca4728ad92eb6fd32933de7ec28926ac7ad8fdb073e3f63201109d29ed992d2c64a270a7c1f787223c7e22e926a065922b74b08de23d289eb91dc66a2e98170d29a4dc84cd75d53724df61922aae9f14c432363c1c87f17ff965c7623820d552e2d227b3a704a842cead96967646b4dd87b6e5daad133998880f921c53ba02e83fef152b1d80ad77c21aa0cbd11bb632419dfb17e9274879db2ab452394c159d5a1480932065e1c2abfe8890767111dddbc8872ff5901d19f6a6c27f6a3166596879edcaebf328a7eb0dfefed4eb70a63c6da51bea0ddeb3b90e783fc9221a08dcd7c84c66a85f8534b650379249456ae0dab735c1cf7221408a5f447c4014055b4fc4203f4a065e5c3cb975f6df7c6c330ed8bd77e2fd85b8dd0670941f226ef8d7c096acf29d45a388538b2b86786f6ee5bd3283bdaaab7b7d91b7fd3d3966f4e6abe79c2bd8380fd000736211781aafc82bd728011c88587cc7bc7f1f6b223b821372cd6e2ca12f8ebf48ee2f0d29d78fb90134ede3b6a2afd20819c1e19076e5c2442c1cc9edbdfeec72945a38a88b78725bae925412c9953ea26a8899509ae339e6b759681a5c6d588b0cdddade0ad9c820ca4f5a0083e176bf1b778f693d1758a512902251bacccdc452952836b0ccf74735ce4c14588dae277979d1318bea1189a47d2e190ce9c183a096198faccd06be1f5c265cb63fec3cc9f128e738b7bd16861dd223e00feef0205ff8b375b8463ea038d0ccee05a9cb56aca2acfe920237a8aba31e449cd3074037f4abe8ed363d80fd0199d9a15453ef989eeb24746ac30a40042ef07592bc64af05d3c0d766dd3b5a7d5278a232071ae7e35478e36782f0d8b69d88c0f89466d57f2ddb478136bb3fad253b3d1c64efedca0f7a50435496b24a99ef6519ef8504a4b54462556ab783b744f1c655848e5f8dc06da195073fa8c42449c1de59a28306c8781832f2ea933f46200f7564e8ef9dc86bd6cb8f30343dce628912b72c6d61188826af6e7c0ffe88c20869544d88d3bee19ed0692af59637cdf3b9692363a7e01dd4f27f168975058dddffb5676eb626a1475ebfc0894a4c7ca7a3158b87820adce69b69c4a327715fd8cf65213e73ce66422c453faeb987586c8e0ffc00bd77d803ab8e8bac67cdd351469aa777af9f81f050a94cfe4ed6f61677438c6f6f53aec17de3032cd5d9fe5e435ffd91d7d4d31b7f9ef893296ae68dd0170f198cd87d0a8c8869ac5d27e568db43b6c4fd59651695881abfd4404ab55b98257d4e399fb759016925696431f6d51464a192387efbaee873b61e3172676d40f22e305505b42c9050661b9a4b609eb379dc401aba78300c6a2df749b41ba4db355819a4b0af02e555281d9c4776f082347ce4aa8c52cfa57ca0049258dd6f354f95bf1cb714811a353c9cf98180122021d83ee8f33c52c8506ee2cea86f082ef66ac6c3cdb920d538b034339f15a6982194696fa3684e48d7c1d1ad84202feebdcea53507e7c1d81358172e1e0f19c28b55b9e1a65824f4b964fca75f881fe5577c9b3771ea119b3a7c436ee07bfdfb237c4fc82343048f1103e3aef8d98815e21c1f0524c6b04a6c0407ced44b07a768f343b0c9026083870540e473f8c40182a2e279d2db5845eaa713242775189f0e497eeab911645791180fa2c1c7fc7835600631ee1596da53a93d9b205e4176ea02814388fd81ba90c6a54495b1caafc154bc2e4df10e41fe99c6014798b675c36096c7d34eb51453104d20563d6a41a270dec2bc688a859d4786e5864642395c697661b62b3c25bb60a7d6cc577684e8c6bbfb1c8cdaf4f2f3df18828bd7b5423d767f5b3b0e18980c82b7c6fba5cc4680d62dab5f20b5cffffe5c767131d433887ebde236a05f08eeb7a22f2676f07a783f9e293ae188a98146419184f8615e470569828bedd3b845d538d65c52e58de6295ffd8a8e57cf2ea1044df3eeb180207fcfb08868268e87d72c25b5e7ef2624c8f03405addc57f55f305a251bcc360b33b9892091401315ba103199f5c94345f08b22c992ff92cbf01c70ca27f2d11eb0bbd52279ef5c87d9f9</script>
+</div>
+<script src="/lib/blog-encrypt.js"></script><link href="/css/blog-encrypt.css" rel="stylesheet" type="text/css">]]></content>
+      <categories>
+        <category>随笔</category>
+      </categories>
+      <tags>
+        <tag>随笔</tag>
       </tags>
   </entry>
   <entry>
