@@ -7,9 +7,9 @@
 <meta name="generator" content="Hexo 5.3.0">
 
 
-  <link rel="apple-touch-icon" sizes="180x180" href="/favicon.svg">
-  <link rel="icon" type="image/png" sizes="32x32" href="/favicon.svg">
-  <link rel="icon" type="image/png" sizes="16x16" href="/favicon.svg">
+  <link rel="apple-touch-icon" sizes="180x180" href="/cat1-01.svg">
+  <link rel="icon" type="image/png" sizes="32x32" href="/cat1-01.svg">
+  <link rel="icon" type="image/png" sizes="16x16" href="/cat1-01.svg">
   <link rel="mask-icon" href="/images/logo.svg" color="#222">
 
 <link rel="stylesheet" href="/css/main.css">
@@ -22,12 +22,12 @@
 
 <script class="hexo-configurations">
     var NexT = window.NexT || {};
-    var CONFIG = {"hostname":"blog.ubin.top","root":"/","images":"/images","scheme":"Mist","version":"8.1.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":true,"bookmark":{"enable":true,"color":"#222","save":"auto"},"fancybox":true,"mediumzoom":false,"lazyload":true,"pangu":true,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":true,"nav":null},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}};
+    var CONFIG = {"hostname":"ubin.top","root":"/","images":"/images","scheme":"Gemini","version":"8.1.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":true,"bookmark":{"enable":true,"color":"#222","save":"auto"},"fancybox":true,"mediumzoom":false,"lazyload":true,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":true,"nav":null},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}};
   </script>
 <meta name="description" content="缓存更新问题缓存是高并发业务的基石，当访问量突然上升的时候，缓存失效回源时会将请求打到后台数据库，导致服务器响应延迟或者宕机的情况。 通常缓存更新方案：  1.业务代码中，根据key从缓存拿不到数据，访问存储层获取数据后更新缓存 2.由专门的定时脚本在缓存失效前对其进行更新 3.通过分布式锁，实现只有一个请求负责缓存更新，其他请求等待：一种基于哨兵的缓存访问策略  通常获取缓存这样写： 1234d">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Go防缓存击穿 singleflight">
-<meta property="og:url" content="https://blog.ubin.top/2020/03/15/Go%E9%98%B2%E7%BC%93%E5%AD%98%E5%87%BB%E7%A9%BFsingleflight/index.html">
+<meta property="og:url" content="https://ubin.top/2020/03/15/Go%E9%98%B2%E7%BC%93%E5%AD%98%E5%87%BB%E7%A9%BFsingleflight/index.html">
 <meta property="og:site_name" content="薛定谔の猫">
 <meta property="og:description" content="缓存更新问题缓存是高并发业务的基石，当访问量突然上升的时候，缓存失效回源时会将请求打到后台数据库，导致服务器响应延迟或者宕机的情况。 通常缓存更新方案：  1.业务代码中，根据key从缓存拿不到数据，访问存储层获取数据后更新缓存 2.由专门的定时脚本在缓存失效前对其进行更新 3.通过分布式锁，实现只有一个请求负责缓存更新，其他请求等待：一种基于哨兵的缓存访问策略  通常获取缓存这样写： 1234d">
 <meta property="og:locale" content="zh_CN">
@@ -40,7 +40,7 @@
 <meta name="twitter:card" content="summary">
 
 
-<link rel="canonical" href="https://blog.ubin.top/2020/03/15/Go%E9%98%B2%E7%BC%93%E5%AD%98%E5%87%BB%E7%A9%BFsingleflight/">
+<link rel="canonical" href="https://ubin.top/2020/03/15/Go%E9%98%B2%E7%BC%93%E5%AD%98%E5%87%BB%E7%A9%BFsingleflight/">
 
 
 <script class="page-configurations">
@@ -364,7 +364,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://blog.ubin.top/2020/03/15/Go%E9%98%B2%E7%BC%93%E5%AD%98%E5%87%BB%E7%A9%BFsingleflight/">
+    <link itemprop="mainEntityOfPage" href="https://ubin.top/2020/03/15/Go%E9%98%B2%E7%BC%93%E5%AD%98%E5%87%BB%E7%A9%BFsingleflight/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="https://i.loli.net/2020/12/28/GsCnKm21pTdBUZo.jpg">
@@ -538,7 +538,7 @@
   </div>
 
 <div class="copyright">
-  &copy; 
+  &copy; 2015 – 
   <span itemprop="copyrightYear">2020</span>
   <span class="with-love">
     <i class="fa fa-heart"></i>
@@ -568,8 +568,7 @@
   <script src="//cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js"></script>
   <script src="//cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js"></script>
   <script src="//cdn.jsdelivr.net/npm/lozad@1.16.0/dist/lozad.min.js"></script>
-  <script src="//cdn.jsdelivr.net/npm/pangu@4.0.7/dist/browser/pangu.min.js"></script>
-<script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script><script src="/js/bookmark.js"></script>
+<script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script><script src="/js/bookmark.js"></script>
 
   
 
@@ -636,7 +635,7 @@
       quicklink.listen({
         timeout : 3000,
         priority: true,
-        ignores : [uri => uri.includes('#'),uri => uri === 'https://blog.ubin.top/2020/03/15/Go%E9%98%B2%E7%BC%93%E5%AD%98%E5%87%BB%E7%A9%BFsingleflight/',]
+        ignores : [uri => uri.includes('#'),uri => uri === 'https://ubin.top/2020/03/15/Go%E9%98%B2%E7%BC%93%E5%AD%98%E5%87%BB%E7%A9%BFsingleflight/',]
       });
       });
   </script>
