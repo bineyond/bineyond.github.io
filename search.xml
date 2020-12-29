@@ -1387,6 +1387,8 @@
     <url>/2020/12/29/docker-tips/</url>
     <content><![CDATA[<h1 id="Docker容器使用问题"><a href="#Docker容器使用问题" class="headerlink" title="Docker容器使用问题"></a>Docker容器使用问题</h1><h2 id="Failed-to-get-D-Bus-connection-Operation-not-permitted"><a href="#Failed-to-get-D-Bus-connection-Operation-not-permitted" class="headerlink" title="Failed to get D-Bus connection: Operation not permitted"></a>Failed to get D-Bus connection: Operation not permitted</h2><h3 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h3><p>使用centos7镜像创建容器后，在里面使用systemctl启动服务报错。</p>
 <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">docker run -itd --name centos7 centos:7</span><br><span class="line">docker attach centos7</span><br><span class="line">yum install vsftpd</span><br><span class="line">systemctl start vsftpd</span><br><span class="line">Failed to get D-Bus connection: Operation not permitted</span><br></pre></td></tr></table></figure>
+<a id="more"></a>
+
 <h3 id="分析"><a href="#分析" class="headerlink" title="分析"></a>分析</h3><p>Docker的设计理念是在容器里面不运行后台服务，容器本身就是宿主机上的一个独立的主进程，也可以间接的理解为就是容器里运行服务的应用进程。一个容器的生命周期是围绕这个主进程存在的，所以正确的使用容器方法是将里面的服务运行在前台。</p>
 <p>再说到systemd，这个套件已经成为主流Linux发行版（比如CentOS7、Ubuntu14+）默认的服务管理，取代了传统的SystemV风格服务管理。systemd维护系统服务程序，它需要特权去会访问Linux内核。而容器并不是一个完整的操作系统，只有一个文件系统，而且默认启动只是普通用户这样的权限访问Linux内核，也就是没有特权，所以自然就用不了！</p>
 <p>因此，请遵守容器设计原则，一个容器里运行一个前台服务！</p>
