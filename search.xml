@@ -6,6 +6,25 @@
     <content><![CDATA[]]></content>
   </entry>
   <entry>
+    <title>DB2配置远程数据库</title>
+    <url>/2019/10/24/DB2%E9%85%8D%E7%BD%AE%E8%BF%9C%E7%A8%8B%E6%95%B0%E6%8D%AE%E5%BA%93/</url>
+    <content><![CDATA[<p>在DB2客户机上连接远程DB2服务之前，必须正确设置服务端通信协议。DB2支持的协议有TCP/IP、NetBIOS、NPIPE等。</p>
+<p>基本分成2步：</p>
+<ol>
+<li>在客户机上对远程DB2节点进行设置。</li>
+<li>在客户机上对远程数据库进行设置。</li>
+</ol>
+<a id="more"></a>
+
+<h1 id="第一步"><a href="#第一步" class="headerlink" title="第一步"></a>第一步</h1><p>首先在客户机上对远程节点进行设置，这里需要确认远程主机在客户机上的名称、IP地址、端口号等基本命令如下：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">db2 =&gt; catalog tcpip node <span class="variable">$&#123;nodename&#125;</span> remote <span class="variable">$&#123;ip/hostname&#125;</span> server <span class="variable">$&#123;prot&#125;</span>  <span class="comment"># $&#123;nodename&#125; 不能超过8个字符</span></span><br><span class="line">db2 =&gt; TERMINATE                   <span class="comment">#刷新目录高速缓存</span></span><br><span class="line">db2 =&gt; LIST NODE DIRECTORY         <span class="comment">#查看客户机目录节点</span></span><br><span class="line">db2 =&gt; UNCATALOG NODE <span class="variable">$&#123;nodename&#125;</span>  <span class="comment">#查看客户机目录节点</span></span><br></pre></td></tr></table></figure>
+<h1 id="第二步"><a href="#第二步" class="headerlink" title="第二步"></a>第二步</h1><p>再把远程节点上的数据库，设置本地别名</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">db2 =&gt; catalog db <span class="variable">$&#123;remote_dbname&#125;</span> as <span class="variable">$&#123;local_alias_name&#125;</span> at node <span class="variable">$&#123;nodename&#125;</span></span><br><span class="line">db2 =&gt; TERMINATE                         <span class="comment">#刷新目录高速缓存</span></span><br><span class="line">db2 =&gt; LIST DB DIRECTORY                 <span class="comment">#查看本地数据库目录</span></span><br><span class="line">db2 =&gt; UNCATALOG DB <span class="variable">$&#123;local_alias_name&#125;</span>  <span class="comment">#删除数据库编目$&#123;local_alias_name&#125; </span></span><br></pre></td></tr></table></figure>]]></content>
+      <tags>
+        <tag>DB2</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>ARTS</title>
     <url>/2019/03/17/ARTS/</url>
     <content><![CDATA[<p>加入极客时间《左耳听风》第3期 ARTS 打卡小组</p>
@@ -35,25 +54,6 @@
       </tags>
   </entry>
   <entry>
-    <title>DB2配置远程数据库</title>
-    <url>/2019/10/24/DB2%E9%85%8D%E7%BD%AE%E8%BF%9C%E7%A8%8B%E6%95%B0%E6%8D%AE%E5%BA%93/</url>
-    <content><![CDATA[<p>在DB2客户机上连接远程DB2服务之前，必须正确设置服务端通信协议。DB2支持的协议有TCP/IP、NetBIOS、NPIPE等。</p>
-<p>基本分成2步：</p>
-<ol>
-<li>在客户机上对远程DB2节点进行设置。</li>
-<li>在客户机上对远程数据库进行设置。</li>
-</ol>
-<a id="more"></a>
-
-<h1 id="第一步"><a href="#第一步" class="headerlink" title="第一步"></a>第一步</h1><p>首先在客户机上对远程节点进行设置，这里需要确认远程主机在客户机上的名称、IP地址、端口号等基本命令如下：</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">db2 =&gt; catalog tcpip node <span class="variable">$&#123;nodename&#125;</span> remote <span class="variable">$&#123;ip/hostname&#125;</span> server <span class="variable">$&#123;prot&#125;</span>  <span class="comment"># $&#123;nodename&#125; 不能超过8个字符</span></span><br><span class="line">db2 =&gt; TERMINATE                   <span class="comment">#刷新目录高速缓存</span></span><br><span class="line">db2 =&gt; LIST NODE DIRECTORY         <span class="comment">#查看客户机目录节点</span></span><br><span class="line">db2 =&gt; UNCATALOG NODE <span class="variable">$&#123;nodename&#125;</span>  <span class="comment">#查看客户机目录节点</span></span><br></pre></td></tr></table></figure>
-<h1 id="第二步"><a href="#第二步" class="headerlink" title="第二步"></a>第二步</h1><p>再把远程节点上的数据库，设置本地别名</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">db2 =&gt; catalog db <span class="variable">$&#123;remote_dbname&#125;</span> as <span class="variable">$&#123;local_alias_name&#125;</span> at node <span class="variable">$&#123;nodename&#125;</span></span><br><span class="line">db2 =&gt; TERMINATE                         <span class="comment">#刷新目录高速缓存</span></span><br><span class="line">db2 =&gt; LIST DB DIRECTORY                 <span class="comment">#查看本地数据库目录</span></span><br><span class="line">db2 =&gt; UNCATALOG DB <span class="variable">$&#123;local_alias_name&#125;</span>  <span class="comment">#删除数据库编目$&#123;local_alias_name&#125; </span></span><br></pre></td></tr></table></figure>]]></content>
-      <tags>
-        <tag>DB2</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>Go 空结构体比较</title>
     <url>/2019/04/23/Go%E7%A9%BA%E7%BB%93%E6%9E%84%E4%BD%93%E6%AF%94%E8%BE%83/</url>
     <content><![CDATA[<h1 id="下面代码的输出是什么（判断-a-b-）的部分？为什么？"><a href="#下面代码的输出是什么（判断-a-b-）的部分？为什么？" class="headerlink" title="下面代码的输出是什么（判断 a == b ）的部分？为什么？"></a>下面代码的输出是什么（判断 a == b ）的部分？为什么？</h1><a id="more"></a>
@@ -70,33 +70,6 @@
       <tags>
         <tag>面试题</tag>
         <tag>Golang</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>UNIX网络编程-卷2-源代码编译</title>
-    <url>/2016/01/22/UNIX%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B-%E5%8D%B72-%E6%BA%90%E4%BB%A3%E7%A0%81%E7%BC%96%E8%AF%91/</url>
-    <content><![CDATA[<blockquote>
-<p>最近在看《UNIX网络编程-第二版-卷2：进程间通讯》，下载了源码，在SLES SP4 32bit 无法编译，需要做些修改如下</p>
-</blockquote>
-<h2 id="1-下载源码"><a href="#1-下载源码" class="headerlink" title="1 下载源码:"></a>1 下载源码:</h2><p>W. Richard Stevens的主页：<a href="http://www.kohala.com/start/">http://www.kohala.com/start/</a></p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">wget http://www.kohala.com/start/unpv22e/unpv22e.tar.gz -P /usr/<span class="built_in">local</span>/src</span><br></pre></td></tr></table></figure>
-<h2 id="2-解压"><a href="#2-解压" class="headerlink" title="2 解压"></a>2 解压</h2><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">tar xvf /usr/<span class="built_in">local</span>/src/unpv22e.tar.gz -C /root/bin</span><br></pre></td></tr></table></figure>
-<a id="more"></a>
-
-<h2 id="3-编译库文件，及修改头文件"><a href="#3-编译库文件，及修改头文件" class="headerlink" title="3 编译库文件，及修改头文件"></a>3 编译库文件，及修改头文件</h2><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">cd</span> /root/bin/unpv22e/</span><br><span class="line">./configure</span><br></pre></td></tr></table></figure>
-<h3 id="3-1-修改生成config-h文件，注释以下几行"><a href="#3-1-修改生成config-h文件，注释以下几行" class="headerlink" title="3.1 修改生成config.h文件，注释以下几行"></a>3.1 修改生成config.h文件，注释以下几行</h3><figure class="highlight c"><table><tr><td class="code"><pre><span class="line">vi config.h</span><br><span class="line"><span class="number">56</span> <span class="comment">// #define uint8_t unsigned char</span></span><br><span class="line"><span class="number">57</span> <span class="comment">// #define uint16_t unsigned short</span></span><br><span class="line"><span class="number">58</span> <span class="comment">// #define uint32_t unsigned int</span></span><br></pre></td></tr></table></figure>
-<h3 id="3-2-添加MSG-R和MSG-W定义"><a href="#3-2-添加MSG-R和MSG-W定义" class="headerlink" title="3.2 添加MSG_R和MSG_W定义"></a>3.2 添加MSG_R和MSG_W定义</h3><figure class="highlight c"><table><tr><td class="code"><pre><span class="line">vi config.h</span><br><span class="line"><span class="number">67</span> <span class="keyword">typedef</span> <span class="keyword">unsigned</span> <span class="keyword">long</span> <span class="keyword">ulong_t</span>;</span><br><span class="line"><span class="number">68</span> <span class="meta">#<span class="meta-keyword">define</span> MSG_R 0400</span></span><br><span class="line"><span class="number">69</span> <span class="meta">#<span class="meta-keyword">define</span> MSG_W 0200</span></span><br></pre></td></tr></table></figure>
-<h3 id="3-3-添加-GNU-SOURCE定义"><a href="#3-3-添加-GNU-SOURCE定义" class="headerlink" title="3.3 添加_GNU_SOURCE定义"></a>3.3 添加_GNU_SOURCE定义</h3><figure class="highlight c"><table><tr><td class="code"><pre><span class="line">vi config.h</span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> _GNU_SOURCE</span></span><br></pre></td></tr></table></figure>
-<h3 id="3-4-编译warpunix-c，使用mkstemp函数替换mktemp函数"><a href="#3-4-编译warpunix-c，使用mkstemp函数替换mktemp函数" class="headerlink" title="3.4 编译warpunix.c，使用mkstemp函数替换mktemp函数"></a>3.4 编译warpunix.c，使用mkstemp函数替换mktemp函数</h3><figure class="highlight c"><table><tr><td class="code"><pre><span class="line">cd lib</span><br><span class="line"><span class="number">181</span> <span class="keyword">void</span></span><br><span class="line"><span class="number">182</span> Mktemp(<span class="keyword">char</span> *<span class="keyword">template</span>)</span><br><span class="line"><span class="number">183</span> &#123;</span><br><span class="line"><span class="number">184</span> <span class="keyword">if</span> (mkstemp(<span class="keyword">template</span>) == <span class="literal">NULL</span> || <span class="keyword">template</span>[<span class="number">0</span>] == <span class="number">0</span>)</span><br><span class="line"><span class="number">185</span> err_quit(<span class="string">&quot;mktemp error&quot;</span>);</span><br><span class="line"><span class="number">186</span> &#125;</span><br></pre></td></tr></table></figure>
-<h3 id="3-5-编译生成libunpipc-a"><a href="#3-5-编译生成libunpipc-a" class="headerlink" title="3.5 编译生成libunpipc.a"></a>3.5 编译生成libunpipc.a</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">cd</span> lib</span><br><span class="line">make</span><br></pre></td></tr></table></figure>
-<h2 id="4-构建自己的编写代码的目录"><a href="#4-构建自己的编写代码的目录" class="headerlink" title="4 构建自己的编写代码的目录"></a>4 构建自己的编写代码的目录</h2><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">mkdir -p /root/bin/unpv2</span><br><span class="line"><span class="built_in">cd</span> -</span><br><span class="line">cp /root/bin/unpv22e/libunpipc.a /root/bin/unpv22e/config.h /root/bin/unpv22e/Make.defines .</span><br></pre></td></tr></table></figure>
-<h2 id="5-编译各个目录自己的文件"><a href="#5-编译各个目录自己的文件" class="headerlink" title="5 编译各个目录自己的文件"></a>5 编译各个目录自己的文件</h2><p>复制各个子目录下得*.h头文件和Makfile文件，然后执行</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">cp /root/bin/unpv22e/dir/*.h /root/bin/unpv22e/dir/Makefile /root/bin/unpv2</span><br><span class="line">make filename</span><br></pre></td></tr></table></figure>
-<p>即可编译各个子目录下的代码</p>
-]]></content>
-      <tags>
-        <tag>UNIX</tag>
-        <tag>Source</tag>
       </tags>
   </entry>
   <entry>
@@ -160,6 +133,33 @@
       </tags>
   </entry>
   <entry>
+    <title>UNIX网络编程-卷2-源代码编译</title>
+    <url>/2016/01/22/UNIX%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B-%E5%8D%B72-%E6%BA%90%E4%BB%A3%E7%A0%81%E7%BC%96%E8%AF%91/</url>
+    <content><![CDATA[<blockquote>
+<p>最近在看《UNIX网络编程-第二版-卷2：进程间通讯》，下载了源码，在SLES SP4 32bit 无法编译，需要做些修改如下</p>
+</blockquote>
+<h2 id="1-下载源码"><a href="#1-下载源码" class="headerlink" title="1 下载源码:"></a>1 下载源码:</h2><p>W. Richard Stevens的主页：<a href="http://www.kohala.com/start/">http://www.kohala.com/start/</a></p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">wget http://www.kohala.com/start/unpv22e/unpv22e.tar.gz -P /usr/<span class="built_in">local</span>/src</span><br></pre></td></tr></table></figure>
+<h2 id="2-解压"><a href="#2-解压" class="headerlink" title="2 解压"></a>2 解压</h2><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">tar xvf /usr/<span class="built_in">local</span>/src/unpv22e.tar.gz -C /root/bin</span><br></pre></td></tr></table></figure>
+<a id="more"></a>
+
+<h2 id="3-编译库文件，及修改头文件"><a href="#3-编译库文件，及修改头文件" class="headerlink" title="3 编译库文件，及修改头文件"></a>3 编译库文件，及修改头文件</h2><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">cd</span> /root/bin/unpv22e/</span><br><span class="line">./configure</span><br></pre></td></tr></table></figure>
+<h3 id="3-1-修改生成config-h文件，注释以下几行"><a href="#3-1-修改生成config-h文件，注释以下几行" class="headerlink" title="3.1 修改生成config.h文件，注释以下几行"></a>3.1 修改生成config.h文件，注释以下几行</h3><figure class="highlight c"><table><tr><td class="code"><pre><span class="line">vi config.h</span><br><span class="line"><span class="number">56</span> <span class="comment">// #define uint8_t unsigned char</span></span><br><span class="line"><span class="number">57</span> <span class="comment">// #define uint16_t unsigned short</span></span><br><span class="line"><span class="number">58</span> <span class="comment">// #define uint32_t unsigned int</span></span><br></pre></td></tr></table></figure>
+<h3 id="3-2-添加MSG-R和MSG-W定义"><a href="#3-2-添加MSG-R和MSG-W定义" class="headerlink" title="3.2 添加MSG_R和MSG_W定义"></a>3.2 添加MSG_R和MSG_W定义</h3><figure class="highlight c"><table><tr><td class="code"><pre><span class="line">vi config.h</span><br><span class="line"><span class="number">67</span> <span class="keyword">typedef</span> <span class="keyword">unsigned</span> <span class="keyword">long</span> <span class="keyword">ulong_t</span>;</span><br><span class="line"><span class="number">68</span> <span class="meta">#<span class="meta-keyword">define</span> MSG_R 0400</span></span><br><span class="line"><span class="number">69</span> <span class="meta">#<span class="meta-keyword">define</span> MSG_W 0200</span></span><br></pre></td></tr></table></figure>
+<h3 id="3-3-添加-GNU-SOURCE定义"><a href="#3-3-添加-GNU-SOURCE定义" class="headerlink" title="3.3 添加_GNU_SOURCE定义"></a>3.3 添加_GNU_SOURCE定义</h3><figure class="highlight c"><table><tr><td class="code"><pre><span class="line">vi config.h</span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> _GNU_SOURCE</span></span><br></pre></td></tr></table></figure>
+<h3 id="3-4-编译warpunix-c，使用mkstemp函数替换mktemp函数"><a href="#3-4-编译warpunix-c，使用mkstemp函数替换mktemp函数" class="headerlink" title="3.4 编译warpunix.c，使用mkstemp函数替换mktemp函数"></a>3.4 编译warpunix.c，使用mkstemp函数替换mktemp函数</h3><figure class="highlight c"><table><tr><td class="code"><pre><span class="line">cd lib</span><br><span class="line"><span class="number">181</span> <span class="keyword">void</span></span><br><span class="line"><span class="number">182</span> Mktemp(<span class="keyword">char</span> *<span class="keyword">template</span>)</span><br><span class="line"><span class="number">183</span> &#123;</span><br><span class="line"><span class="number">184</span> <span class="keyword">if</span> (mkstemp(<span class="keyword">template</span>) == <span class="literal">NULL</span> || <span class="keyword">template</span>[<span class="number">0</span>] == <span class="number">0</span>)</span><br><span class="line"><span class="number">185</span> err_quit(<span class="string">&quot;mktemp error&quot;</span>);</span><br><span class="line"><span class="number">186</span> &#125;</span><br></pre></td></tr></table></figure>
+<h3 id="3-5-编译生成libunpipc-a"><a href="#3-5-编译生成libunpipc-a" class="headerlink" title="3.5 编译生成libunpipc.a"></a>3.5 编译生成libunpipc.a</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">cd</span> lib</span><br><span class="line">make</span><br></pre></td></tr></table></figure>
+<h2 id="4-构建自己的编写代码的目录"><a href="#4-构建自己的编写代码的目录" class="headerlink" title="4 构建自己的编写代码的目录"></a>4 构建自己的编写代码的目录</h2><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">mkdir -p /root/bin/unpv2</span><br><span class="line"><span class="built_in">cd</span> -</span><br><span class="line">cp /root/bin/unpv22e/libunpipc.a /root/bin/unpv22e/config.h /root/bin/unpv22e/Make.defines .</span><br></pre></td></tr></table></figure>
+<h2 id="5-编译各个目录自己的文件"><a href="#5-编译各个目录自己的文件" class="headerlink" title="5 编译各个目录自己的文件"></a>5 编译各个目录自己的文件</h2><p>复制各个子目录下得*.h头文件和Makfile文件，然后执行</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">cp /root/bin/unpv22e/dir/*.h /root/bin/unpv22e/dir/Makefile /root/bin/unpv2</span><br><span class="line">make filename</span><br></pre></td></tr></table></figure>
+<p>即可编译各个子目录下的代码</p>
+]]></content>
+      <tags>
+        <tag>UNIX</tag>
+        <tag>Source</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>在Mac上安装db2 driver</title>
     <url>/2020/12/28/db2-driver-on-macos/</url>
     <content><![CDATA[<h1 id="选择版本"><a href="#选择版本" class="headerlink" title="选择版本"></a>选择版本</h1><p><a href="https://www.ibm.com/support/pages/node/323035">此处选择</a></p>
@@ -190,6 +190,24 @@
       <tags>
         <tag>db2</tag>
         <tag>MacOS</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>docker-tips</title>
+    <url>/2020/12/29/docker-tips/</url>
+    <content><![CDATA[<h1 id="Docker容器使用问题"><a href="#Docker容器使用问题" class="headerlink" title="Docker容器使用问题"></a>Docker容器使用问题</h1><h2 id="Failed-to-get-D-Bus-connection-Operation-not-permitted"><a href="#Failed-to-get-D-Bus-connection-Operation-not-permitted" class="headerlink" title="Failed to get D-Bus connection: Operation not permitted"></a>Failed to get D-Bus connection: Operation not permitted</h2><h3 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h3><p>使用centos7镜像创建容器后，在里面使用systemctl启动服务报错。</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">docker run -itd --name centos7 centos:7</span><br><span class="line">docker attach centos7</span><br><span class="line">yum install vsftpd</span><br><span class="line">systemctl start vsftpd</span><br><span class="line">Failed to get D-Bus connection: Operation not permitted</span><br></pre></td></tr></table></figure>
+<a id="more"></a>
+
+<h3 id="分析"><a href="#分析" class="headerlink" title="分析"></a>分析</h3><p>Docker的设计理念是在容器里面不运行后台服务，容器本身就是宿主机上的一个独立的主进程，也可以间接的理解为就是容器里运行服务的应用进程。一个容器的生命周期是围绕这个主进程存在的，所以正确的使用容器方法是将里面的服务运行在前台。</p>
+<p>再说到systemd，这个套件已经成为主流Linux发行版（比如CentOS7、Ubuntu14+）默认的服务管理，取代了传统的SystemV风格服务管理。systemd维护系统服务程序，它需要特权去会访问Linux内核。而容器并不是一个完整的操作系统，只有一个文件系统，而且默认启动只是普通用户这样的权限访问Linux内核，也就是没有特权，所以自然就用不了！</p>
+<p>因此，请遵守容器设计原则，一个容器里运行一个前台服务！</p>
+<h3 id="解决"><a href="#解决" class="headerlink" title="解决"></a>解决</h3><p>以特权模式运行容器。</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 创建容器：</span></span><br><span class="line">docker run -d -name centos7 --privileged=<span class="literal">true</span> centos:7 /usr/sbin/init</span><br><span class="line"></span><br><span class="line"><span class="comment"># 进入容器：</span></span><br><span class="line">docker <span class="built_in">exec</span> -it centos7 /bin/bash</span><br></pre></td></tr></table></figure>
+<p>这样可以使用systemctl启动服务了。</p>
+]]></content>
+      <tags>
+        <tag>docker</tag>
       </tags>
   </entry>
   <entry>
@@ -290,54 +308,6 @@
       </tags>
   </entry>
   <entry>
-    <title>getopt和getopt_long函数</title>
-    <url>/2016/02/01/getopt%E5%92%8Cgetopt-long%E5%87%BD%E6%95%B0/</url>
-    <content><![CDATA[<blockquote>
-<p>在linux下写程序时常常需要对命令行参数进行处理。下面比对下getopt、getopt_long、getopt_long_only。</p>
-</blockquote>
-<a id="more"></a>
-
-<h3 id="头文件及函数声明"><a href="#头文件及函数声明" class="headerlink" title="头文件及函数声明"></a>头文件及函数声明</h3><figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;unistd.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">getopt</span><span class="params">(<span class="keyword">int</span> argc, <span class="keyword">char</span> * <span class="keyword">const</span> argv[],</span></span></span><br><span class="line"><span class="function"><span class="params">           <span class="keyword">const</span> <span class="keyword">char</span> *optstring)</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">extern</span> <span class="keyword">char</span> *optarg;</span><br><span class="line"><span class="keyword">extern</span> <span class="keyword">int</span> optind, opterr, optopt;</span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;getopt.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">getopt_long</span><span class="params">(<span class="keyword">int</span> argc, <span class="keyword">char</span> * <span class="keyword">const</span> argv[],</span></span></span><br><span class="line"><span class="function"><span class="params">           <span class="keyword">const</span> <span class="keyword">char</span> *optstring,</span></span></span><br><span class="line"><span class="function"><span class="params">           <span class="keyword">const</span> struct option *longopts, <span class="keyword">int</span> *longindex)</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">getopt_long_only</span><span class="params">(<span class="keyword">int</span> argc, <span class="keyword">char</span> * <span class="keyword">const</span> argv[],</span></span></span><br><span class="line"><span class="function"><span class="params">           <span class="keyword">const</span> <span class="keyword">char</span> *optstring,</span></span></span><br><span class="line"><span class="function"><span class="params">           <span class="keyword">const</span> struct option *longopts, <span class="keyword">int</span> *longindex)</span></span>;</span><br></pre></td></tr></table></figure>
-<p><strong>从最简单的getopt讲起，getopt函数的前两个参数，就是main函数的argc和argv，这两者直接传入即可，要考虑的就只剩下第三个参数。</strong></p>
-<p>optstring的格式举例说明比较方便，例如：</p>
-<pre><code>char *optstring = &quot;abcd:&quot;;</code></pre>
-<p>上面这个optstring在传入之后，getopt函数将依次检查命令行是否指定了 -a， -b， -c及 -d（这需要多次调用getopt函数，直到其返回-1），当检查到上面某一个参数被指定时，函数会返回被指定的参数名称（即该字母）</p>
-<p>最后一个参数d后面带有冒号: 表示参数d是可以指定值的，如 -d 100 或 -d user。</p>
-<p>optind表示的是下一个将被处理到的参数在argv中的下标值。</p>
-<p>如果指定opterr = 0的话，在getopt、getopt_long、getopt_long_only遇到错误将不会输出错误信息到标准输出流。</p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;unistd.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">int</span> argc, <span class="keyword">char</span> *argv[])</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> opt;</span><br><span class="line">    <span class="keyword">char</span> *optstring = <span class="string">&quot;a:b:c:d&quot;</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">while</span> ((opt = getopt(argc, argv, optstring)) != <span class="number">-1</span>)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;opt = %c\n&quot;</span>, opt);</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;optarg = %s\n&quot;</span>, optarg);</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;optind = %d\n&quot;</span>, optind);</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;argv[optind - 1] = %s\n\n&quot;</span>,  argv[optind - <span class="number">1</span>]);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>编译上述程序并运行，有如下结果：</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">cashey@ubuntu:~/Desktop/getopt$ ./test_getopt -a 100 -b 200 -c admin -d</span><br><span class="line">opt = a</span><br><span class="line">optarg = 100</span><br><span class="line">optind = 3</span><br><span class="line">argv[optind - 1] = 100</span><br><span class="line"></span><br><span class="line">opt = b</span><br><span class="line">optarg = 200</span><br><span class="line">optind = 5</span><br><span class="line">argv[optind - 1] = 200</span><br><span class="line"></span><br><span class="line">opt = c</span><br><span class="line">optarg = admin</span><br><span class="line">optind = 7</span><br><span class="line">argv[optind - 1] = admin</span><br><span class="line"></span><br><span class="line">opt = d</span><br><span class="line">optarg = (null)</span><br><span class="line">optind = 8</span><br><span class="line">argv[optind - 1] = -d</span><br></pre></td></tr></table></figure>
-<p>** 下面来讲getopt_long函数，getopt_long函数包含了getopt函数的功能，并且还可以指定“长参数”（或者说长选项），与getopt函数对比，getopt_long比其多了两个参数： **</p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">getopt</span><span class="params">(<span class="keyword">int</span> argc, <span class="keyword">char</span> * <span class="keyword">const</span> argv[],</span></span></span><br><span class="line"><span class="function"><span class="params">                  <span class="keyword">const</span> <span class="keyword">char</span> *optstring)</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">getopt_long</span><span class="params">(<span class="keyword">int</span> argc, <span class="keyword">char</span> * <span class="keyword">const</span> argv[],</span></span></span><br><span class="line"><span class="function"><span class="params">          <span class="keyword">const</span> <span class="keyword">char</span> *optstring,</span></span></span><br><span class="line"><span class="function"><span class="params">          <span class="keyword">const</span> struct option *longopts, <span class="keyword">int</span> *longindex)</span></span>;</span><br></pre></td></tr></table></figure>
-
-<p>在这里，longopts指向的是一个由option结构体组成的数组，那个数组的每个元素，指明了一个“长参数”（即形如–name的参数）名称和性质：</p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">option</span> &#123;</span></span><br><span class="line">    <span class="keyword">const</span> <span class="keyword">char</span> *name;</span><br><span class="line">    <span class="keyword">int</span>         has_arg;</span><br><span class="line">    <span class="keyword">int</span>        *flag;</span><br><span class="line">    <span class="keyword">int</span>         val;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-<pre><code>   name     是参数的名称
-
-   has_arg  指明是否带参数值，其数值可选：
-            no_argument (即 0) 表明这个长参数不带参数（即不带数值，如：--name）
-            required_argument (即 1) 表明这个长参数必须带参数（即必须带数值，如：--name Bob）
-            optional_argument（即2）表明这个长参数后面带的参数是可选的，（即--name和--name Bob均可）
-
-   flag     当这个指针为空的时候，函数直接将val的数值从getopt_long的返回值返回出去，当它非空时，
-            val的值会被赋到flag指向的整型数中，而函数返回值为0
-
-   val      用于指定函数找到该选项时的返回值，或者当flag非空时指定flag指向的数据的值。</code></pre>
-<p>** 另一个参数longindex，如果longindex非空，它指向的变量将记录当前找到参数符合longopts里的第几个元素的描述，即是longopts的下标值。**</p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;unistd.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;getopt.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="keyword">int</span></span><br><span class="line">main(<span class="keyword">int</span> argc, <span class="keyword">char</span> **argv)</span><br><span class="line">&#123;</span><br><span class="line">   <span class="keyword">int</span> opt;</span><br><span class="line">   <span class="keyword">int</span> digit_optind = <span class="number">0</span>;</span><br><span class="line">   <span class="keyword">int</span> option_index = <span class="number">0</span>;</span><br><span class="line">   <span class="keyword">char</span> *optstring = <span class="string">&quot;a:b:c:d&quot;</span>;</span><br><span class="line">   <span class="keyword">static</span> <span class="class"><span class="keyword">struct</span> <span class="title">option</span> <span class="title">long_options</span>[] =</span> &#123;</span><br><span class="line">       &#123;<span class="string">&quot;reqarg&quot;</span>, required_argument, <span class="literal">NULL</span>, <span class="string">&#x27;r&#x27;</span>&#125;,</span><br><span class="line">       &#123;<span class="string">&quot;noarg&quot;</span>,  no_argument,       <span class="literal">NULL</span>, <span class="string">&#x27;n&#x27;</span>&#125;,</span><br><span class="line">       &#123;<span class="string">&quot;optarg&quot;</span>, optional_argument, <span class="literal">NULL</span>, <span class="string">&#x27;o&#x27;</span>&#125;,</span><br><span class="line">       &#123;<span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>&#125;</span><br><span class="line">   &#125;;</span><br><span class="line"></span><br><span class="line">   <span class="keyword">while</span> ( (opt = getopt_long(argc, argv, optstring, long_options, &amp;option_index)) != <span class="number">-1</span>)</span><br><span class="line">   &#123;</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;opt = %c\n&quot;</span>, opt);</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;optarg = %s\n&quot;</span>, optarg);</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;optind = %d\n&quot;</span>, optind);</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;argv[optind - 1] = %s\n&quot;</span>,  argv[optind - <span class="number">1</span>]);</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;option_index = %d\n&quot;</span>, option_index);</span><br><span class="line">   &#125;</span><br><span class="line"></span><br><span class="line">   <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>** 编译运行以上程序并运行，可以得到以下结果： **</p>
-<figure class="highlight makefile"><table><tr><td class="code"><pre><span class="line"><span class="section">cashey@ubuntu:~/Desktop/getopt$ ./test_getopt_long -a 100 --reqarg 100 --nonarg</span></span><br><span class="line">opt = a</span><br><span class="line">optarg = 100</span><br><span class="line">optind = 3</span><br><span class="line">argv[optind - 1] = 100</span><br><span class="line">option_index = 0</span><br><span class="line">opt = r</span><br><span class="line">optarg = 100</span><br><span class="line">optind = 5</span><br><span class="line">argv[optind - 1] = 100</span><br><span class="line">option_index = 0</span><br><span class="line"><span class="section">./test_getopt_long: unrecognized option &#x27;--nonarg&#x27;</span></span><br><span class="line">opt = ?</span><br><span class="line">optarg = (null)</span><br><span class="line">optind = 6</span><br><span class="line">argv[optind - 1] = --nonarg</span><br><span class="line">option_index = 0</span><br></pre></td></tr></table></figure>
-<p>** 当所给的参数存在问题时，opt（即函数返回值是’?’），如： **</p>
-<figure class="highlight elixir"><table><tr><td class="code"><pre><span class="line">cashey<span class="variable">@ubuntu</span><span class="symbol">:~/Desktop/getopt</span><span class="variable">$ </span>./test_getopt_long -a</span><br><span class="line">./<span class="symbol">test_getopt_long:</span> option requires an argument -- <span class="string">&#x27;a&#x27;</span></span><br><span class="line">opt = ?</span><br><span class="line">optarg = (null)</span><br><span class="line">optind = <span class="number">2</span></span><br><span class="line">argv[optind - <span class="number">1</span>] = -a</span><br><span class="line">option_index = 0</span><br><span class="line">cashey<span class="variable">@ubuntu</span><span class="symbol">:~/Desktop/getopt</span><span class="variable">$ </span>./test_getopt_long --reqarg</span><br><span class="line">./<span class="symbol">test_getopt_long:</span> option <span class="string">&#x27;--reqarg&#x27;</span> requires an argument</span><br><span class="line">opt = ?</span><br><span class="line">optarg = (null)</span><br><span class="line">optind = <span class="number">2</span></span><br><span class="line">argv[optind - <span class="number">1</span>] = --reqarg</span><br></pre></td></tr></table></figure>
-<p>最后说说<code>getopt_long_only</code>函数，它与getopt_long函数使用相同的参数表，在功能上基本一致，只是getopt_long只将–name当作长参数，但getopt_long_only会将–name和-name两种选项都当作长参数来匹配。在getopt_long在遇到-name时，会拆解成-n -a -m -e到optstring中进行匹配，而getopt_long_only只在-name不能在longopts中匹配时才将其拆解成-n -a -m -e这样的参数到optstring中进行匹配。</p>
-]]></content>
-      <tags>
-        <tag>linux</tag>
-        <tag>C</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>go-cgo-oracle</title>
     <url>/2020/04/09/go-cgo-oracle/</url>
     <content><![CDATA[<h1 id="Linux-环境"><a href="#Linux-环境" class="headerlink" title="Linux 环境"></a>Linux 环境</h1><h2 id="安装-oracle-instantclient"><a href="#安装-oracle-instantclient" class="headerlink" title="安装 oracle-instantclient"></a>安装 oracle-instantclient</h2><h3 id="下载"><a href="#下载" class="headerlink" title="下载"></a>下载</h3><ul>
@@ -407,6 +377,54 @@
         <tag>cgo</tag>
         <tag>Mingw-w64</tag>
         <tag>sql</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>getopt和getopt_long函数</title>
+    <url>/2016/02/01/getopt%E5%92%8Cgetopt-long%E5%87%BD%E6%95%B0/</url>
+    <content><![CDATA[<blockquote>
+<p>在linux下写程序时常常需要对命令行参数进行处理。下面比对下getopt、getopt_long、getopt_long_only。</p>
+</blockquote>
+<a id="more"></a>
+
+<h3 id="头文件及函数声明"><a href="#头文件及函数声明" class="headerlink" title="头文件及函数声明"></a>头文件及函数声明</h3><figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;unistd.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">getopt</span><span class="params">(<span class="keyword">int</span> argc, <span class="keyword">char</span> * <span class="keyword">const</span> argv[],</span></span></span><br><span class="line"><span class="function"><span class="params">           <span class="keyword">const</span> <span class="keyword">char</span> *optstring)</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">extern</span> <span class="keyword">char</span> *optarg;</span><br><span class="line"><span class="keyword">extern</span> <span class="keyword">int</span> optind, opterr, optopt;</span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;getopt.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">getopt_long</span><span class="params">(<span class="keyword">int</span> argc, <span class="keyword">char</span> * <span class="keyword">const</span> argv[],</span></span></span><br><span class="line"><span class="function"><span class="params">           <span class="keyword">const</span> <span class="keyword">char</span> *optstring,</span></span></span><br><span class="line"><span class="function"><span class="params">           <span class="keyword">const</span> struct option *longopts, <span class="keyword">int</span> *longindex)</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">getopt_long_only</span><span class="params">(<span class="keyword">int</span> argc, <span class="keyword">char</span> * <span class="keyword">const</span> argv[],</span></span></span><br><span class="line"><span class="function"><span class="params">           <span class="keyword">const</span> <span class="keyword">char</span> *optstring,</span></span></span><br><span class="line"><span class="function"><span class="params">           <span class="keyword">const</span> struct option *longopts, <span class="keyword">int</span> *longindex)</span></span>;</span><br></pre></td></tr></table></figure>
+<p><strong>从最简单的getopt讲起，getopt函数的前两个参数，就是main函数的argc和argv，这两者直接传入即可，要考虑的就只剩下第三个参数。</strong></p>
+<p>optstring的格式举例说明比较方便，例如：</p>
+<pre><code>char *optstring = &quot;abcd:&quot;;</code></pre>
+<p>上面这个optstring在传入之后，getopt函数将依次检查命令行是否指定了 -a， -b， -c及 -d（这需要多次调用getopt函数，直到其返回-1），当检查到上面某一个参数被指定时，函数会返回被指定的参数名称（即该字母）</p>
+<p>最后一个参数d后面带有冒号: 表示参数d是可以指定值的，如 -d 100 或 -d user。</p>
+<p>optind表示的是下一个将被处理到的参数在argv中的下标值。</p>
+<p>如果指定opterr = 0的话，在getopt、getopt_long、getopt_long_only遇到错误将不会输出错误信息到标准输出流。</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;unistd.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">int</span> argc, <span class="keyword">char</span> *argv[])</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> opt;</span><br><span class="line">    <span class="keyword">char</span> *optstring = <span class="string">&quot;a:b:c:d&quot;</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">while</span> ((opt = getopt(argc, argv, optstring)) != <span class="number">-1</span>)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;opt = %c\n&quot;</span>, opt);</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;optarg = %s\n&quot;</span>, optarg);</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;optind = %d\n&quot;</span>, optind);</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;argv[optind - 1] = %s\n\n&quot;</span>,  argv[optind - <span class="number">1</span>]);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>编译上述程序并运行，有如下结果：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">cashey@ubuntu:~/Desktop/getopt$ ./test_getopt -a 100 -b 200 -c admin -d</span><br><span class="line">opt = a</span><br><span class="line">optarg = 100</span><br><span class="line">optind = 3</span><br><span class="line">argv[optind - 1] = 100</span><br><span class="line"></span><br><span class="line">opt = b</span><br><span class="line">optarg = 200</span><br><span class="line">optind = 5</span><br><span class="line">argv[optind - 1] = 200</span><br><span class="line"></span><br><span class="line">opt = c</span><br><span class="line">optarg = admin</span><br><span class="line">optind = 7</span><br><span class="line">argv[optind - 1] = admin</span><br><span class="line"></span><br><span class="line">opt = d</span><br><span class="line">optarg = (null)</span><br><span class="line">optind = 8</span><br><span class="line">argv[optind - 1] = -d</span><br></pre></td></tr></table></figure>
+<p>** 下面来讲getopt_long函数，getopt_long函数包含了getopt函数的功能，并且还可以指定“长参数”（或者说长选项），与getopt函数对比，getopt_long比其多了两个参数： **</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">getopt</span><span class="params">(<span class="keyword">int</span> argc, <span class="keyword">char</span> * <span class="keyword">const</span> argv[],</span></span></span><br><span class="line"><span class="function"><span class="params">                  <span class="keyword">const</span> <span class="keyword">char</span> *optstring)</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">getopt_long</span><span class="params">(<span class="keyword">int</span> argc, <span class="keyword">char</span> * <span class="keyword">const</span> argv[],</span></span></span><br><span class="line"><span class="function"><span class="params">          <span class="keyword">const</span> <span class="keyword">char</span> *optstring,</span></span></span><br><span class="line"><span class="function"><span class="params">          <span class="keyword">const</span> struct option *longopts, <span class="keyword">int</span> *longindex)</span></span>;</span><br></pre></td></tr></table></figure>
+
+<p>在这里，longopts指向的是一个由option结构体组成的数组，那个数组的每个元素，指明了一个“长参数”（即形如–name的参数）名称和性质：</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">option</span> &#123;</span></span><br><span class="line">    <span class="keyword">const</span> <span class="keyword">char</span> *name;</span><br><span class="line">    <span class="keyword">int</span>         has_arg;</span><br><span class="line">    <span class="keyword">int</span>        *flag;</span><br><span class="line">    <span class="keyword">int</span>         val;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<pre><code>   name     是参数的名称
+
+   has_arg  指明是否带参数值，其数值可选：
+            no_argument (即 0) 表明这个长参数不带参数（即不带数值，如：--name）
+            required_argument (即 1) 表明这个长参数必须带参数（即必须带数值，如：--name Bob）
+            optional_argument（即2）表明这个长参数后面带的参数是可选的，（即--name和--name Bob均可）
+
+   flag     当这个指针为空的时候，函数直接将val的数值从getopt_long的返回值返回出去，当它非空时，
+            val的值会被赋到flag指向的整型数中，而函数返回值为0
+
+   val      用于指定函数找到该选项时的返回值，或者当flag非空时指定flag指向的数据的值。</code></pre>
+<p>** 另一个参数longindex，如果longindex非空，它指向的变量将记录当前找到参数符合longopts里的第几个元素的描述，即是longopts的下标值。**</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;unistd.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;getopt.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="keyword">int</span></span><br><span class="line">main(<span class="keyword">int</span> argc, <span class="keyword">char</span> **argv)</span><br><span class="line">&#123;</span><br><span class="line">   <span class="keyword">int</span> opt;</span><br><span class="line">   <span class="keyword">int</span> digit_optind = <span class="number">0</span>;</span><br><span class="line">   <span class="keyword">int</span> option_index = <span class="number">0</span>;</span><br><span class="line">   <span class="keyword">char</span> *optstring = <span class="string">&quot;a:b:c:d&quot;</span>;</span><br><span class="line">   <span class="keyword">static</span> <span class="class"><span class="keyword">struct</span> <span class="title">option</span> <span class="title">long_options</span>[] =</span> &#123;</span><br><span class="line">       &#123;<span class="string">&quot;reqarg&quot;</span>, required_argument, <span class="literal">NULL</span>, <span class="string">&#x27;r&#x27;</span>&#125;,</span><br><span class="line">       &#123;<span class="string">&quot;noarg&quot;</span>,  no_argument,       <span class="literal">NULL</span>, <span class="string">&#x27;n&#x27;</span>&#125;,</span><br><span class="line">       &#123;<span class="string">&quot;optarg&quot;</span>, optional_argument, <span class="literal">NULL</span>, <span class="string">&#x27;o&#x27;</span>&#125;,</span><br><span class="line">       &#123;<span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>&#125;</span><br><span class="line">   &#125;;</span><br><span class="line"></span><br><span class="line">   <span class="keyword">while</span> ( (opt = getopt_long(argc, argv, optstring, long_options, &amp;option_index)) != <span class="number">-1</span>)</span><br><span class="line">   &#123;</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;opt = %c\n&quot;</span>, opt);</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;optarg = %s\n&quot;</span>, optarg);</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;optind = %d\n&quot;</span>, optind);</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;argv[optind - 1] = %s\n&quot;</span>,  argv[optind - <span class="number">1</span>]);</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;option_index = %d\n&quot;</span>, option_index);</span><br><span class="line">   &#125;</span><br><span class="line"></span><br><span class="line">   <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>** 编译运行以上程序并运行，可以得到以下结果： **</p>
+<figure class="highlight makefile"><table><tr><td class="code"><pre><span class="line"><span class="section">cashey@ubuntu:~/Desktop/getopt$ ./test_getopt_long -a 100 --reqarg 100 --nonarg</span></span><br><span class="line">opt = a</span><br><span class="line">optarg = 100</span><br><span class="line">optind = 3</span><br><span class="line">argv[optind - 1] = 100</span><br><span class="line">option_index = 0</span><br><span class="line">opt = r</span><br><span class="line">optarg = 100</span><br><span class="line">optind = 5</span><br><span class="line">argv[optind - 1] = 100</span><br><span class="line">option_index = 0</span><br><span class="line"><span class="section">./test_getopt_long: unrecognized option &#x27;--nonarg&#x27;</span></span><br><span class="line">opt = ?</span><br><span class="line">optarg = (null)</span><br><span class="line">optind = 6</span><br><span class="line">argv[optind - 1] = --nonarg</span><br><span class="line">option_index = 0</span><br></pre></td></tr></table></figure>
+<p>** 当所给的参数存在问题时，opt（即函数返回值是’?’），如： **</p>
+<figure class="highlight elixir"><table><tr><td class="code"><pre><span class="line">cashey<span class="variable">@ubuntu</span><span class="symbol">:~/Desktop/getopt</span><span class="variable">$ </span>./test_getopt_long -a</span><br><span class="line">./<span class="symbol">test_getopt_long:</span> option requires an argument -- <span class="string">&#x27;a&#x27;</span></span><br><span class="line">opt = ?</span><br><span class="line">optarg = (null)</span><br><span class="line">optind = <span class="number">2</span></span><br><span class="line">argv[optind - <span class="number">1</span>] = -a</span><br><span class="line">option_index = 0</span><br><span class="line">cashey<span class="variable">@ubuntu</span><span class="symbol">:~/Desktop/getopt</span><span class="variable">$ </span>./test_getopt_long --reqarg</span><br><span class="line">./<span class="symbol">test_getopt_long:</span> option <span class="string">&#x27;--reqarg&#x27;</span> requires an argument</span><br><span class="line">opt = ?</span><br><span class="line">optarg = (null)</span><br><span class="line">optind = <span class="number">2</span></span><br><span class="line">argv[optind - <span class="number">1</span>] = --reqarg</span><br></pre></td></tr></table></figure>
+<p>最后说说<code>getopt_long_only</code>函数，它与getopt_long函数使用相同的参数表，在功能上基本一致，只是getopt_long只将–name当作长参数，但getopt_long_only会将–name和-name两种选项都当作长参数来匹配。在getopt_long在遇到-name时，会拆解成-n -a -m -e到optstring中进行匹配，而getopt_long_only只在-name不能在longopts中匹配时才将其拆解成-n -a -m -e这样的参数到optstring中进行匹配。</p>
+]]></content>
+      <tags>
+        <tag>linux</tag>
+        <tag>C</tag>
       </tags>
   </entry>
   <entry>
@@ -515,11 +533,6 @@
       </tags>
   </entry>
   <entry>
-    <title>微信支付踩坑</title>
-    <url>/2020/01/31/%E5%BE%AE%E4%BF%A1%E6%94%AF%E4%BB%98%E8%B8%A9%E5%9D%91/</url>
-    <content><![CDATA[]]></content>
-  </entry>
-  <entry>
     <title>利用python发邮件</title>
     <url>/2016/01/19/%E5%88%A9%E7%94%A8python%E5%8F%91%E9%82%AE%E4%BB%B6/</url>
     <content><![CDATA[<p>在刚开始学习python的时候就听有的人说，用python发邮件简直太轻松了，随着学习的深入，今天学习了一下python的smtplib模块，果不其然，只需几行代码就可以轻松实现发邮件的功能。<br>在本例中，使用自己的163邮箱给qq邮箱发测试样例。</p>
@@ -557,6 +570,25 @@
       <tags>
         <tag>python</tag>
       </tags>
+  </entry>
+  <entry>
+    <title>在nginx proxy_pass中禁用IPv6</title>
+    <url>/2019/10/22/%E5%9C%A8nginx%20proxy-pass%E4%B8%AD%E7%A6%81%E7%94%A8IPv6/</url>
+    <content><![CDATA[<p>最近在生产服务上遇到 nginx 正向代理连接失败的问题。</p>
+<figure class="highlight css"><table><tr><td class="code"><pre><span class="line">2019/10/22 15<span class="selector-pseudo">:25</span><span class="selector-pseudo">:21</span> <span class="selector-attr">[error]</span> 1930<span class="selector-id">#0</span>: *1482670 <span class="selector-tag">connect</span>() <span class="selector-tag">to</span> <span class="selector-attr">[AAAA:BBBB:C:DDD:E:F:GGG:HHH]</span><span class="selector-pseudo">:443</span> <span class="selector-tag">failed</span> (101: <span class="selector-tag">Network</span> <span class="selector-tag">is</span> <span class="selector-tag">unreachable</span>) <span class="selector-tag">while</span> <span class="selector-tag">connecting</span> <span class="selector-tag">to</span> <span class="selector-tag">upstream</span>, <span class="selector-tag">client</span>: <span class="selector-tag">AA</span><span class="selector-class">.BB</span><span class="selector-class">.CC</span><span class="selector-class">.DD</span>, <span class="selector-tag">server</span>: <span class="selector-tag">example</span><span class="selector-class">.com</span>, <span class="selector-tag">request</span>: &quot;<span class="selector-tag">GET</span> /<span class="selector-tag">download</span>/<span class="selector-tag">file</span> <span class="selector-tag">HTTP</span>/1.0&quot;, <span class="selector-tag">upstream</span>: &quot;<span class="selector-tag">https</span>://<span class="selector-attr">[AAAA:BBBB:C:DDD:E:F:GGG:HHH]</span><span class="selector-pseudo">:443</span>/<span class="selector-tag">download</span>/<span class="selector-tag">file</span>&quot;, <span class="selector-tag">host</span>: &quot;<span class="selector-tag">example</span><span class="selector-class">.com</span>&quot;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>分析错误日志，应答是nginx尝试连接目标的 IPv6 地址端口时失败，错误<code>101: Network is unreachable</code></p>
+<p>服务器没有IPv6地址，那就禁用nginx的IPv6解析</p>
+<p>禁用IPv6很简单</p>
+<figure class="highlight apache"><table><tr><td class="code"><pre><span class="line"><span class="attribute">resolver</span> <span class="number">8.8.8.8</span> ipv<span class="number">6</span>=<span class="literal">off</span>;</span><br></pre></td></tr></table></figure>]]></content>
+      <tags>
+        <tag>nginx</tag>
+        <tag>IPv6</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>微信支付踩坑</title>
+    <url>/2020/01/31/%E5%BE%AE%E4%BF%A1%E6%94%AF%E4%BB%98%E8%B8%A9%E5%9D%91/</url>
+    <content><![CDATA[]]></content>
   </entry>
   <entry>
     <title>服务优雅重启及热更新</title>
@@ -645,20 +677,6 @@
 ]]></content>
       <tags>
         <tag>go</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>在nginx proxy_pass中禁用IPv6</title>
-    <url>/2019/10/22/%E5%9C%A8nginx%20proxy-pass%E4%B8%AD%E7%A6%81%E7%94%A8IPv6/</url>
-    <content><![CDATA[<p>最近在生产服务上遇到 nginx 正向代理连接失败的问题。</p>
-<figure class="highlight css"><table><tr><td class="code"><pre><span class="line">2019/10/22 15<span class="selector-pseudo">:25</span><span class="selector-pseudo">:21</span> <span class="selector-attr">[error]</span> 1930<span class="selector-id">#0</span>: *1482670 <span class="selector-tag">connect</span>() <span class="selector-tag">to</span> <span class="selector-attr">[AAAA:BBBB:C:DDD:E:F:GGG:HHH]</span><span class="selector-pseudo">:443</span> <span class="selector-tag">failed</span> (101: <span class="selector-tag">Network</span> <span class="selector-tag">is</span> <span class="selector-tag">unreachable</span>) <span class="selector-tag">while</span> <span class="selector-tag">connecting</span> <span class="selector-tag">to</span> <span class="selector-tag">upstream</span>, <span class="selector-tag">client</span>: <span class="selector-tag">AA</span><span class="selector-class">.BB</span><span class="selector-class">.CC</span><span class="selector-class">.DD</span>, <span class="selector-tag">server</span>: <span class="selector-tag">example</span><span class="selector-class">.com</span>, <span class="selector-tag">request</span>: &quot;<span class="selector-tag">GET</span> /<span class="selector-tag">download</span>/<span class="selector-tag">file</span> <span class="selector-tag">HTTP</span>/1.0&quot;, <span class="selector-tag">upstream</span>: &quot;<span class="selector-tag">https</span>://<span class="selector-attr">[AAAA:BBBB:C:DDD:E:F:GGG:HHH]</span><span class="selector-pseudo">:443</span>/<span class="selector-tag">download</span>/<span class="selector-tag">file</span>&quot;, <span class="selector-tag">host</span>: &quot;<span class="selector-tag">example</span><span class="selector-class">.com</span>&quot;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-<p>分析错误日志，应答是nginx尝试连接目标的 IPv6 地址端口时失败，错误<code>101: Network is unreachable</code></p>
-<p>服务器没有IPv6地址，那就禁用nginx的IPv6解析</p>
-<p>禁用IPv6很简单</p>
-<figure class="highlight apache"><table><tr><td class="code"><pre><span class="line"><span class="attribute">resolver</span> <span class="number">8.8.8.8</span> ipv<span class="number">6</span>=<span class="literal">off</span>;</span><br></pre></td></tr></table></figure>]]></content>
-      <tags>
-        <tag>nginx</tag>
-        <tag>IPv6</tag>
       </tags>
   </entry>
   <entry>
@@ -1383,21 +1401,43 @@
       </tags>
   </entry>
   <entry>
-    <title>docker-tips</title>
-    <url>/2020/12/29/docker-tips/</url>
-    <content><![CDATA[<h1 id="Docker容器使用问题"><a href="#Docker容器使用问题" class="headerlink" title="Docker容器使用问题"></a>Docker容器使用问题</h1><h2 id="Failed-to-get-D-Bus-connection-Operation-not-permitted"><a href="#Failed-to-get-D-Bus-connection-Operation-not-permitted" class="headerlink" title="Failed to get D-Bus connection: Operation not permitted"></a>Failed to get D-Bus connection: Operation not permitted</h2><h3 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h3><p>使用centos7镜像创建容器后，在里面使用systemctl启动服务报错。</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">docker run -itd --name centos7 centos:7</span><br><span class="line">docker attach centos7</span><br><span class="line">yum install vsftpd</span><br><span class="line">systemctl start vsftpd</span><br><span class="line">Failed to get D-Bus connection: Operation not permitted</span><br></pre></td></tr></table></figure>
+    <title>Percona Data Recovery Tool for InnoDB</title>
+    <url>/2021/01/08/Percona-Data-Recovery-Tool-for-InnoDB/</url>
+    <content><![CDATA[<p>遇到这么一个问题，不小心删除关键数据（delete），MySQL 没有备份且没有开 binlog。网上搜寻了一遍，发现可以使用 percona 的恢复工具解决，本文做个恢复步骤记录。</p>
 <a id="more"></a>
 
-<h3 id="分析"><a href="#分析" class="headerlink" title="分析"></a>分析</h3><p>Docker的设计理念是在容器里面不运行后台服务，容器本身就是宿主机上的一个独立的主进程，也可以间接的理解为就是容器里运行服务的应用进程。一个容器的生命周期是围绕这个主进程存在的，所以正确的使用容器方法是将里面的服务运行在前台。</p>
-<p>再说到systemd，这个套件已经成为主流Linux发行版（比如CentOS7、Ubuntu14+）默认的服务管理，取代了传统的SystemV风格服务管理。systemd维护系统服务程序，它需要特权去会访问Linux内核。而容器并不是一个完整的操作系统，只有一个文件系统，而且默认启动只是普通用户这样的权限访问Linux内核，也就是没有特权，所以自然就用不了！</p>
-<p>因此，请遵守容器设计原则，一个容器里运行一个前台服务！</p>
-<h3 id="解决"><a href="#解决" class="headerlink" title="解决"></a>解决</h3><p>以特权模式运行容器。</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 创建容器：</span></span><br><span class="line">docker run -d -name centos7 --privileged=<span class="literal">true</span> centos:7 /usr/sbin/init</span><br><span class="line"></span><br><span class="line"><span class="comment"># 进入容器：</span></span><br><span class="line">docker <span class="built_in">exec</span> -it centos7 /bin/bash</span><br></pre></td></tr></table></figure>
-<p>这样可以使用systemctl启动服务了。</p>
+<h1 id="下载"><a href="#下载" class="headerlink" title="下载"></a>下载</h1><p><a href="https://launchpad.net/percona-data-recovery-tool-for-innodb/trunk/release-0.5/">网站</a> 或 <a href="https://launchpad.net/percona-data-recovery-tool-for-innodb/trunk/release-0.5/+download/percona-data-recovery-tool-for-innodb-0.5.tar.gz?spm=a2c6h.12873639.0.0.6e6e31damQzvqd&file=percona-data-recovery-tool-for-innodb-0.5.tar.gz">直接下载工具</a></p>
+<h1 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h1><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">tar -xvf percona-data-recovery-tool-for-innodb-0.5.tar.gz</span><br><span class="line"><span class="built_in">cd</span> percona-data-recovery-tool-for-innodb-0.5/mysql-source</span><br><span class="line">./configure</span><br><span class="line"><span class="built_in">cd</span> ..</span><br><span class="line">make</span><br></pre></td></tr></table></figure>
+<h1 id="idb-处理"><a href="#idb-处理" class="headerlink" title="idb 处理"></a>idb 处理</h1><p>提取 ibd 物理文件，按照每页16K，存放。</p>
+<figure class="highlight vala"><table><tr><td class="code"><pre><span class="line"><span class="meta"># 参数</span></span><br><span class="line"><span class="meta"># -5: row format 为 Compact</span></span><br><span class="line"><span class="meta"># -f: 要解析的文件</span></span><br><span class="line">./page_parser <span class="number">-5</span> -f t_trans.ibd</span><br><span class="line"></span><br><span class="line"><span class="meta"># 结果生成</span></span><br><span class="line">pages<span class="number">-1610078166</span>/FIL_PAGE_INDEX</span><br><span class="line">pages<span class="number">-1610078166</span>/FIL_PAGE_TYPE_BLOB</span><br></pre></td></tr></table></figure>
+<p>FIL_PAGE_INDEX 按照主键索引目录生成，要恢复的表索引<code>id</code>使用<code>innodb_table_monitor</code>查询获取</p>
+<h1 id="获取索引-id"><a href="#获取索引-id" class="headerlink" title="获取索引 id"></a>获取索引 id</h1><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 创建innodb_table_monitor表，通知innodb存储引擎将数据输出到/etc/my.cnf中定义的log-error文件里</span></span><br><span class="line">mysql&gt; create table innodb_table_monitor(a int) engine=innodb;</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>log-error    = /var/log/mysql/mysqld.log</p>
+</blockquote>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">===========================================</span><br><span class="line"><span class="number">210108</span> <span class="number">13</span>:<span class="number">18</span>:<span class="number">22</span> INNODB TABLE MONITOR OUTPUT</span><br><span class="line">===========================================</span><br><span class="line">--------------------------------------</span><br><span class="line">TABLE: name test/t_trans, <span class="built_in">id</span> <span class="number">51</span>, flags <span class="number">1</span>, columns <span class="number">28</span>, indexes <span class="number">2</span>, appr.rows <span class="number">942</span></span><br><span class="line">  COLUMNS: <span class="built_in">id</span>: DATA_INT DATA_UNSIGNED DATA_BINARY_TYPE DATA_NOT_NULL <span class="built_in">len</span> <span class="number">8</span>; transdate: DATA_VARCHAR prtype <span class="number">524559</span> <span class="built_in">len</span> <span class="number">8</span>; mchid: DATA_VARCHAR prtype <span class="number">524559</span> <span class="built_in">len</span> <span class="number">15</span>; refno: DATA_VARCHAR prtype <span class="number">524559</span> <span class="built_in">len</span> <span class="number">12</span>; custacct: DATA_VARCHAR prtype <span class="number">524303</span> <span class="built_in">len</span> <span class="number">20</span>; wtrq: DATA_VARCHAR prtype <span class="number">524303</span> <span class="built_in">len</span> <span class="number">8</span>; djxh: DATA_VARCHAR prtype <span class="number">524303</span> <span class="built_in">len</span> <span class="number">32</span>; name: DATA_VARCHAR prtype <span class="number">524303</span> <span class="built_in">len</span> <span class="number">32</span>; zjlx: DATA_VARCHAR prtype <span class="number">524303</span> <span class="built_in">len</span> <span class="number">32</span>; idno: DATA_VARCHAR prtype <span class="number">524303</span> <span class="built_in">len</span> <span class="number">32</span>; rqrq: DATA_VARCHAR prtype <span class="number">524303</span> <span class="built_in">len</span> <span class="number">8</span>; nsrsbh: DATA_VARCHAR prtype <span class="number">524303</span> <span class="built_in">len</span> <span class="number">20</span>; swjylsh: DATA_VARCHAR prtype <span class="number">524303</span> <span class="built_in">len</span> <span class="number">32</span>; payamount: DATA_FIXBINARY DATA_BINARY_TYPE <span class="built_in">len</span> <span class="number">9</span>; zoneno: DATA_VARCHAR prtype <span class="number">524303</span> <span class="built_in">len</span> <span class="number">5</span>; devno: DATA_VARCHAR prtype <span class="number">524303</span> <span class="built_in">len</span> <span class="number">20</span>; <span class="built_in">type</span>: DATA_VARCHAR prtype <span class="number">524303</span> <span class="built_in">len</span> <span class="number">2</span>; channel: DATA_VARCHAR prtype <span class="number">524303</span> <span class="built_in">len</span> <span class="number">2</span>; posserno: DATA_VARCHAR prtype <span class="number">524303</span> <span class="built_in">len</span> <span class="number">27</span>; rzzh: DATA_VARCHAR prtype <span class="number">524303</span> <span class="built_in">len</span> <span class="number">20</span>; returnCode: DATA_VARCHAR prtype <span class="number">524303</span> <span class="built_in">len</span> <span class="number">3</span>; returnMessage: DATA_VARCHAR prtype <span class="number">524303</span> <span class="built_in">len</span> <span class="number">100</span>; jftype: DATA_VARCHAR prtype <span class="number">524303</span> <span class="built_in">len</span> <span class="number">1</span>; reqpack: DATA_VARCHAR prtype <span class="number">528399</span> <span class="built_in">len</span> <span class="number">40960</span>; respack: DATA_VARCHAR prtype <span class="number">524303</span> <span class="built_in">len</span> <span class="number">255</span>; DB_ROW_ID: DATA_SYS prtype <span class="number">256</span> <span class="built_in">len</span> <span class="number">6</span>; DB_TRX_ID: DATA_SYS prtype <span class="number">257</span> <span class="built_in">len</span> <span class="number">6</span>; DB_ROLL_PTR: DATA_SYS prtype <span class="number">258</span> <span class="built_in">len</span> <span class="number">7</span>;</span><br><span class="line">  INDEX: name PRIMARY, <span class="built_in">id</span> <span class="number">77</span>, fields <span class="number">4</span>/<span class="number">27</span>, uniq <span class="number">4</span>, <span class="built_in">type</span> <span class="number">3</span></span><br><span class="line">   root page <span class="number">98364</span>, appr.key vals <span class="number">942</span>, leaf pages <span class="number">209</span>, size pages <span class="number">289</span></span><br><span class="line">   FIELDS:  <span class="built_in">id</span> transdate mchid refno DB_TRX_ID DB_ROLL_PTR custacct wtrq djxh name zjlx idno rqrq nsrsbh swjylsh payamount zoneno devno <span class="built_in">type</span> channel posserno rzzh returnCode returnMessage jftype reqpack respack</span><br><span class="line">  INDEX: name Index_trans_sw_id, <span class="built_in">id</span> <span class="number">78</span>, fields <span class="number">3</span>/<span class="number">4</span>, uniq <span class="number">4</span>, <span class="built_in">type</span> <span class="number">0</span></span><br><span class="line">   root page <span class="number">98365</span>, appr.key vals <span class="number">702</span>, leaf pages <span class="number">4</span>, size pages <span class="number">5</span></span><br><span class="line">   FIELDS:  transdate mchid refno <span class="built_in">id</span></span><br><span class="line">-----------------------------------</span><br><span class="line">END OF INNODB TABLE MONITOR OUTPUT</span><br><span class="line">==================================</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>关于上面一些特殊字段中的含义</p>
+</blockquote>
+<figure class="highlight livecodeserver"><table><tr><td class="code"><pre><span class="line">DB_TRX_ID - this field is managed <span class="keyword">by</span> InnoDBinternally <span class="keyword">and</span> <span class="keyword">contains</span> <span class="keyword">a</span> ID <span class="keyword">of</span> transaction which changed <span class="keyword">a</span> recordlast <span class="built_in">time</span></span><br><span class="line">DB_ROLL_PTR - <span class="literal">one</span> more internal InnoDB field (TODO: find out whatis <span class="keyword">it</span> used <span class="keyword">for</span>).</span><br><span class="line">DB_ROW_ID - this internally used field should be <span class="keyword">the</span> <span class="keyword">first</span> field intables <span class="keyword">without</span> primary <span class="built_in">keys</span> (<span class="keyword">it</span> is <span class="keyword">an</span> auto-increment field used byInnoDB <span class="built_in">to</span> identify rows <span class="keyword">in</span> such tables)</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>上面信息可以知道，index_id 为 77，下面在恢复数据时需要用到</p>
+</blockquote>
+<h1 id="生成表结构"><a href="#生成表结构" class="headerlink" title="生成表结构"></a>生成表结构</h1><figure class="highlight jboss-cli"><table><tr><td class="code"><pre><span class="line"><span class="comment"># percona-data-recovery-tool-for-innodb-0.5</span></span><br><span class="line"><span class="comment"># -- host 主机地址</span></span><br><span class="line"><span class="comment"># -- port 端口</span></span><br><span class="line"><span class="comment"># -- user 用户名</span></span><br><span class="line"><span class="comment"># -- password 密码</span></span><br><span class="line"><span class="comment"># -- db 数据库名</span></span><br><span class="line"><span class="comment"># -- table 表名</span></span><br><span class="line"><span class="string">./create_defs.pl</span> <span class="params">--host</span> localhost <span class="params">--port</span> 3306 <span class="params">--user</span> root <span class="params">--password</span> 123456 <span class="params">--db</span> test <span class="params">--table</span> t_trans &gt; include/table_defs.h</span><br></pre></td></tr></table></figure>
+<p>上面的命令会将 t_trans 表的表结构定义传入到 table_defs.h 中，在生成了表结构定义后，重新make该恢复工具</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># percona-data-recovery-tool-for-innodb-0.5</span></span><br><span class="line">make</span><br></pre></td></tr></table></figure>
+<h1 id="恢复数据"><a href="#恢复数据" class="headerlink" title="恢复数据"></a>恢复数据</h1><figure class="highlight awk"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 77 通过上面 innodb_table_monitor 查询得到</span></span><br><span class="line"><span class="comment"># -5 -f: 和page_parser相同</span></span><br><span class="line"><span class="comment"># -5: row format 为 Compact</span></span><br><span class="line"><span class="comment"># -f: 要解析的文件</span></span><br><span class="line"><span class="comment"># -D: 代表恢复删除的数据页</span></span><br><span class="line">.<span class="regexp">/constraints_parser -D -5 -f pages-1610078166/</span>FIL_PAGE_INDEX<span class="regexp">/0-77/</span> &gt; <span class="regexp">/tmp/</span>t_trans.txt</span><br></pre></td></tr></table></figure>
+<p>恢复完成后生成如下语句和文件：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">LOAD DATA INFILE <span class="string">&#x27;/mysql/percona-data-recovery-tool-for-innodb-0.5/dumps/default/t_trans&#x27;</span> REPLACE INTO TABLE `t_trans` FIELDS TERMINATED BY <span class="string">&#x27;\t&#x27;</span> OPTIONALLY ENCLOSED BY <span class="string">&#x27;&quot;&#x27;</span> LINES STARTING BY <span class="string">&#x27;t_trans\t&#x27;</span> (id, transdate, mchid, refno, custacct, wtrq, djxh, name, zjlx, idno, rqrq, nsrsbh, swjylsh, payamount, zoneno, devno, <span class="built_in">type</span>, channel, posserno, rzzh, returnCode, returnMessage, jftype, reqpack, respack);</span><br></pre></td></tr></table></figure>
+<p>/tmp/t_trans.txt 该文件就是我们需要 load data 的文本文件</p>
+<h1 id="导入数据"><a href="#导入数据" class="headerlink" title="导入数据"></a>导入数据</h1><figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">LOAD</span> <span class="keyword">DATA</span> <span class="keyword">LOCAL</span> <span class="keyword">INFILE</span> <span class="string">&#x27;/tmp/t_trans.txt&#x27;</span> <span class="keyword">REPLACE</span> <span class="keyword">INTO</span> <span class="keyword">TABLE</span> <span class="string">`t_trans`</span> <span class="keyword">FIELDS</span> <span class="keyword">TERMINATED</span> <span class="keyword">BY</span> <span class="string">&#x27;\t&#x27;</span> <span class="keyword">OPTIONALLY</span> <span class="keyword">ENCLOSED</span> <span class="keyword">BY</span> <span class="string">&#x27;&quot;&#x27;</span> <span class="keyword">LINES</span> <span class="keyword">STARTING</span> <span class="keyword">BY</span> <span class="string">&#x27;t_trans\t&#x27;</span> (<span class="keyword">id</span>, transdate, mchid, refno, custacct, wtrq, djxh, <span class="keyword">name</span>, zjlx, idno, rqrq, nsrsbh, swjylsh, payamount, zoneno, devno, <span class="keyword">type</span>, channel, posserno, rzzh, returnCode, returnMessage, jftype, reqpack, respack);</span><br></pre></td></tr></table></figure>
+<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p>1）该恢复工具只支持innodb存储引擎，文件的格式需要为：Compact<br>2）数据被误删除后，需要尽快将保护现场，停止数据库，把idb文件拷贝出来，防止ibd文件写入数据被覆盖（笔者恢复的一个表中，由于数据删除后，表中仍有大量写入，导致大部分数据没有恢复出来）；<br>3）千叮嘱万嘱咐，数据库的备份重于泰山；</p>
+<h1 id="reference"><a href="#reference" class="headerlink" title="reference"></a>reference</h1><p><a href="https://developer.aliyun.com/article/9059">使用Percona Data Recovery Tool for InnoDB恢复数据</a></p>
+<p><a href="https://blog.51cto.com/hcymysql/1552917">无全量备份、未开启binlog日志，利用percona工具恢复delete的数据</a></p>
 ]]></content>
       <tags>
-        <tag>docker</tag>
+        <tag>mysql</tag>
+        <tag>数据恢复</tag>
       </tags>
   </entry>
 </search>
