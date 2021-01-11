@@ -24,22 +24,22 @@
     var NexT = window.NexT || {};
     var CONFIG = {"hostname":"ubin.top","root":"/","images":"/images","scheme":"Gemini","version":"8.1.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":true,"bookmark":{"enable":true,"color":"#222","save":"auto"},"fancybox":true,"mediumzoom":false,"lazyload":true,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":true,"nav":null},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}};
   </script>
-<meta name="description" content="最近在生产服务上遇到 nginx 正向代理连接失败的问题。 122019&#x2F;10&#x2F;22 15:25:21 [error] 1930#0: *1482670 connect() to [AAAA:BBBB:C:DDD:E:F:GGG:HHH]:443 failed (101: Network is unreachable) while connecting to upstream, client: A">
+<meta name="description" content="问题使用 docker 经常会遇到时区问题。基本上都是UTC时间，默认时区为0时区， 123docker run --name test --rm -ti alpine &#x2F;bin&#x2F;sh# dateMon Jan 11 02:52:18 UTC 2021 而我们主要用的是 CST 时间，北京时间，位于东八区。时区代号： Asia&#x2F;Shanghai 123docker run --name test">
 <meta property="og:type" content="article">
-<meta property="og:title" content="在nginx proxy_pass中禁用IPv6">
-<meta property="og:url" content="https://ubin.top/2019/10/22/%E5%9C%A8nginx%20proxy-pass%E4%B8%AD%E7%A6%81%E7%94%A8IPv6/index.html">
+<meta property="og:title" content="docker 时区调整方案">
+<meta property="og:url" content="https://ubin.top/2021/01/11/docker-timezone-localtime/index.html">
 <meta property="og:site_name" content="薛定谔の猫">
-<meta property="og:description" content="最近在生产服务上遇到 nginx 正向代理连接失败的问题。 122019&#x2F;10&#x2F;22 15:25:21 [error] 1930#0: *1482670 connect() to [AAAA:BBBB:C:DDD:E:F:GGG:HHH]:443 failed (101: Network is unreachable) while connecting to upstream, client: A">
+<meta property="og:description" content="问题使用 docker 经常会遇到时区问题。基本上都是UTC时间，默认时区为0时区， 123docker run --name test --rm -ti alpine &#x2F;bin&#x2F;sh# dateMon Jan 11 02:52:18 UTC 2021 而我们主要用的是 CST 时间，北京时间，位于东八区。时区代号： Asia&#x2F;Shanghai 123docker run --name test">
 <meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2019-10-22T07:50:47.000Z">
-<meta property="article:modified_time" content="2020-12-19T03:45:51.317Z">
+<meta property="article:published_time" content="2021-01-11T02:49:07.000Z">
+<meta property="article:modified_time" content="2021-01-11T03:05:21.198Z">
 <meta property="article:author" content="薛定谔の猫">
-<meta property="article:tag" content="nginx">
-<meta property="article:tag" content="IPv6">
+<meta property="article:tag" content="docker">
+<meta property="article:tag" content="timezone">
 <meta name="twitter:card" content="summary">
 
 
-<link rel="canonical" href="https://ubin.top/2019/10/22/%E5%9C%A8nginx%20proxy-pass%E4%B8%AD%E7%A6%81%E7%94%A8IPv6/">
+<link rel="canonical" href="https://ubin.top/2021/01/11/docker-timezone-localtime/">
 
 
 <script class="page-configurations">
@@ -51,7 +51,7 @@
     lang   : 'zh-CN'
   };
 </script>
-<title>在nginx proxy_pass中禁用IPv6 | 薛定谔の猫</title>
+<title>docker 时区调整方案 | 薛定谔の猫</title>
   
     <script>
       function sendPageView() {
@@ -221,7 +221,7 @@
 
   <aside class="sidebar">
 
-    <div class="sidebar-inner sidebar-overview-active">
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
       <ul class="sidebar-nav">
         <li class="sidebar-nav-toc">
           文章目录
@@ -234,6 +234,7 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <section class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E9%97%AE%E9%A2%98"><span class="nav-number">1.</span> <span class="nav-text">问题</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%96%B9%E6%A1%88"><span class="nav-number">2.</span> <span class="nav-text">方案</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%BF%90%E8%A1%8C%E5%AE%B9%E5%99%A8%E6%97%B6%E8%B0%83%E6%95%B4%E6%97%B6%E5%8C%BA"><span class="nav-number">2.1.</span> <span class="nav-text">运行容器时调整时区</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%80%9A%E7%94%A8-docker-%E6%97%B6%E5%8C%BA%E4%BF%AE%E6%94%B9%E6%96%B9%E6%A1%88"><span class="nav-number">2.1.1.</span> <span class="nav-text">通用 docker 时区修改方案</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%80%9A%E8%BF%87%E4%BC%A0%E9%80%92%E7%8E%AF%E5%A2%83%E5%8F%98%E9%87%8F%E6%94%B9%E5%8F%98%E5%AE%B9%E5%99%A8%E6%97%B6%E5%8C%BA"><span class="nav-number">2.1.2.</span> <span class="nav-text">通过传递环境变量改变容器时区</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%88%B6%E4%BD%9C-Docker-%E9%95%9C%E5%83%8F%E6%97%B6%E8%B0%83%E6%95%B4%E6%97%B6%E5%8C%BA"><span class="nav-number">2.2.</span> <span class="nav-text">制作 Docker 镜像时调整时区</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Alpine"><span class="nav-number">2.2.1.</span> <span class="nav-text">Alpine</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Debian"><span class="nav-number">2.2.2.</span> <span class="nav-text">Debian</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Ubuntu"><span class="nav-number">2.2.3.</span> <span class="nav-text">Ubuntu</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#CentOS"><span class="nav-number">2.2.4.</span> <span class="nav-text">CentOS</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#reference"><span class="nav-number">3.</span> <span class="nav-text">reference</span></a></li></ol></div>
         </section>
         <!--/noindex-->
 
@@ -353,7 +354,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://ubin.top/2019/10/22/%E5%9C%A8nginx%20proxy-pass%E4%B8%AD%E7%A6%81%E7%94%A8IPv6/">
+    <link itemprop="mainEntityOfPage" href="https://ubin.top/2021/01/11/docker-timezone-localtime/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="https://i.loli.net/2020/12/28/GsCnKm21pTdBUZo.jpg">
@@ -366,7 +367,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          在nginx proxy_pass中禁用IPv6
+          docker 时区调整方案
         </h1>
 
         <div class="post-meta-container">
@@ -376,16 +377,10 @@
         <i class="far fa-calendar"></i>
       </span>
       <span class="post-meta-item-text">发表于</span>
+      
 
-      <time title="创建时间：2019-10-22 15:50:47" itemprop="dateCreated datePublished" datetime="2019-10-22T15:50:47+08:00">2019-10-22</time>
+      <time title="创建时间：2021-01-11 10:49:07 / 修改时间：11:05:21" itemprop="dateCreated datePublished" datetime="2021-01-11T10:49:07+08:00">2021-01-11</time>
     </span>
-      <span class="post-meta-item">
-        <span class="post-meta-item-icon">
-          <i class="far fa-calendar-check"></i>
-        </span>
-        <span class="post-meta-item-text">更新于</span>
-        <time title="修改时间：2020-12-19 11:45:51" itemprop="dateModified" datetime="2020-12-19T11:45:51+08:00">2020-12-19</time>
-      </span>
 
   
       </div>
@@ -395,14 +390,14 @@
         <i class="far fa-file-word"></i>
       </span>
       <span class="post-meta-item-text">本文字数：</span>
-      <span>482</span>
+      <span>2.2k</span>
     </span>
     <span class="post-meta-item" title="阅读时长">
       <span class="post-meta-item-icon">
         <i class="far fa-clock"></i>
       </span>
       <span class="post-meta-item-text">阅读时长 &asymp;</span>
-      <span>1 分钟</span>
+      <span>2 分钟</span>
     </span>
 </div>
 
@@ -413,12 +408,37 @@
     
     
     <div class="post-body" itemprop="articleBody">
-        <p>最近在生产服务上遇到 nginx 正向代理连接失败的问题。</p>
-<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">2019/10/22 15<span class="selector-pseudo">:25</span><span class="selector-pseudo">:21</span> <span class="selector-attr">[error]</span> 1930<span class="selector-id">#0</span>: *1482670 <span class="selector-tag">connect</span>() <span class="selector-tag">to</span> <span class="selector-attr">[AAAA:BBBB:C:DDD:E:F:GGG:HHH]</span><span class="selector-pseudo">:443</span> <span class="selector-tag">failed</span> (101: <span class="selector-tag">Network</span> <span class="selector-tag">is</span> <span class="selector-tag">unreachable</span>) <span class="selector-tag">while</span> <span class="selector-tag">connecting</span> <span class="selector-tag">to</span> <span class="selector-tag">upstream</span>, <span class="selector-tag">client</span>: <span class="selector-tag">AA</span><span class="selector-class">.BB</span><span class="selector-class">.CC</span><span class="selector-class">.DD</span>, <span class="selector-tag">server</span>: <span class="selector-tag">example</span><span class="selector-class">.com</span>, <span class="selector-tag">request</span>: &quot;<span class="selector-tag">GET</span> /<span class="selector-tag">download</span>/<span class="selector-tag">file</span> <span class="selector-tag">HTTP</span>/1.0&quot;, <span class="selector-tag">upstream</span>: &quot;<span class="selector-tag">https</span>://<span class="selector-attr">[AAAA:BBBB:C:DDD:E:F:GGG:HHH]</span><span class="selector-pseudo">:443</span>/<span class="selector-tag">download</span>/<span class="selector-tag">file</span>&quot;, <span class="selector-tag">host</span>: &quot;<span class="selector-tag">example</span><span class="selector-class">.com</span>&quot;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-<p>分析错误日志，应答是nginx尝试连接目标的 IPv6 地址端口时失败，错误<code>101: Network is unreachable</code></p>
-<p>服务器没有IPv6地址，那就禁用nginx的IPv6解析</p>
-<p>禁用IPv6很简单</p>
-<figure class="highlight apache"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="attribute">resolver</span> <span class="number">8.8.8.8</span> ipv<span class="number">6</span>=<span class="literal">off</span>;</span><br></pre></td></tr></table></figure>
+        <h1 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h1><p>使用 docker 经常会遇到时区问题。<br>基本上都是UTC时间，默认时区为0时区，</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">docker run --name <span class="built_in">test</span> --rm -ti alpine /bin/sh</span><br><span class="line"><span class="comment"># date</span></span><br><span class="line">Mon Jan 11 02:52:18 UTC 2021</span><br></pre></td></tr></table></figure>
+<p>而我们主要用的是 CST 时间，北京时间，位于东八区。时区代号： Asia/Shanghai</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">docker run --name <span class="built_in">test</span> --rm -ti -v /etc/timezone:/etc/timezone:ro -v /etc/localtime:/etc/localtime:ro alpine /bin/sh</span><br><span class="line"><span class="comment"># date</span></span><br><span class="line">Mon Jan 11 10:53:06 CST 2021</span><br></pre></td></tr></table></figure>
+<p>下面汇总几个方案：</p>
+<a id="more"></a>
+
+<h1 id="方案"><a href="#方案" class="headerlink" title="方案"></a>方案</h1><h2 id="运行容器时调整时区"><a href="#运行容器时调整时区" class="headerlink" title="运行容器时调整时区"></a>运行容器时调整时区</h2><p>在 Linux 系统中，控制时区和时间的主要是两个地方：</p>
+<figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="regexp">/etc/</span>timezone  主要代表当前时区设置，一般链接指向<span class="regexp">/usr/</span>share/zoneinfo目录下的具体时区。</span><br><span class="line"><span class="regexp">/etc/</span>localtime 主要代表当前时区设置下的本地时间。</span><br></pre></td></tr></table></figure>
+<h3 id="通用-docker-时区修改方案"><a href="#通用-docker-时区修改方案" class="headerlink" title="通用 docker 时区修改方案"></a>通用 docker 时区修改方案</h3><p>当宿主机为 Linux 系统时，我们可以直接将宿主机上的<code>/etc/timezone</code>和<code>/etc/localtime</code>挂载到容器中，这样可以保持容器和宿主机时区和时间一致。</p>
+<figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">-v <span class="regexp">/etc/</span>timezone:<span class="regexp">/etc/</span>timezone:ro -v <span class="regexp">/etc/</span>localtime:<span class="regexp">/etc/</span>localtime:ro</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">docker run --name <span class="built_in">test</span> --rm -ti -v /etc/timezone:/etc/timezone:ro -v /etc/localtime:/etc/localtime:ro alpine /bin/sh</span><br><span class="line"><span class="comment"># date</span></span><br><span class="line">Mon Jan 11 10:58:31 CST 2021</span><br></pre></td></tr></table></figure>
+<h3 id="通过传递环境变量改变容器时区"><a href="#通过传递环境变量改变容器时区" class="headerlink" title="通过传递环境变量改变容器时区"></a>通过传递环境变量改变容器时区</h3><ul>
+<li>适用于基于 Debian 基础镜像, CentOS 基础镜像 制作的 Docker 镜像</li>
+<li>不适用于基于 Alpine 基础镜像, Ubuntu 基础镜像 制作的 Docker 镜像</li>
+</ul>
+<p>对于基于 Debian 基础镜像，CentOS 基础镜像制作的 Docker 镜像，在运行 Docker 容器时，传递环境变量-e TZ=Asia/Shanghai进去，能修改 docker 容器时区。</p>
+<figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">-e <span class="attribute">TZ</span>=Asia/Shanghai</span><br></pre></td></tr></table></figure>
+<p>使用示例如下：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">docker run --name <span class="built_in">test</span> -e TZ=Asia/Shanghai --rm -ti debian /bin/bash</span><br><span class="line"><span class="comment"># date</span></span><br><span class="line">Mon Jan 11 11:00:52 CST 2021</span><br></pre></td></tr></table></figure>
+<h2 id="制作-Docker-镜像时调整时区"><a href="#制作-Docker-镜像时调整时区" class="headerlink" title="制作 Docker 镜像时调整时区"></a>制作 Docker 镜像时调整时区</h2><p>通过编写 Dockerfile,构建自己的 Docker 镜像，可以永久解决时区问题。</p>
+<h3 id="Alpine"><a href="#Alpine" class="headerlink" title="Alpine"></a>Alpine</h3><p>根据《Setting the timezone》提示，我们可以将以下代码添加到 Dockerfile 中：</p>
+<figure class="highlight dockerfile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">ENV</span> TZ Asia/Shanghai</span><br><span class="line"></span><br><span class="line"><span class="keyword">RUN</span><span class="bash"> apk add tzdata &amp;&amp; cp /usr/share/zoneinfo/<span class="variable">$&#123;TZ&#125;</span> /etc/localtime \</span></span><br><span class="line"><span class="bash">    &amp;&amp; <span class="built_in">echo</span> <span class="variable">$&#123;TZ&#125;</span> &gt; /etc/timezone \</span></span><br><span class="line"><span class="bash">    &amp;&amp; apk del tzdata</span></span><br></pre></td></tr></table></figure>
+<h3 id="Debian"><a href="#Debian" class="headerlink" title="Debian"></a>Debian</h3><p>Debian 基础镜像 中已经安装了 tzdata 包，我们可以将以下代码添加到 Dockerfile 中：</p>
+<figure class="highlight dockerfile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">ENV</span> TZ=Asia/Shanghai \</span><br><span class="line">    DEBIAN_FRONTEND=noninteractive</span><br><span class="line"></span><br><span class="line"><span class="keyword">RUN</span><span class="bash"> ln -fs /usr/share/zoneinfo/<span class="variable">$&#123;TZ&#125;</span> /etc/localtime \</span></span><br><span class="line"><span class="bash">    &amp;&amp; <span class="built_in">echo</span> <span class="variable">$&#123;TZ&#125;</span> &gt; /etc/timezone \</span></span><br><span class="line"><span class="bash">    &amp;&amp; dpkg-reconfigure --frontend noninteractive tzdata \</span></span><br><span class="line"><span class="bash">    &amp;&amp; rm -rf /var/lib/apt/lists/*</span></span><br></pre></td></tr></table></figure>
+<h3 id="Ubuntu"><a href="#Ubuntu" class="headerlink" title="Ubuntu"></a>Ubuntu</h3><p>Ubuntu 基础镜像中没有安装了 tzdata 包，因此我们需要先安装 tzdata 包。</p>
+<figure class="highlight dockerfile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">ENV</span> TZ=Asia/Shanghai \</span><br><span class="line">    DEBIAN_FRONTEND=noninteractive</span><br><span class="line"></span><br><span class="line"><span class="keyword">RUN</span><span class="bash"> apt update \</span></span><br><span class="line"><span class="bash">    &amp;&amp; apt install -y tzdata \</span></span><br><span class="line"><span class="bash">    &amp;&amp; ln -fs /usr/share/zoneinfo/<span class="variable">$&#123;TZ&#125;</span> /etc/localtime \</span></span><br><span class="line"><span class="bash">    &amp;&amp; <span class="built_in">echo</span> <span class="variable">$&#123;TZ&#125;</span> &gt; /etc/timezone \</span></span><br><span class="line"><span class="bash">    &amp;&amp; dpkg-reconfigure --frontend noninteractive tzdata \</span></span><br><span class="line"><span class="bash">    &amp;&amp; rm -rf /var/lib/apt/lists/*</span></span><br></pre></td></tr></table></figure>
+<h3 id="CentOS"><a href="#CentOS" class="headerlink" title="CentOS"></a>CentOS</h3><p>CentOS 基础镜像 中已经安装了 tzdata 包，我们可以将以下代码添加到 Dockerfile 中。</p>
+<figure class="highlight dockerfile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">ENV</span> TZ Asia/Shanghai</span><br><span class="line"></span><br><span class="line"><span class="keyword">RUN</span><span class="bash"> ln -fs /usr/share/zoneinfo/<span class="variable">$&#123;TZ&#125;</span> /etc/localtime \</span></span><br><span class="line"><span class="bash">    &amp;&amp; <span class="built_in">echo</span> <span class="variable">$&#123;TZ&#125;</span> &gt; /etc/timezone</span></span><br></pre></td></tr></table></figure>
+<h1 id="reference"><a href="#reference" class="headerlink" title="reference"></a>reference</h1><p>转载自<br><a target="_blank" rel="noopener" href="https://www.itcoder.tech/posts/docker-timezone-localtime/">https://www.itcoder.tech/posts/docker-timezone-localtime/</a></p>
+
     </div>
 
     
@@ -428,29 +448,35 @@
   <div class="popular-posts-header">相关文章</div>
   <ul class="popular-posts">
     <li class="popular-posts-item">
+      <div class="popular-posts-title"><a href="/2020/12/29/Docker-Operation-not-permitted/" rel="bookmark">Docker Operation not permitted</a></div>
+    </li>
+    <li class="popular-posts-item">
+      <div class="popular-posts-title"><a href="/2019/10/23/docker安装DB2/" rel="bookmark">docker安装DB2</a></div>
+    </li>
+    <li class="popular-posts-item">
       <div class="popular-posts-title"><a href="/2019/10/12/docker镜像自动编译程序/" rel="bookmark">docker镜像自动编译程序</a></div>
+    </li>
+    <li class="popular-posts-item">
+      <div class="popular-posts-title"><a href="/2019/10/28/docker搭建oracle-helowin-oracle-11g/" rel="bookmark">docker搭建oracle: [helowin/oracle_11g]</a></div>
     </li>
   </ul>
 
 
     <footer class="post-footer">
           <div class="post-tags">
-              <a href="/tags/nginx/" rel="tag"># nginx</a>
-              <a href="/tags/IPv6/" rel="tag"># IPv6</a>
+              <a href="/tags/docker/" rel="tag"># docker</a>
+              <a href="/tags/timezone/" rel="tag"># timezone</a>
           </div>
 
         
 
           <div class="post-nav">
             <div class="post-nav-item">
-                <a href="/2019/10/12/docker%E9%95%9C%E5%83%8F%E8%87%AA%E5%8A%A8%E7%BC%96%E8%AF%91%E7%A8%8B%E5%BA%8F/" rel="prev" title="docker镜像自动编译程序">
-                  <i class="fa fa-chevron-left"></i> docker镜像自动编译程序
+                <a href="/2021/01/08/Percona-Data-Recovery-Tool-for-InnoDB/" rel="prev" title="Percona Data Recovery Tool for InnoDB">
+                  <i class="fa fa-chevron-left"></i> Percona Data Recovery Tool for InnoDB
                 </a>
             </div>
             <div class="post-nav-item">
-                <a href="/2019/10/23/docker%E5%AE%89%E8%A3%85DB2/" rel="next" title="docker安装DB2">
-                  docker安装DB2 <i class="fa fa-chevron-right"></i>
-                </a>
             </div>
           </div>
     </footer>
@@ -592,7 +618,7 @@
       quicklink.listen({
         timeout : 3000,
         priority: true,
-        ignores : [uri => uri.includes('#'),uri => uri === 'https://ubin.top/2019/10/22/%E5%9C%A8nginx%20proxy-pass%E4%B8%AD%E7%A6%81%E7%94%A8IPv6/',]
+        ignores : [uri => uri.includes('#'),uri => uri === 'https://ubin.top/2021/01/11/docker-timezone-localtime/',]
       });
       });
   </script>
@@ -608,7 +634,7 @@ NexT.utils.loadComments('#gitalk-container', () => {
       repo        : 'bineyond.github.io',
       owner       : 'bineyond',
       admin       : ['bineyond'],
-      id          : 'db4285723fdb8671c5702a9963312271',
+      id          : '1e37acea02f208f648fe88bb953901f9',
         language: 'zh-CN',
       distractionFreeMode: false
     });

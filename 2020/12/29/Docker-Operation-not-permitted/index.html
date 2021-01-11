@@ -24,22 +24,21 @@
     var NexT = window.NexT || {};
     var CONFIG = {"hostname":"ubin.top","root":"/","images":"/images","scheme":"Gemini","version":"8.1.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":true,"bookmark":{"enable":true,"color":"#222","save":"auto"},"fancybox":true,"mediumzoom":false,"lazyload":true,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":true,"nav":null},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}};
   </script>
-<meta name="description" content="最近在生产服务上遇到 nginx 正向代理连接失败的问题。 122019&#x2F;10&#x2F;22 15:25:21 [error] 1930#0: *1482670 connect() to [AAAA:BBBB:C:DDD:E:F:GGG:HHH]:443 failed (101: Network is unreachable) while connecting to upstream, client: A">
+<meta name="description" content="Docker容器使用问题Failed to get D-Bus connection: Operation not permitted问题使用centos7镜像创建容器后，在里面使用systemctl启动服务报错。 12345docker run -itd --name centos7 centos:7docker attach centos7yum install vsftpdsystemctl">
 <meta property="og:type" content="article">
-<meta property="og:title" content="在nginx proxy_pass中禁用IPv6">
-<meta property="og:url" content="https://ubin.top/2019/10/22/%E5%9C%A8nginx%20proxy-pass%E4%B8%AD%E7%A6%81%E7%94%A8IPv6/index.html">
+<meta property="og:title" content="Docker Operation not permitted">
+<meta property="og:url" content="https://ubin.top/2020/12/29/Docker-Operation-not-permitted/index.html">
 <meta property="og:site_name" content="薛定谔の猫">
-<meta property="og:description" content="最近在生产服务上遇到 nginx 正向代理连接失败的问题。 122019&#x2F;10&#x2F;22 15:25:21 [error] 1930#0: *1482670 connect() to [AAAA:BBBB:C:DDD:E:F:GGG:HHH]:443 failed (101: Network is unreachable) while connecting to upstream, client: A">
+<meta property="og:description" content="Docker容器使用问题Failed to get D-Bus connection: Operation not permitted问题使用centos7镜像创建容器后，在里面使用systemctl启动服务报错。 12345docker run -itd --name centos7 centos:7docker attach centos7yum install vsftpdsystemctl">
 <meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2019-10-22T07:50:47.000Z">
-<meta property="article:modified_time" content="2020-12-19T03:45:51.317Z">
+<meta property="article:published_time" content="2020-12-29T06:42:44.000Z">
+<meta property="article:modified_time" content="2021-01-11T02:48:10.076Z">
 <meta property="article:author" content="薛定谔の猫">
-<meta property="article:tag" content="nginx">
-<meta property="article:tag" content="IPv6">
+<meta property="article:tag" content="docker">
 <meta name="twitter:card" content="summary">
 
 
-<link rel="canonical" href="https://ubin.top/2019/10/22/%E5%9C%A8nginx%20proxy-pass%E4%B8%AD%E7%A6%81%E7%94%A8IPv6/">
+<link rel="canonical" href="https://ubin.top/2020/12/29/Docker-Operation-not-permitted/">
 
 
 <script class="page-configurations">
@@ -51,7 +50,7 @@
     lang   : 'zh-CN'
   };
 </script>
-<title>在nginx proxy_pass中禁用IPv6 | 薛定谔の猫</title>
+<title>Docker Operation not permitted | 薛定谔の猫</title>
   
     <script>
       function sendPageView() {
@@ -221,7 +220,7 @@
 
   <aside class="sidebar">
 
-    <div class="sidebar-inner sidebar-overview-active">
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
       <ul class="sidebar-nav">
         <li class="sidebar-nav-toc">
           文章目录
@@ -234,6 +233,7 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <section class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Docker%E5%AE%B9%E5%99%A8%E4%BD%BF%E7%94%A8%E9%97%AE%E9%A2%98"><span class="nav-number">1.</span> <span class="nav-text">Docker容器使用问题</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Failed-to-get-D-Bus-connection-Operation-not-permitted"><span class="nav-number">1.1.</span> <span class="nav-text">Failed to get D-Bus connection: Operation not permitted</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%97%AE%E9%A2%98"><span class="nav-number">1.1.1.</span> <span class="nav-text">问题</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%88%86%E6%9E%90"><span class="nav-number">1.1.2.</span> <span class="nav-text">分析</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%A7%A3%E5%86%B3"><span class="nav-number">1.1.3.</span> <span class="nav-text">解决</span></a></li></ol></li></ol></li></ol></div>
         </section>
         <!--/noindex-->
 
@@ -353,7 +353,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://ubin.top/2019/10/22/%E5%9C%A8nginx%20proxy-pass%E4%B8%AD%E7%A6%81%E7%94%A8IPv6/">
+    <link itemprop="mainEntityOfPage" href="https://ubin.top/2020/12/29/Docker-Operation-not-permitted/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="https://i.loli.net/2020/12/28/GsCnKm21pTdBUZo.jpg">
@@ -366,7 +366,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          在nginx proxy_pass中禁用IPv6
+          Docker Operation not permitted
         </h1>
 
         <div class="post-meta-container">
@@ -377,14 +377,14 @@
       </span>
       <span class="post-meta-item-text">发表于</span>
 
-      <time title="创建时间：2019-10-22 15:50:47" itemprop="dateCreated datePublished" datetime="2019-10-22T15:50:47+08:00">2019-10-22</time>
+      <time title="创建时间：2020-12-29 14:42:44" itemprop="dateCreated datePublished" datetime="2020-12-29T14:42:44+08:00">2020-12-29</time>
     </span>
       <span class="post-meta-item">
         <span class="post-meta-item-icon">
           <i class="far fa-calendar-check"></i>
         </span>
         <span class="post-meta-item-text">更新于</span>
-        <time title="修改时间：2020-12-19 11:45:51" itemprop="dateModified" datetime="2020-12-19T11:45:51+08:00">2020-12-19</time>
+        <time title="修改时间：2021-01-11 10:48:10" itemprop="dateModified" datetime="2021-01-11T10:48:10+08:00">2021-01-11</time>
       </span>
 
   
@@ -395,7 +395,7 @@
         <i class="far fa-file-word"></i>
       </span>
       <span class="post-meta-item-text">本文字数：</span>
-      <span>482</span>
+      <span>706</span>
     </span>
     <span class="post-meta-item" title="阅读时长">
       <span class="post-meta-item-icon">
@@ -413,12 +413,17 @@
     
     
     <div class="post-body" itemprop="articleBody">
-        <p>最近在生产服务上遇到 nginx 正向代理连接失败的问题。</p>
-<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">2019/10/22 15<span class="selector-pseudo">:25</span><span class="selector-pseudo">:21</span> <span class="selector-attr">[error]</span> 1930<span class="selector-id">#0</span>: *1482670 <span class="selector-tag">connect</span>() <span class="selector-tag">to</span> <span class="selector-attr">[AAAA:BBBB:C:DDD:E:F:GGG:HHH]</span><span class="selector-pseudo">:443</span> <span class="selector-tag">failed</span> (101: <span class="selector-tag">Network</span> <span class="selector-tag">is</span> <span class="selector-tag">unreachable</span>) <span class="selector-tag">while</span> <span class="selector-tag">connecting</span> <span class="selector-tag">to</span> <span class="selector-tag">upstream</span>, <span class="selector-tag">client</span>: <span class="selector-tag">AA</span><span class="selector-class">.BB</span><span class="selector-class">.CC</span><span class="selector-class">.DD</span>, <span class="selector-tag">server</span>: <span class="selector-tag">example</span><span class="selector-class">.com</span>, <span class="selector-tag">request</span>: &quot;<span class="selector-tag">GET</span> /<span class="selector-tag">download</span>/<span class="selector-tag">file</span> <span class="selector-tag">HTTP</span>/1.0&quot;, <span class="selector-tag">upstream</span>: &quot;<span class="selector-tag">https</span>://<span class="selector-attr">[AAAA:BBBB:C:DDD:E:F:GGG:HHH]</span><span class="selector-pseudo">:443</span>/<span class="selector-tag">download</span>/<span class="selector-tag">file</span>&quot;, <span class="selector-tag">host</span>: &quot;<span class="selector-tag">example</span><span class="selector-class">.com</span>&quot;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-<p>分析错误日志，应答是nginx尝试连接目标的 IPv6 地址端口时失败，错误<code>101: Network is unreachable</code></p>
-<p>服务器没有IPv6地址，那就禁用nginx的IPv6解析</p>
-<p>禁用IPv6很简单</p>
-<figure class="highlight apache"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="attribute">resolver</span> <span class="number">8.8.8.8</span> ipv<span class="number">6</span>=<span class="literal">off</span>;</span><br></pre></td></tr></table></figure>
+        <h1 id="Docker容器使用问题"><a href="#Docker容器使用问题" class="headerlink" title="Docker容器使用问题"></a>Docker容器使用问题</h1><h2 id="Failed-to-get-D-Bus-connection-Operation-not-permitted"><a href="#Failed-to-get-D-Bus-connection-Operation-not-permitted" class="headerlink" title="Failed to get D-Bus connection: Operation not permitted"></a>Failed to get D-Bus connection: Operation not permitted</h2><h3 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h3><p>使用centos7镜像创建容器后，在里面使用systemctl启动服务报错。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">docker run -itd --name centos7 centos:7</span><br><span class="line">docker attach centos7</span><br><span class="line">yum install vsftpd</span><br><span class="line">systemctl start vsftpd</span><br><span class="line">Failed to get D-Bus connection: Operation not permitted</span><br></pre></td></tr></table></figure>
+<a id="more"></a>
+
+<h3 id="分析"><a href="#分析" class="headerlink" title="分析"></a>分析</h3><p>Docker的设计理念是在容器里面不运行后台服务，容器本身就是宿主机上的一个独立的主进程，也可以间接的理解为就是容器里运行服务的应用进程。一个容器的生命周期是围绕这个主进程存在的，所以正确的使用容器方法是将里面的服务运行在前台。</p>
+<p>再说到systemd，这个套件已经成为主流Linux发行版（比如CentOS7、Ubuntu14+）默认的服务管理，取代了传统的SystemV风格服务管理。systemd维护系统服务程序，它需要特权去会访问Linux内核。而容器并不是一个完整的操作系统，只有一个文件系统，而且默认启动只是普通用户这样的权限访问Linux内核，也就是没有特权，所以自然就用不了！</p>
+<p>因此，请遵守容器设计原则，一个容器里运行一个前台服务！</p>
+<h3 id="解决"><a href="#解决" class="headerlink" title="解决"></a>解决</h3><p>以特权模式运行容器。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 创建容器：</span></span><br><span class="line">docker run -d -name centos7 --privileged=<span class="literal">true</span> centos:7 /usr/sbin/init</span><br><span class="line"></span><br><span class="line"><span class="comment"># 进入容器：</span></span><br><span class="line">docker <span class="built_in">exec</span> -it centos7 /bin/bash</span><br></pre></td></tr></table></figure>
+<p>这样可以使用systemctl启动服务了。</p>
+
     </div>
 
     
@@ -428,28 +433,36 @@
   <div class="popular-posts-header">相关文章</div>
   <ul class="popular-posts">
     <li class="popular-posts-item">
+      <div class="popular-posts-title"><a href="/2021/01/11/docker-timezone-localtime/" rel="bookmark">docker 时区调整方案</a></div>
+    </li>
+    <li class="popular-posts-item">
+      <div class="popular-posts-title"><a href="/2019/10/23/docker安装DB2/" rel="bookmark">docker安装DB2</a></div>
+    </li>
+    <li class="popular-posts-item">
       <div class="popular-posts-title"><a href="/2019/10/12/docker镜像自动编译程序/" rel="bookmark">docker镜像自动编译程序</a></div>
+    </li>
+    <li class="popular-posts-item">
+      <div class="popular-posts-title"><a href="/2019/10/28/docker搭建oracle-helowin-oracle-11g/" rel="bookmark">docker搭建oracle: [helowin/oracle_11g]</a></div>
     </li>
   </ul>
 
 
     <footer class="post-footer">
           <div class="post-tags">
-              <a href="/tags/nginx/" rel="tag"># nginx</a>
-              <a href="/tags/IPv6/" rel="tag"># IPv6</a>
+              <a href="/tags/docker/" rel="tag"># docker</a>
           </div>
 
         
 
           <div class="post-nav">
             <div class="post-nav-item">
-                <a href="/2019/10/12/docker%E9%95%9C%E5%83%8F%E8%87%AA%E5%8A%A8%E7%BC%96%E8%AF%91%E7%A8%8B%E5%BA%8F/" rel="prev" title="docker镜像自动编译程序">
-                  <i class="fa fa-chevron-left"></i> docker镜像自动编译程序
+                <a href="/2020/12/29/supervisor/" rel="prev" title="supervisor 使用说明">
+                  <i class="fa fa-chevron-left"></i> supervisor 使用说明
                 </a>
             </div>
             <div class="post-nav-item">
-                <a href="/2019/10/23/docker%E5%AE%89%E8%A3%85DB2/" rel="next" title="docker安装DB2">
-                  docker安装DB2 <i class="fa fa-chevron-right"></i>
+                <a href="/2021/01/08/Percona-Data-Recovery-Tool-for-InnoDB/" rel="next" title="Percona Data Recovery Tool for InnoDB">
+                  Percona Data Recovery Tool for InnoDB <i class="fa fa-chevron-right"></i>
                 </a>
             </div>
           </div>
@@ -592,7 +605,7 @@
       quicklink.listen({
         timeout : 3000,
         priority: true,
-        ignores : [uri => uri.includes('#'),uri => uri === 'https://ubin.top/2019/10/22/%E5%9C%A8nginx%20proxy-pass%E4%B8%AD%E7%A6%81%E7%94%A8IPv6/',]
+        ignores : [uri => uri.includes('#'),uri => uri === 'https://ubin.top/2020/12/29/Docker-Operation-not-permitted/',]
       });
       });
   </script>
@@ -608,7 +621,7 @@ NexT.utils.loadComments('#gitalk-container', () => {
       repo        : 'bineyond.github.io',
       owner       : 'bineyond',
       admin       : ['bineyond'],
-      id          : 'db4285723fdb8671c5702a9963312271',
+      id          : 'c99001cb34a88ceb889e3c6fd2c501eb',
         language: 'zh-CN',
       distractionFreeMode: false
     });

@@ -24,34 +24,28 @@
     var NexT = window.NexT || {};
     var CONFIG = {"hostname":"ubin.top","root":"/","images":"/images","scheme":"Gemini","version":"8.1.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":true,"bookmark":{"enable":true,"color":"#222","save":"auto"},"fancybox":true,"mediumzoom":false,"lazyload":true,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":true,"nav":null},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}};
   </script>
-<meta name="description" content="最近在生产服务上遇到 nginx 正向代理连接失败的问题。 122019&#x2F;10&#x2F;22 15:25:21 [error] 1930#0: *1482670 connect() to [AAAA:BBBB:C:DDD:E:F:GGG:HHH]:443 failed (101: Network is unreachable) while connecting to upstream, client: A">
-<meta property="og:type" content="article">
-<meta property="og:title" content="在nginx proxy_pass中禁用IPv6">
-<meta property="og:url" content="https://ubin.top/2019/10/22/%E5%9C%A8nginx%20proxy-pass%E4%B8%AD%E7%A6%81%E7%94%A8IPv6/index.html">
+<meta property="og:type" content="website">
+<meta property="og:title" content="薛定谔の猫">
+<meta property="og:url" content="https://ubin.top/page/4/index.html">
 <meta property="og:site_name" content="薛定谔の猫">
-<meta property="og:description" content="最近在生产服务上遇到 nginx 正向代理连接失败的问题。 122019&#x2F;10&#x2F;22 15:25:21 [error] 1930#0: *1482670 connect() to [AAAA:BBBB:C:DDD:E:F:GGG:HHH]:443 failed (101: Network is unreachable) while connecting to upstream, client: A">
 <meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2019-10-22T07:50:47.000Z">
-<meta property="article:modified_time" content="2020-12-19T03:45:51.317Z">
 <meta property="article:author" content="薛定谔の猫">
-<meta property="article:tag" content="nginx">
-<meta property="article:tag" content="IPv6">
 <meta name="twitter:card" content="summary">
 
 
-<link rel="canonical" href="https://ubin.top/2019/10/22/%E5%9C%A8nginx%20proxy-pass%E4%B8%AD%E7%A6%81%E7%94%A8IPv6/">
+<link rel="canonical" href="https://ubin.top/page/4/">
 
 
 <script class="page-configurations">
   // https://hexo.io/docs/variables.html
   CONFIG.page = {
     sidebar: "",
-    isHome : false,
-    isPost : true,
+    isHome : true,
+    isPost : false,
     lang   : 'zh-CN'
   };
 </script>
-<title>在nginx proxy_pass中禁用IPv6 | 薛定谔の猫</title>
+<title>薛定谔の猫</title>
   
     <script>
       function sendPageView() {
@@ -342,10 +336,9 @@
 </noscript>
 
 
-    <div class="main-inner post posts-expand">
+    <div class="main-inner index posts-expand">
 
-
-  
+    
 
 
 <div class="post-block">
@@ -353,7 +346,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://ubin.top/2019/10/22/%E5%9C%A8nginx%20proxy-pass%E4%B8%AD%E7%A6%81%E7%94%A8IPv6/">
+    <link itemprop="mainEntityOfPage" href="https://ubin.top/2015/03/27/hello-world/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="https://i.loli.net/2020/12/28/GsCnKm21pTdBUZo.jpg">
@@ -365,9 +358,9 @@
       <meta itemprop="name" content="薛定谔の猫">
     </span>
       <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          在nginx proxy_pass中禁用IPv6
-        </h1>
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2015/03/27/hello-world/" class="post-title-link" itemprop="url">Hello World</a>
+        </h2>
 
         <div class="post-meta-container">
           <div class="post-meta">
@@ -377,7 +370,7 @@
       </span>
       <span class="post-meta-item-text">发表于</span>
 
-      <time title="创建时间：2019-10-22 15:50:47" itemprop="dateCreated datePublished" datetime="2019-10-22T15:50:47+08:00">2019-10-22</time>
+      <time title="创建时间：2015-03-27 00:00:00" itemprop="dateCreated datePublished" datetime="2015-03-27T00:00:00+08:00">2015-03-27</time>
     </span>
       <span class="post-meta-item">
         <span class="post-meta-item-icon">
@@ -395,7 +388,7 @@
         <i class="far fa-file-word"></i>
       </span>
       <span class="post-meta-item-text">本文字数：</span>
-      <span>482</span>
+      <span>367</span>
     </span>
     <span class="post-meta-item" title="阅读时长">
       <span class="post-meta-item-icon">
@@ -413,46 +406,25 @@
     
     
     <div class="post-body" itemprop="articleBody">
-        <p>最近在生产服务上遇到 nginx 正向代理连接失败的问题。</p>
-<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">2019/10/22 15<span class="selector-pseudo">:25</span><span class="selector-pseudo">:21</span> <span class="selector-attr">[error]</span> 1930<span class="selector-id">#0</span>: *1482670 <span class="selector-tag">connect</span>() <span class="selector-tag">to</span> <span class="selector-attr">[AAAA:BBBB:C:DDD:E:F:GGG:HHH]</span><span class="selector-pseudo">:443</span> <span class="selector-tag">failed</span> (101: <span class="selector-tag">Network</span> <span class="selector-tag">is</span> <span class="selector-tag">unreachable</span>) <span class="selector-tag">while</span> <span class="selector-tag">connecting</span> <span class="selector-tag">to</span> <span class="selector-tag">upstream</span>, <span class="selector-tag">client</span>: <span class="selector-tag">AA</span><span class="selector-class">.BB</span><span class="selector-class">.CC</span><span class="selector-class">.DD</span>, <span class="selector-tag">server</span>: <span class="selector-tag">example</span><span class="selector-class">.com</span>, <span class="selector-tag">request</span>: &quot;<span class="selector-tag">GET</span> /<span class="selector-tag">download</span>/<span class="selector-tag">file</span> <span class="selector-tag">HTTP</span>/1.0&quot;, <span class="selector-tag">upstream</span>: &quot;<span class="selector-tag">https</span>://<span class="selector-attr">[AAAA:BBBB:C:DDD:E:F:GGG:HHH]</span><span class="selector-pseudo">:443</span>/<span class="selector-tag">download</span>/<span class="selector-tag">file</span>&quot;, <span class="selector-tag">host</span>: &quot;<span class="selector-tag">example</span><span class="selector-class">.com</span>&quot;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-<p>分析错误日志，应答是nginx尝试连接目标的 IPv6 地址端口时失败，错误<code>101: Network is unreachable</code></p>
-<p>服务器没有IPv6地址，那就禁用nginx的IPv6解析</p>
-<p>禁用IPv6很简单</p>
-<figure class="highlight apache"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="attribute">resolver</span> <span class="number">8.8.8.8</span> ipv<span class="number">6</span>=<span class="literal">off</span>;</span><br></pre></td></tr></table></figure>
+          <p>Welcome to <a target="_blank" rel="noopener" href="http://hexo.io/">Hexo</a>! This is your very first post. Check <a target="_blank" rel="noopener" href="http://hexo.io/docs/">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a target="_blank" rel="noopener" href="http://hexo.io/docs/troubleshooting.html">troubleshooting</a> or you can ask me on <a target="_blank" rel="noopener" href="https://github.com/hexojs/hexo/issues">GitHub</a>.</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2015/03/27/hello-world/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
     </div>
 
     
     
     
-      
-  <div class="popular-posts-header">相关文章</div>
-  <ul class="popular-posts">
-    <li class="popular-posts-item">
-      <div class="popular-posts-title"><a href="/2019/10/12/docker镜像自动编译程序/" rel="bookmark">docker镜像自动编译程序</a></div>
-    </li>
-  </ul>
-
 
     <footer class="post-footer">
-          <div class="post-tags">
-              <a href="/tags/nginx/" rel="tag"># nginx</a>
-              <a href="/tags/IPv6/" rel="tag"># IPv6</a>
-          </div>
-
-        
-
-          <div class="post-nav">
-            <div class="post-nav-item">
-                <a href="/2019/10/12/docker%E9%95%9C%E5%83%8F%E8%87%AA%E5%8A%A8%E7%BC%96%E8%AF%91%E7%A8%8B%E5%BA%8F/" rel="prev" title="docker镜像自动编译程序">
-                  <i class="fa fa-chevron-left"></i> docker镜像自动编译程序
-                </a>
-            </div>
-            <div class="post-nav-item">
-                <a href="/2019/10/23/docker%E5%AE%89%E8%A3%85DB2/" rel="next" title="docker安装DB2">
-                  docker安装DB2 <i class="fa fa-chevron-right"></i>
-                </a>
-            </div>
-          </div>
+        <div class="post-eof"></div>
+      
     </footer>
   </article>
 </div>
@@ -460,9 +432,10 @@
 
 
 
+  <nav class="pagination">
+    <a class="extend prev" rel="prev" href="/page/3/"><i class="fa fa-angle-left" aria-label="上一页"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/3/">3</a><span class="page-number current">4</span>
+  </nav>
 
-
-    <div class="comments" id="gitalk-container"></div>
 
 <script>
   window.addEventListener('tabs:register', () => {
@@ -592,30 +565,11 @@
       quicklink.listen({
         timeout : 3000,
         priority: true,
-        ignores : [uri => uri.includes('#'),uri => uri === 'https://ubin.top/2019/10/22/%E5%9C%A8nginx%20proxy-pass%E4%B8%AD%E7%A6%81%E7%94%A8IPv6/',]
+        ignores : [uri => uri.includes('#'),uri => uri === 'https://ubin.top/page/4/',]
       });
       });
   </script>
 
-<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/gitalk@1.7.0/dist/gitalk.css">
-
-<script>
-NexT.utils.loadComments('#gitalk-container', () => {
-  NexT.utils.getScript('//cdn.jsdelivr.net/npm/gitalk@1.7.0/dist/gitalk.min.js', () => {
-    var gitalk = new Gitalk({
-      clientID    : 'f7f877653d119a713c65',
-      clientSecret: '9c7421df94ce13acbf3e825f092635181616981f',
-      repo        : 'bineyond.github.io',
-      owner       : 'bineyond',
-      admin       : ['bineyond'],
-      id          : 'db4285723fdb8671c5702a9963312271',
-        language: 'zh-CN',
-      distractionFreeMode: false
-    });
-    gitalk.render('gitalk-container');
-  }, window.Gitalk);
-});
-</script>
 
 </body>
 </html>
