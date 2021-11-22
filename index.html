@@ -243,7 +243,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">31</span>
+          <span class="site-state-item-count">32</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -256,7 +256,7 @@
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">35</span>
+        <span class="site-state-item-count">38</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -337,6 +337,89 @@
 
 
     <div class="main-inner index posts-expand">
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://ubin.top/2021/11/22/Docker-use-32-bit-centos-image/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://i.loli.net/2020/12/28/GsCnKm21pTdBUZo.jpg">
+      <meta itemprop="name" content="薛定谔の猫">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="薛定谔の猫">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2021/11/22/Docker-use-32-bit-centos-image/" class="post-title-link" itemprop="url">Docker use 32-bit centos image</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+      
+
+      <time title="创建时间：2021-11-22 22:28:08 / 修改时间：22:34:06" itemprop="dateCreated datePublished" datetime="2021-11-22T22:28:08+08:00">2021-11-22</time>
+    </span>
+
+  
+      </div>
+      <div class="post-meta">
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>949</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>1 分钟</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h1 id="拉取-32bit-镜像"><a href="#拉取-32bit-镜像" class="headerlink" title="拉取 32bit 镜像"></a>拉取 32bit 镜像</h1><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker pull i386/centos:centos6</span><br></pre></td></tr></table></figure>
+<h1 id="替换-centos6-yum-repo"><a href="#替换-centos6-yum-repo" class="headerlink" title="替换 centos6 yum repo"></a>替换 centos6 yum repo</h1><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">sed -i <span class="string">&quot;s|enabled=1|enabled=0|g&quot;</span> /etc/yum/pluginconf.d/fastestmirror.conf</span><br><span class="line">mv /etc/yum.repos.d/CentOS-Base.repo /etc/yum.repos.d/CentOS-Base.repo.backup</span><br><span class="line">curl -o /etc/yum.repos.d/CentOS-Base.repo https://www.xmpan.com/Centos-6-Vault-Aliyun.repo</span><br></pre></td></tr></table></figure>
+<h1 id="使用-32bit-repo"><a href="#使用-32bit-repo" class="headerlink" title="使用 32bit repo"></a>使用 32bit repo</h1><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># arch --&gt; x86_64</span></span><br><span class="line">sed -i <span class="string">&#x27;s/\$arch/i686/g&#x27;</span> /etc/yum.repos.d/*</span><br><span class="line">sed -i <span class="string">&#x27;s/\$basearch/i386/g&#x27;</span> /etc/yum.repos.d/*</span><br><span class="line"></span><br><span class="line">yum clean all</span><br><span class="line">yum makecache</span><br></pre></td></tr></table></figure>
+<h1 id="更新-git-gt-git-2-x"><a href="#更新-git-gt-git-2-x" class="headerlink" title="更新 git -&gt; git 2.x"></a>更新 git -&gt; git 2.x</h1><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 32bit</span></span><br><span class="line">wget http://opensource.wandisco.com/centos/6/git/i686/wandisco-git-release-6-1.noarch.rpm &amp;&amp; rpm -ivh wandisco-git-release-6-1.noarch.rpm</span><br><span class="line"></span><br><span class="line"><span class="comment"># 64bit</span></span><br><span class="line">wget http://opensource.wandisco.com/centos/6/git/x86_64/wandisco-git-release-6-1.noarch.rpm &amp;&amp; rpm -ivh wandisco-git-release-6-1.noarch.rpm</span><br><span class="line"></span><br><span class="line"><span class="comment"># centos7 64bit</span></span><br><span class="line">wget http://opensource.wandisco.com/centos/7/git/x86_64/wandisco-git-release-7-2.noarch.rpm &amp;&amp; rpm -ivh wandisco-git-release-7-2.noarch.rpm</span><br><span class="line"></span><br><span class="line">yum update git</span><br></pre></td></tr></table></figure>
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
 
     
 
@@ -1208,108 +1291,6 @@
 
 
 
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://ubin.top/2020/03/15/Go%E9%98%B2%E7%BC%93%E5%AD%98%E5%87%BB%E7%A9%BFsingleflight/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="https://i.loli.net/2020/12/28/GsCnKm21pTdBUZo.jpg">
-      <meta itemprop="name" content="薛定谔の猫">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="薛定谔の猫">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2020/03/15/Go%E9%98%B2%E7%BC%93%E5%AD%98%E5%87%BB%E7%A9%BFsingleflight/" class="post-title-link" itemprop="url">Go防缓存击穿 singleflight</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">发表于</span>
-
-      <time title="创建时间：2020-03-15 14:48:47" itemprop="dateCreated datePublished" datetime="2020-03-15T14:48:47+08:00">2020-03-15</time>
-    </span>
-      <span class="post-meta-item">
-        <span class="post-meta-item-icon">
-          <i class="far fa-calendar-check"></i>
-        </span>
-        <span class="post-meta-item-text">更新于</span>
-        <time title="修改时间：2020-12-19 11:45:51" itemprop="dateModified" datetime="2020-12-19T11:45:51+08:00">2020-12-19</time>
-      </span>
-
-  
-      </div>
-      <div class="post-meta">
-    <span class="post-meta-item" title="本文字数">
-      <span class="post-meta-item-icon">
-        <i class="far fa-file-word"></i>
-      </span>
-      <span class="post-meta-item-text">本文字数：</span>
-      <span>2.1k</span>
-    </span>
-    <span class="post-meta-item" title="阅读时长">
-      <span class="post-meta-item-icon">
-        <i class="far fa-clock"></i>
-      </span>
-      <span class="post-meta-item-text">阅读时长 &asymp;</span>
-      <span>2 分钟</span>
-    </span>
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <h1 id="缓存更新问题"><a href="#缓存更新问题" class="headerlink" title="缓存更新问题"></a>缓存更新问题</h1><p>缓存是高并发业务的基石，当访问量突然上升的时候，缓存失效回源时会将请求打到后台数据库，导致服务器响应延迟或者宕机的情况。</p>
-<p><code>通常缓存更新方案：</code></p>
-<ul>
-<li>1.业务代码中，根据key从缓存拿不到数据，访问存储层获取数据后更新缓存</li>
-<li>2.由专门的定时脚本在缓存失效前对其进行更新</li>
-<li>3.通过分布式锁，实现只有一个请求负责缓存更新，其他请求等待：<a target="_blank" rel="noopener" href="http://yangxikun.github.io/%E7%BC%93%E5%AD%98/2015/07/02/cache-access.html">一种基于哨兵的缓存访问策略</a></li>
-</ul>
-<p>通常获取缓存这样写：</p>
-<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">data = getCache(key)</span><br><span class="line"><span class="keyword">if</span> !data &#123;</span><br><span class="line">    data = selectDB(key)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2020/03/15/Go%E9%98%B2%E7%BC%93%E5%AD%98%E5%87%BB%E7%A9%BFsingleflight/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
   <nav class="pagination">
     <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><span class="space">&hellip;</span><a class="page-number" href="/page/4/">4</a><a class="extend next" rel="next" href="/page/2/"><i class="fa fa-angle-right" aria-label="下一页"></i></a>
   </nav>
@@ -1358,13 +1339,13 @@
     <span class="post-meta-item-icon">
       <i class="fa fa-chart-line"></i>
     </span>
-    <span title="站点总字数">99k</span>
+    <span title="站点总字数">100k</span>
   </span>
   <span class="post-meta-item">
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="站点阅读时长">1:30</span>
+    <span title="站点阅读时长">1:31</span>
   </span>
 </div>
 

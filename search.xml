@@ -4,6 +4,31 @@
   
     
     <entry>
+      <title>Docker use 32-bit centos image</title>
+      <link href="2021/11/22/Docker-use-32-bit-centos-image/"/>
+      <url>2021/11/22/Docker-use-32-bit-centos-image/</url>
+      
+        <content type="html"><![CDATA[<h1 id="拉取-32bit-镜像"><a href="#拉取-32bit-镜像" class="headerlink" title="拉取 32bit 镜像"></a>拉取 32bit 镜像</h1><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker pull i386/centos:centos6</span><br></pre></td></tr></table></figure><h1 id="替换-centos6-yum-repo"><a href="#替换-centos6-yum-repo" class="headerlink" title="替换 centos6 yum repo"></a>替换 centos6 yum repo</h1><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">sed -i <span class="string">&quot;s|enabled=1|enabled=0|g&quot;</span> /etc/yum/pluginconf.d/fastestmirror.conf</span><br><span class="line">mv /etc/yum.repos.d/CentOS-Base.repo /etc/yum.repos.d/CentOS-Base.repo.backup</span><br><span class="line">curl -o /etc/yum.repos.d/CentOS-Base.repo https://www.xmpan.com/Centos-6-Vault-Aliyun.repo</span><br></pre></td></tr></table></figure><h1 id="使用-32bit-repo"><a href="#使用-32bit-repo" class="headerlink" title="使用 32bit repo"></a>使用 32bit repo</h1><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># arch --&gt; x86_64</span></span><br><span class="line">sed -i <span class="string">&#x27;s/\$arch/i686/g&#x27;</span> /etc/yum.repos.d/*</span><br><span class="line">sed -i <span class="string">&#x27;s/\$basearch/i386/g&#x27;</span> /etc/yum.repos.d/*</span><br><span class="line"></span><br><span class="line">yum clean all</span><br><span class="line">yum makecache</span><br></pre></td></tr></table></figure><h1 id="更新-git-gt-git-2-x"><a href="#更新-git-gt-git-2-x" class="headerlink" title="更新 git -&gt; git 2.x"></a>更新 git -&gt; git 2.x</h1><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 32bit</span></span><br><span class="line">wget http://opensource.wandisco.com/centos/6/git/i686/wandisco-git-release-6-1.noarch.rpm &amp;&amp; rpm -ivh wandisco-git-release-6-1.noarch.rpm</span><br><span class="line"></span><br><span class="line"><span class="comment"># 64bit</span></span><br><span class="line">wget http://opensource.wandisco.com/centos/6/git/x86_64/wandisco-git-release-6-1.noarch.rpm &amp;&amp; rpm -ivh wandisco-git-release-6-1.noarch.rpm</span><br><span class="line"></span><br><span class="line"><span class="comment"># centos7 64bit</span></span><br><span class="line">wget http://opensource.wandisco.com/centos/7/git/x86_64/wandisco-git-release-7-2.noarch.rpm &amp;&amp; rpm -ivh wandisco-git-release-7-2.noarch.rpm</span><br><span class="line"></span><br><span class="line">yum update git</span><br></pre></td></tr></table></figure>]]></content>
+      
+      
+      
+        <tags>
+            
+            <tag> docker </tag>
+            
+            <tag> git </tag>
+            
+            <tag> centos6 </tag>
+            
+            <tag> yum </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>docker 时区调整方案</title>
       <link href="2021/01/11/docker-timezone-localtime/"/>
       <url>2021/01/11/docker-timezone-localtime/</url>
