@@ -29,7 +29,7 @@
 <meta property="og:description" content="make custommake FULL_BUILD&#x3D;true customcd custom-src &amp;&amp; make menuconfig &amp;&amp; make V&#x3D;99  custom-src&#x2F;package&#x2F;kernel&#x2F;mac80211&#x2F;files&#x2F;lib&#x2F;wifi&#x2F;mac80211.sh  option disabled 1改成0，默认开启wifi。option">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2015-12-25T13:24:42.000Z">
-<meta property="article:modified_time" content="2020-12-19T03:45:51.318Z">
+<meta property="article:modified_time" content="2021-11-23T09:11:52.402Z">
 <meta property="article:author" content="薛定谔の猫">
 <meta property="article:tag" content="Gargoyle">
 <meta property="article:tag" content="OpemWrt">
@@ -301,7 +301,7 @@
           <i class="far fa-calendar-check"></i>
         </span>
         <span class="post-meta-item-text">更新于</span>
-        <time title="修改时间：2020-12-19 11:45:51" itemprop="dateModified" datetime="2020-12-19T11:45:51+08:00">2020-12-19</time>
+        <time title="修改时间：2021-11-23 17:11:52" itemprop="dateModified" datetime="2021-11-23T17:11:52+08:00">2021-11-23</time>
       </span>
 
   
@@ -334,12 +334,13 @@
 <p>custom-src/package/kernel/mac80211/files/lib/wifi/mac80211.sh</p>
 </blockquote>
 <p>option disabled 1改成0，默认开启wifi。<br>option disabled 0下添加<br>option htmode HT40+<br>option channel 1<br>option country CN<br>option noscan 1<br>option txpower 17</p>
-<a id="more"></a>
+<span id="more"></span>
 
 <p><a target="_blank" rel="noopener" href="http://blog.chinaunix.net/uid-25631578-id-4009228.html">http://blog.chinaunix.net/uid-25631578-id-4009228.html</a></p>
 <pre><code>    option ssid &#39;Just-I&#39;
     option encryption &#39;psk2&#39;
-    option key &#39;ubin.top&#39;</code></pre>
+    option key &#39;ubin.top&#39;
+</code></pre>
 <p>编译OpenWrt之前 编辑 .config文件 搜索 “CONFIG_ATH_USER_REGD” 字符串<br>搜索到后把前面的 “#” 删掉 改成 CONFIG_ATH_USER_REGD=y<br>然后在去编译吧<br>编译好并刷机后，手动吧国家code代码改成CN 然后保存重启，就能看到13信道了，当然你也可以编译前设置国家code为CN，具体方法找度娘吧。<br>kmod-ath </p>
 <p>以Atheros 芯片路由器为例:<br>编译的时候make menuconfig<br>进入：Kernel Modules - Wireless Drivers - Kmod-ath - Force Atheros drivers to respect the user’s regdomain settings. 选上。<br>保存设置，编译。<br>刷固件。<br>Luci中国家选择中国并保存（Save and Apply）<br>这样就可以使用1-13频道了</p>
 <blockquote>
