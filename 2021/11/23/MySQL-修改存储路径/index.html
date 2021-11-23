@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/cat1-01.svg">
+  <link rel="icon" type="image/png" sizes="32x32" href="/cat1-01.svg">
+  <link rel="icon" type="image/png" sizes="16x16" href="/cat1-01.svg">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.4/css/all.min.css" integrity="sha256-mUZM63G8m73Mcidfrv5E+Y61y7a12O5mW4ezU3bxqW4=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css" integrity="sha256-Vzbj7sDDS/woiFS3uNKo8eIuni59rjyNGtXfstRzStA=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"ubin.top","root":"/","images":"/images","scheme":"Gemini","darkmode":false,"version":"8.8.1","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":true,"bookmark":{"enable":true,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":true,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":true,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+<meta name="description" content="1、检查 MariaDB 数据库存放目录1mysql -u root  123456789101112131415161718192021222324252627282930313233343536373839404142434445464748MariaDB [(none)]&gt; show variables like &amp;#x27;%dir%&amp;#x27;;+-----------------">
+<meta property="og:type" content="article">
+<meta property="og:title" content="MariaDB 修改存储路径">
+<meta property="og:url" content="https://ubin.top/2021/11/23/MySQL-%E4%BF%AE%E6%94%B9%E5%AD%98%E5%82%A8%E8%B7%AF%E5%BE%84/index.html">
+<meta property="og:site_name" content="薛定谔の猫">
+<meta property="og:description" content="1、检查 MariaDB 数据库存放目录1mysql -u root  123456789101112131415161718192021222324252627282930313233343536373839404142434445464748MariaDB [(none)]&gt; show variables like &amp;#x27;%dir%&amp;#x27;;+-----------------">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2021-11-23T06:21:45.000Z">
+<meta property="article:modified_time" content="2021-11-23T07:11:19.152Z">
+<meta property="article:author" content="薛定谔の猫">
+<meta property="article:tag" content="MariaDB">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://ubin.top/2021/11/23/MySQL-%E4%BF%AE%E6%94%B9%E5%AD%98%E5%82%A8%E8%B7%AF%E5%BE%84/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://ubin.top/2021/11/23/MySQL-%E4%BF%AE%E6%94%B9%E5%AD%98%E5%82%A8%E8%B7%AF%E5%BE%84/","path":"2021/11/23/MySQL-修改存储路径/","title":"MariaDB 修改存储路径"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>MariaDB 修改存储路径 | 薛定谔の猫</title>
+  
+  <script class="next-config" data-name="google_analytics" type="application/json">{"tracking_id":"UA-151051157-1","only_pageview":true}</script>
+  <script src="/js/third-party/analytics/google-analytics.js"></script>
+
+  <script src="/js/third-party/analytics/baidu-analytics.js"></script>
+  <script async src="https://hm.baidu.com/hm.js?306b44649c053ac56d4911f4894bcf16"></script>
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <h1 class="site-title">薛定谔の猫</h1>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">把酒诗代码，趁乱写年华</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu">
+        <li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li>
+        <li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li>
+        <li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li>
+        <li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+        <li class="menu-item menu-item-commonweal"><a href="/404/" rel="section"><i class="fa fa-heartbeat fa-fw"></i>公益 404</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#1%E3%80%81%E6%A3%80%E6%9F%A5-MariaDB-%E6%95%B0%E6%8D%AE%E5%BA%93%E5%AD%98%E6%94%BE%E7%9B%AE%E5%BD%95"><span class="nav-number">1.</span> <span class="nav-text">1、检查 MariaDB 数据库存放目录</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#2%E3%80%81%E5%81%9C%E6%AD%A2-mariadb-%E6%9C%8D%E5%8A%A1"><span class="nav-number">2.</span> <span class="nav-text">2、停止 mariadb 服务</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#3%E3%80%81%E5%88%9B%E5%BB%BA%E6%96%B0%E7%9A%84%E6%95%B0%E6%8D%AE%E5%BA%93%E5%AD%98%E6%94%BE%E7%9B%AE%E5%BD%95"><span class="nav-number">3.</span> <span class="nav-text">3、创建新的数据库存放目录</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#4%E3%80%81%E5%A4%8D%E5%88%B6-%E7%A7%BB%E5%8A%A8%E4%B9%8B%E5%89%8D%E5%AD%98%E6%94%BE%E6%95%B0%E6%8D%AE%E5%BA%93%E7%9B%AE%E5%BD%95%E6%96%87%E4%BB%B6%EF%BC%8C%E5%88%B0%E6%96%B0%E7%9A%84%E6%95%B0%E6%8D%AE%E5%BA%93%E5%AD%98%E6%94%BE%E7%9B%AE%E5%BD%95%E4%BD%8D%E7%BD%AE"><span class="nav-number">4.</span> <span class="nav-text">4、复制&#x2F;移动之前存放数据库目录文件，到新的数据库存放目录位置</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#5%E3%80%81%E4%BF%AE%E6%94%B9-mariadb-%E6%95%B0%E6%8D%AE%E5%BA%93%E7%9B%AE%E5%BD%95%E6%9D%83%E9%99%90%E4%BB%A5%E5%8F%8A%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6"><span class="nav-number">5.</span> <span class="nav-text">5、修改 mariadb 数据库目录权限以及配置文件</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#6%E3%80%81%E7%BC%96%E8%BE%91-Mariadb-%E7%9A%84%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6-etc-my-cnf"><span class="nav-number">6.</span> <span class="nav-text">6、编辑 Mariadb 的配置文件 &#x2F;etc&#x2F;my.cnf</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#7%E3%80%81%E5%90%AF%E5%8A%A8%E6%95%B0%E6%8D%AE%E5%BA%93%E6%9C%8D%E5%8A%A1"><span class="nav-number">7.</span> <span class="nav-text">7、启动数据库服务</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#8%E3%80%81%E5%85%B6%E4%BB%96"><span class="nav-number">8.</span> <span class="nav-text">8、其他</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="薛定谔の猫"
+      src="https://i.loli.net/2020/12/28/GsCnKm21pTdBUZo.jpg">
+  <p class="site-author-name" itemprop="name">薛定谔の猫</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">33</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">3</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">39</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author site-overview-item animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/bineyond%20|%20fab%20fa-github" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;bineyond | fab fa-github" rel="noopener" target="_blank">GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://www.jetbrains.com/?from=bineyond.github.io" title="GoLand → https:&#x2F;&#x2F;www.jetbrains.com&#x2F;?from&#x3D;bineyond.github.io" rel="noopener" target="_blank"><i class="thumbs-o-up fa-fw"></i>GoLand</a>
+      </span>
+  </div>
+
+
+  <div class="links-of-blogroll site-overview-item animated">
+    <div class="links-of-blogroll-title"><i class="fa fa-globe fa-fw"></i>
+      Links
+    </div>
+    <ul class="links-of-blogroll-list">
+        <li class="links-of-blogroll-item">
+          <a href="https://talkgo.org/night/" title="https:&#x2F;&#x2F;talkgo.org&#x2F;night&#x2F;" rel="noopener" target="_blank">Go 夜读</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://colobu.com/" title="https:&#x2F;&#x2F;colobu.com&#x2F;" rel="noopener" target="_blank">鸟窝</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://draveness.me/" title="https:&#x2F;&#x2F;draveness.me&#x2F;" rel="noopener" target="_blank">面向信仰编程</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://weread.qnmlgb.tech/" title="https:&#x2F;&#x2F;weread.qnmlgb.tech&#x2F;" rel="noopener" target="_blank">微信读书组队</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://mojotv.cn/" title="https:&#x2F;&#x2F;mojotv.cn&#x2F;" rel="noopener" target="_blank">致力于分享Go语言编程</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://eddycjy.com/posts/" title="https:&#x2F;&#x2F;eddycjy.com&#x2F;posts&#x2F;" rel="noopener" target="_blank">煎鱼</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://golang.design/under-the-hood/" title="https:&#x2F;&#x2F;golang.design&#x2F;under-the-hood&#x2F;" rel="noopener" target="_blank">《Go 语言原本》</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://xargin.com/" title="https:&#x2F;&#x2F;xargin.com&#x2F;" rel="noopener" target="_blank">No Headback</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://blog.changkun.de/posts/" title="https:&#x2F;&#x2F;blog.changkun.de&#x2F;posts&#x2F;" rel="noopener" target="_blank">欧长坤</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://qcrao.com/" title="https:&#x2F;&#x2F;qcrao.com&#x2F;" rel="noopener" target="_blank">码农桃花源</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://github.com/xx-zh/xx-zh-roadmap" title="https:&#x2F;&#x2F;github.com&#x2F;xx-zh&#x2F;xx-zh-roadmap" rel="noopener" target="_blank">中文在线翻译Books</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://www.golangroadmap.com/" title="https:&#x2F;&#x2F;www.golangroadmap.com&#x2F;" rel="noopener" target="_blank">Go开发者成长线路图</a>
+        </li>
+    </ul>
+  </div>
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+  <a role="button" class="book-mark-link book-mark-link-fixed"></a>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://ubin.top/2021/11/23/MySQL-%E4%BF%AE%E6%94%B9%E5%AD%98%E5%82%A8%E8%B7%AF%E5%BE%84/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://i.loli.net/2020/12/28/GsCnKm21pTdBUZo.jpg">
+      <meta itemprop="name" content="薛定谔の猫">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="薛定谔の猫">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          MariaDB 修改存储路径
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+      
+
+      <time title="创建时间：2021-11-23 14:21:45 / 修改时间：15:11:19" itemprop="dateCreated datePublished" datetime="2021-11-23T14:21:45+08:00">2021-11-23</time>
+    </span>
+
+  
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>3.1k</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>3 分钟</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <h1 id="1、检查-MariaDB-数据库存放目录"><a href="#1、检查-MariaDB-数据库存放目录" class="headerlink" title="1、检查 MariaDB 数据库存放目录"></a>1、检查 MariaDB 数据库存放目录</h1><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mysql -u root</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br></pre></td><td class="code"><pre><span class="line">MariaDB [(<span class="keyword">none</span>)]<span class="operator">&gt;</span> <span class="keyword">show</span> variables <span class="keyword">like</span> <span class="string">&#x27;%dir%&#x27;</span>;</span><br><span class="line"><span class="operator">+</span><span class="comment">-----------------------------------------+----------------------------+</span></span><br><span class="line"><span class="operator">|</span> Variable_name                           <span class="operator">|</span> <span class="keyword">Value</span>                      <span class="operator">|</span></span><br><span class="line"><span class="operator">+</span><span class="comment">-----------------------------------------+----------------------------+</span></span><br><span class="line"><span class="operator">|</span> aria_sync_log_dir                       <span class="operator">|</span> NEWFILE                    <span class="operator">|</span></span><br><span class="line"><span class="operator">|</span> basedir                                 <span class="operator">|</span> <span class="operator">/</span>usr<span class="operator">/</span>                      <span class="operator">|</span></span><br><span class="line"><span class="operator">|</span> binlog_direct_non_transactional_updates <span class="operator">|</span> OFF                        <span class="operator">|</span></span><br><span class="line"><span class="operator">|</span> character_sets_dir                      <span class="operator">|</span> <span class="operator">/</span>usr<span class="operator">/</span>share<span class="operator">/</span>mysql<span class="operator">/</span>charsets<span class="operator">/</span> <span class="operator">|</span></span><br><span class="line"><span class="operator">|</span> datadir                                 <span class="operator">|</span> <span class="operator">/</span>var<span class="operator">/</span>lib<span class="operator">/</span>mysql             <span class="operator">|</span></span><br><span class="line"><span class="operator">|</span> ignore_db_dirs                          <span class="operator">|</span>                            <span class="operator">|</span></span><br><span class="line"><span class="operator">|</span> innodb_data_home_dir                    <span class="operator">|</span>                            <span class="operator">|</span></span><br><span class="line"><span class="operator">|</span> innodb_log_group_home_dir               <span class="operator">|</span> .<span class="operator">/</span>                         <span class="operator">|</span></span><br><span class="line"><span class="operator">|</span> innodb_max_dirty_pages_pct              <span class="operator">|</span> <span class="number">90.000000</span>                  <span class="operator">|</span></span><br><span class="line"><span class="operator">|</span> innodb_max_dirty_pages_pct_lwm          <span class="operator">|</span> <span class="number">0.000000</span>                   <span class="operator">|</span></span><br><span class="line"><span class="operator">|</span> innodb_tmpdir                           <span class="operator">|</span>                            <span class="operator">|</span></span><br><span class="line"><span class="operator">|</span> innodb_undo_directory                   <span class="operator">|</span> .<span class="operator">/</span>                         <span class="operator">|</span></span><br><span class="line"><span class="operator">|</span> lc_messages_dir                         <span class="operator">|</span>                            <span class="operator">|</span></span><br><span class="line"><span class="operator">|</span> plugin_dir                              <span class="operator">|</span> <span class="operator">/</span>usr<span class="operator">/</span>lib64<span class="operator">/</span>mysql<span class="operator">/</span>plugin<span class="operator">/</span>   <span class="operator">|</span></span><br><span class="line"><span class="operator">|</span> slave_load_tmpdir                       <span class="operator">|</span> <span class="operator">/</span>tmp                       <span class="operator">|</span></span><br><span class="line"><span class="operator">|</span> tmpdir                                  <span class="operator">|</span> <span class="operator">/</span>tmp                       <span class="operator">|</span></span><br><span class="line"><span class="operator">|</span> wsrep_data_home_dir                     <span class="operator">|</span> <span class="operator">/</span>var<span class="operator">/</span>lib<span class="operator">/</span>mysql             <span class="operator">|</span></span><br><span class="line"><span class="operator">|</span> wsrep_dirty_reads                       <span class="operator">|</span> OFF                        <span class="operator">|</span></span><br><span class="line"><span class="operator">+</span><span class="comment">-----------------------------------------+----------------------------+</span></span><br><span class="line"></span><br><span class="line">MariaDB [(<span class="keyword">none</span>)]<span class="operator">&gt;</span> status</span><br><span class="line"><span class="comment">--------------</span></span><br><span class="line">mysql  Ver <span class="number">15.1</span> Distrib <span class="number">10.7</span><span class="number">.1</span><span class="operator">-</span>MariaDB, <span class="keyword">for</span> Linux (x86_64) <span class="keyword">using</span> readline <span class="number">5.1</span></span><br><span class="line"></span><br><span class="line">Connection id:		<span class="number">4</span></span><br><span class="line"><span class="keyword">Current</span> database:</span><br><span class="line"><span class="keyword">Current</span> <span class="keyword">user</span>:		root<span class="variable">@localhost</span></span><br><span class="line">SSL:			<span class="keyword">Not</span> <span class="keyword">in</span> use</span><br><span class="line"><span class="keyword">Current</span> pager:		stdout</span><br><span class="line"><span class="keyword">Using</span> outfile:		<span class="string">&#x27;&#x27;</span></span><br><span class="line"><span class="keyword">Using</span> delimiter:	;</span><br><span class="line">Server:			MariaDB</span><br><span class="line">Server version:		<span class="number">10.7</span><span class="number">.1</span><span class="operator">-</span>MariaDB<span class="operator">-</span>log MariaDB Server</span><br><span class="line">Protocol version:	<span class="number">10</span></span><br><span class="line">Connection:		Localhost via UNIX socket</span><br><span class="line">Server characterset:	utf8mb4</span><br><span class="line">Db     characterset:	utf8mb4</span><br><span class="line">Client characterset:	utf8mb4</span><br><span class="line">Conn.  characterset:	utf8mb4</span><br><span class="line">UNIX socket:		<span class="operator">/</span>var<span class="operator">/</span>lib<span class="operator">/</span>mysql<span class="operator">/</span>mysql.sock</span><br><span class="line">Uptime:			<span class="number">9</span> min <span class="number">2</span> sec</span><br><span class="line"></span><br><span class="line">Threads: <span class="number">2</span>  Questions: <span class="number">5</span>  Slow queries: <span class="number">0</span>  Opens: <span class="number">16</span>  <span class="keyword">Open</span> tables: <span class="number">10</span>  Queries <span class="keyword">per</span> <span class="keyword">second</span> avg: <span class="number">0.009</span></span><br><span class="line"><span class="comment">--------------</span></span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>查看 datadir 那一行所指的路径 /var/lib/mysql</p>
+</blockquote>
+<blockquote>
+<p>查看 UNIX socket</p>
+</blockquote>
+<span id="more"></span>
+
+<h1 id="2、停止-mariadb-服务"><a href="#2、停止-mariadb-服务" class="headerlink" title="2、停止 mariadb 服务"></a>2、停止 mariadb 服务</h1><figure class="highlight arduino"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">systemctl stop mariadb.service</span><br></pre></td></tr></table></figure>
+
+<h1 id="3、创建新的数据库存放目录"><a href="#3、创建新的数据库存放目录" class="headerlink" title="3、创建新的数据库存放目录"></a>3、创建新的数据库存放目录</h1><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mkdir /data/mysql_data</span><br></pre></td></tr></table></figure>
+
+<h1 id="4、复制-移动之前存放数据库目录文件，到新的数据库存放目录位置"><a href="#4、复制-移动之前存放数据库目录文件，到新的数据库存放目录位置" class="headerlink" title="4、复制/移动之前存放数据库目录文件，到新的数据库存放目录位置"></a>4、复制/移动之前存放数据库目录文件，到新的数据库存放目录位置</h1><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">cp -R /var/lib/mysql/* /data/mysql_data/</span><br><span class="line">or</span><br><span class="line">mv /var/lib/mysql/* /data/mysql_data</span><br></pre></td></tr></table></figure>
+
+<h1 id="5、修改-mariadb-数据库目录权限以及配置文件"><a href="#5、修改-mariadb-数据库目录权限以及配置文件" class="headerlink" title="5、修改 mariadb 数据库目录权限以及配置文件"></a>5、修改 mariadb 数据库目录权限以及配置文件</h1><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">chown mysql:mysql -R /data/mysql_data/</span><br></pre></td></tr></table></figure>
+
+<h1 id="6、编辑-Mariadb-的配置文件-etc-my-cnf"><a href="#6、编辑-Mariadb-的配置文件-etc-my-cnf" class="headerlink" title="6、编辑 Mariadb 的配置文件 /etc/my.cnf"></a>6、编辑 Mariadb 的配置文件 /etc/my.cnf</h1><figure class="highlight ini"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="section">[client-server]</span></span><br><span class="line"><span class="attr">socket</span>=/data/mysql_data/mysql.sock</span><br><span class="line"></span><br><span class="line"><span class="section">[mysqld]</span></span><br><span class="line"><span class="attr">datadir</span>=/data/mysql_data/</span><br></pre></td></tr></table></figure>
+
+<h1 id="7、启动数据库服务"><a href="#7、启动数据库服务" class="headerlink" title="7、启动数据库服务"></a>7、启动数据库服务</h1><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">systemctl start mariadb.service</span><br></pre></td></tr></table></figure>
+
+<h1 id="8、其他"><a href="#8、其他" class="headerlink" title="8、其他"></a>8、其他</h1><p>MariaDB 10.7 @CentOS7</p>
+<p><strong>/etc/my.cnf 例子</strong></p>
+<figure class="highlight clean"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br></pre></td><td class="code"><pre><span class="line">#</span><br><span class="line"># This group is read both by the client and the server</span><br><span class="line"># use it for options that affect everything</span><br><span class="line">#</span><br><span class="line">[client-server]</span><br><span class="line">socket=/data/mysql_data/mysql.sock</span><br><span class="line"></span><br><span class="line">#</span><br><span class="line"># include *.cnf <span class="keyword">from</span> the config directory</span><br><span class="line">#</span><br><span class="line">!includedir /etc/my.cnf.d</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">[mysqld]</span><br><span class="line">port=<span class="number">3306</span></span><br><span class="line">init_connect=<span class="string">&#x27;SET collation_connection = utf8mb4_unicode_ci&#x27;</span></span><br><span class="line">init_connect=<span class="string">&#x27;SET NAMES utf8mb4&#x27;</span></span><br><span class="line">character_set_server=utf8mb4</span><br><span class="line">collation-server=utf8mb4_unicode_ci</span><br><span class="line"></span><br><span class="line">#此处是忽略客户端的字符集，使用服务器的设置</span><br><span class="line">#可以避免客户端程序误操作，使用其他字符集连接进来并写入数据，从而引发乱码问题。</span><br><span class="line">skip-character-set-client-handshake=true</span><br><span class="line">datadir=/data/mysql_data/</span><br><span class="line">max_connections=<span class="number">900</span></span><br><span class="line"></span><br><span class="line">############### binlog</span><br><span class="line"># binlog日志路径，格式为mariadb-log<span class="number">.00000</span>*,递增</span><br><span class="line">log-bin = /data/mysql_data/bin-log/mariadb-log</span><br><span class="line">log-bin-index = /data/mysql_data/bin-log/mariadb-log.index</span><br><span class="line"># binlog日志保留天数</span><br><span class="line">expire-logs-days = <span class="number">7</span></span><br><span class="line">server-id = <span class="number">1</span></span><br><span class="line"># binlog日志有三种格式，分别是Statement、MiXED、ROW</span><br><span class="line">binlog-format = ROW</span><br><span class="line"># max-binlog-size = <span class="number">100</span>M   # binlog每个日志文件大小</span><br><span class="line">############### binlog end</span><br><span class="line"></span><br><span class="line">############### 慢查询</span><br><span class="line"># touch /data/mysql_data/slow_query_log.log</span><br><span class="line"># chown mysql:mysql /data/mysql_data/slow_query_log.log</span><br><span class="line">slow_query_log=on</span><br><span class="line">slow_query_log_file=/data/mysql_data/slow_query_log.log</span><br><span class="line">long_query_time=<span class="number">2</span></span><br><span class="line">############### 慢查询 end</span><br></pre></td></tr></table></figure>
+
+    </div>
+
+    
+    
+    
+      
+
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/MariaDB/" rel="tag"># MariaDB</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2021/11/22/Docker-use-32-bit-centos-image/" rel="prev" title="Docker use 32-bit centos image">
+                  <i class="fa fa-chevron-left"></i> Docker use 32-bit centos image
+                </a>
+            </div>
+            <div class="post-nav-item">
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    <div class="comments gitalk-container"></div>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="beian"><a href="https://beian.miit.gov.cn/" rel="noopener" target="_blank">浙ICP备19017268号-1 </a>
+  </div>
+
+<div class="copyright">
+  &copy; 2015 – 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">薛定谔の猫</span>
+</div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+    <span title="站点总字数">103k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="站点阅读时长">1:33</span>
+  </span>
+</div>
+
+    </div>
+  </footer>
+
+  
+  <script src="https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js" integrity="sha256-yt2kYMy0w8AbtF89WXb2P1rfjcP/HTHLT7097U8Y5b8=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/lozad@1.16.0/dist/lozad.min.js" integrity="sha256-mOFREFhqmHeQbXpK2lp4nA3qooVgACfh88fpJftLBbc=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script><script src="/js/bookmark.js"></script>
+
+  
+<script src="https://cdn.jsdelivr.net/npm/hexo-generator-searchdb@1.4.0/dist/search.js" integrity="sha256-vXZMYLEqsROAXkEw93GGIvaB2ab+QW6w3+1ahD9nXXA=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+
+  <script src="/js/third-party/fancybox.js"></script>
+
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"none","js":{"url":"https://cdn.jsdelivr.net/npm/mathjax@3.2.0/es5/tex-mml-chtml.js","integrity":"sha256-r+3itOMtGGjap0x+10hu6jW/gZCzxHsoKrOd7gyRSGY="}}</script>
+<script src="/js/third-party/math/mathjax.js"></script>
+
+
+  <script src="https://cdn.jsdelivr.net/npm/quicklink@2.2.0/dist/quicklink.umd.js" integrity="sha256-4kQf9z5ntdQrzsBC3YSHnEz02Z9C1UeW/E9OgnvlzSY=" crossorigin="anonymous"></script>
+  <script class="next-config" data-name="quicklink" type="application/json">{"enable":true,"home":true,"archive":true,"delay":true,"timeout":3000,"priority":true,"ignores":null,"url":"https://ubin.top/2021/11/23/MySQL-%E4%BF%AE%E6%94%B9%E5%AD%98%E5%82%A8%E8%B7%AF%E5%BE%84/"}</script>
+  <script src="/js/third-party/quicklink.js"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/gitalk@1.7.2/dist/gitalk.css" integrity="sha256-AJnUHL7dBv6PGaeyPQJcgQPDjt/Hn/PvYZde1iqfp8U=" crossorigin="anonymous">
+
+<script class="next-config" data-name="gitalk" type="application/json">{"enable":true,"github_id":"bineyond","repo":"bineyond.github.io","client_id":"f7f877653d119a713c65","client_secret":"9c7421df94ce13acbf3e825f092635181616981f","admin_user":"bineyond","distraction_free_mode":false,"proxy":"https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token","language":"zh-CN","js":{"url":"https://cdn.jsdelivr.net/npm/gitalk@1.7.2/dist/gitalk.min.js","integrity":"sha256-Pmj85ojLaPOWwRtlMJwmezB/Qg8BzvJp5eTzvXaYAfA="},"path_md5":"ab875f23fd5ed7e4d227e575e441f7e2"}</script>
+<script src="/js/third-party/comments/gitalk.js"></script>
+
+</body>
+</html>
