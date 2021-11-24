@@ -21,23 +21,29 @@
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css" integrity="sha256-Vzbj7sDDS/woiFS3uNKo8eIuni59rjyNGtXfstRzStA=" crossorigin="anonymous">
 
 <script class="next-config" data-name="main" type="application/json">{"hostname":"ubin.top","root":"/","images":"/images","scheme":"Gemini","darkmode":false,"version":"8.8.1","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":true,"bookmark":{"enable":true,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":true,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":true,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
-<meta property="og:type" content="website">
-<meta property="og:title" content="薛定谔の猫">
-<meta property="og:url" content="https://ubin.top/archives/2021/11/index.html">
+<meta name="description" content="背景项目中经常使用别人维护的模块，在 git 中使用子模块的功能能够大大提高开发效率。使用子模块后，不必负责子模块的维护，只需要在必要的时候同步更新子模块即可。本文主要讲解子模块相关的基础命令，详细使用请参考 man page。 子模块的添加添加子模块非常简单，命令如下：git submodule add &lt;url&gt; &lt;path&gt; 其中，url 为子模块的路径，path 为">
+<meta property="og:type" content="article">
+<meta property="og:title" content="git use submodule">
+<meta property="og:url" content="https://ubin.top/2021/11/24/git-use-submodule/index.html">
 <meta property="og:site_name" content="薛定谔の猫">
+<meta property="og:description" content="背景项目中经常使用别人维护的模块，在 git 中使用子模块的功能能够大大提高开发效率。使用子模块后，不必负责子模块的维护，只需要在必要的时候同步更新子模块即可。本文主要讲解子模块相关的基础命令，详细使用请参考 man page。 子模块的添加添加子模块非常简单，命令如下：git submodule add &lt;url&gt; &lt;path&gt; 其中，url 为子模块的路径，path 为">
 <meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2021-11-24T02:48:57.000Z">
+<meta property="article:modified_time" content="2021-11-24T02:57:36.132Z">
 <meta property="article:author" content="薛定谔の猫">
+<meta property="article:tag" content="git">
+<meta property="article:tag" content="submodule">
 <meta name="twitter:card" content="summary">
 
 
-<link rel="canonical" href="https://ubin.top/archives/2021/11/">
+<link rel="canonical" href="https://ubin.top/2021/11/24/git-use-submodule/">
 
 
 
-<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":false,"lang":"zh-CN","comments":"","permalink":"","path":"archives/2021/11/index.html","title":""}</script>
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://ubin.top/2021/11/24/git-use-submodule/","path":"2021/11/24/git-use-submodule/","title":"git use submodule"}</script>
 
 <script class="next-config" data-name="calendar" type="application/json">""</script>
-<title>归档 | 薛定谔の猫</title>
+<title>git use submodule | 薛定谔の猫</title>
   
   <script class="next-config" data-name="google_analytics" type="application/json">{"tracking_id":"UA-151051157-1","only_pageview":true}</script>
   <script src="/js/third-party/analytics/google-analytics.js"></script>
@@ -135,7 +141,7 @@
 
   <aside class="sidebar">
 
-    <div class="sidebar-inner sidebar-overview-active">
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
       <ul class="sidebar-nav">
         <li class="sidebar-nav-toc">
           文章目录
@@ -148,6 +154,7 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E8%83%8C%E6%99%AF"><span class="nav-number">1.</span> <span class="nav-text">背景</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%AD%90%E6%A8%A1%E5%9D%97%E7%9A%84%E6%B7%BB%E5%8A%A0"><span class="nav-number">2.</span> <span class="nav-text">子模块的添加</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%AD%90%E6%A8%A1%E5%9D%97%E7%9A%84%E4%BD%BF%E7%94%A8"><span class="nav-number">3.</span> <span class="nav-text">子模块的使用</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%AD%90%E6%A8%A1%E5%9D%97%E7%9A%84%E6%9B%B4%E6%96%B0"><span class="nav-number">4.</span> <span class="nav-text">子模块的更新</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%88%A0%E9%99%A4%E5%AD%90%E6%A8%A1%E5%9D%97"><span class="nav-number">5.</span> <span class="nav-text">删除子模块</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#reference"><span class="nav-number">6.</span> <span class="nav-text">reference</span></a></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -253,91 +260,143 @@
 </noscript>
 
 
-    <div class="main-inner archive posts-collapse">
+    <div class="main-inner post posts-expand">
 
 
   
+
+
+<div class="post-block">
   
   
-  <div class="post-block">
-    <div class="post-content">
-      <div class="collection-title">
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://ubin.top/2021/11/24/git-use-submodule/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://i.loli.net/2020/12/28/GsCnKm21pTdBUZo.jpg">
+      <meta itemprop="name" content="薛定谔の猫">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="薛定谔の猫">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          git use submodule
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+      
+
+      <time title="创建时间：2021-11-24 10:48:57 / 修改时间：10:57:36" itemprop="dateCreated datePublished" datetime="2021-11-24T10:48:57+08:00">2021-11-24</time>
+    </span>
+
+  
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>982</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>1 分钟</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <h1 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h1><p>项目中经常使用别人维护的模块，在 git 中使用子模块的功能能够大大提高开发效率。使用子模块后，不必负责子模块的维护，只需要在必要的时候同步更新子模块即可。本文主要讲解子模块相关的基础命令，详细使用请参考 man page。</p>
+<h1 id="子模块的添加"><a href="#子模块的添加" class="headerlink" title="子模块的添加"></a>子模块的添加</h1><p>添加子模块非常简单，命令如下：<code>git submodule add &lt;url&gt; &lt;path&gt;</code></p>
+<p>其中，url 为子模块的路径，path 为该子模块存储的目录路径。</p>
+<span id="more"></span>
+
+<p>执行成功后，git status 会看到项目中修改了.gitmodules，并增加了一个新文件（为刚刚添加的路径）</p>
+<p><code>git diff --cached</code> 查看修改内容可以看到增加了子模块，并且新文件下为子模块的提交 hash 摘要</p>
+<p><code>git commit</code> 提交即完成子模块的添加</p>
+<h1 id="子模块的使用"><a href="#子模块的使用" class="headerlink" title="子模块的使用"></a>子模块的使用</h1><p>克隆项目后，默认子模块目录下无任何内容。需要在项目根目录执行如下命令完成子模块的下载：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">git submodule init</span><br><span class="line">git submodule update</span><br></pre></td></tr></table></figure>
+
+<p>或：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git submodule update --init --recursive</span><br></pre></td></tr></table></figure>
+
+<p>执行后，子模块目录下就有了源码，再执行相应的 makefile 即可。</p>
+<h1 id="子模块的更新"><a href="#子模块的更新" class="headerlink" title="子模块的更新"></a>子模块的更新</h1><p>子模块的维护者提交了更新后，使用子模块的项目必须手动更新才能包含最新的提交。</p>
+<p>在项目中，进入到子模块目录下，执行 <code>git pull</code> 更新，查看 <code>git log</code> 查看相应提交。</p>
+<p>完成后返回到项目目录，可以看到子模块有待提交的更新，使用 <code>git add</code> ，提交即可。</p>
+<h1 id="删除子模块"><a href="#删除子模块" class="headerlink" title="删除子模块"></a>删除子模块</h1><p>有时子模块的项目维护地址发生了变化，或者需要替换子模块，就需要删除原有的子模块。</p>
+<p>删除子模块较复杂，步骤如下：</p>
+<ul>
+<li><code>rm -rf</code> 子模块目录 删除子模块目录及源码</li>
+<li><code>vi .gitmodules</code> 删除项目目录下.gitmodules 文件中子模块相关条目</li>
+<li><code>vi .git/config</code> 删除配置项中子模块相关条目</li>
+<li><code>rm .git/module/*</code> 删除模块下的子模块目录，每个子模块对应一个目录，注意只删除对应的子模块目录即可</li>
+</ul>
+<p>执行完成后，再执行添加子模块命令即可，如果仍然报错，执行如下：</p>
+<p><code>git rm --cached 子模块名称</code></p>
+<p>完成删除后，提交到仓库即可。</p>
+<h1 id="reference"><a href="#reference" class="headerlink" title="reference"></a>reference</h1><p><a target="_blank" rel="noopener" href="https://git-scm.com/book/zh/v2/Git-%E5%B7%A5%E5%85%B7-%E5%AD%90%E6%A8%A1%E5%9D%97">https://git-scm.com/book/zh/v2/Git-工具-子模块</a></p>
+<p>[转] <a target="_blank" rel="noopener" href="https://blog.csdn.net/guotianqing/article/details/82391665">https://blog.csdn.net/guotianqing/article/details/82391665</a></p>
+
+    </div>
+
+    
+    
+    
+      
+  <div class="popular-posts-header">相关文章</div>
+  <ul class="popular-posts">
+    <li class="popular-posts-item">
+      <div class="popular-posts-title"><a href="/2021/11/22/Docker-use-32-bit-centos-image/" rel="bookmark">Docker use 32-bit centos image</a></div>
+    </li>
+  </ul>
+
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/git/" rel="tag"># git</a>
+              <a href="/tags/submodule/" rel="tag"># submodule</a>
+          </div>
+
         
-        <span class="collection-header">还行! 目前共计 34 篇日志。 继续努力。</span>
-      </div>
 
-      
-    <div class="collection-year">
-      <span class="collection-header">2021</span>
-    </div>
-
-  <article itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-      <div class="post-meta-container">
-        <time itemprop="dateCreated"
-              datetime="2021-11-24T10:48:57+08:00"
-              content="2021-11-24">
-          11-24
-        </time>
-      </div>
-
-      <div class="post-title">
-          <a class="post-title-link" href="/2021/11/24/git-use-submodule/" itemprop="url">
-            <span itemprop="name">git use submodule</span>
-          </a>
-      </div>
-
-      
-    </header>
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2021/11/23/MySQL-%E4%BF%AE%E6%94%B9%E5%AD%98%E5%82%A8%E8%B7%AF%E5%BE%84/" rel="prev" title="MariaDB 修改存储路径">
+                  <i class="fa fa-chevron-left"></i> MariaDB 修改存储路径
+                </a>
+            </div>
+            <div class="post-nav-item">
+            </div>
+          </div>
+    </footer>
   </article>
-
-  <article itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-      <div class="post-meta-container">
-        <time itemprop="dateCreated"
-              datetime="2021-11-23T14:21:45+08:00"
-              content="2021-11-23">
-          11-23
-        </time>
-      </div>
-
-      <div class="post-title">
-          <a class="post-title-link" href="/2021/11/23/MySQL-%E4%BF%AE%E6%94%B9%E5%AD%98%E5%82%A8%E8%B7%AF%E5%BE%84/" itemprop="url">
-            <span itemprop="name">MariaDB 修改存储路径</span>
-          </a>
-      </div>
-
-      
-    </header>
-  </article>
-
-  <article itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-      <div class="post-meta-container">
-        <time itemprop="dateCreated"
-              datetime="2021-11-22T22:28:08+08:00"
-              content="2021-11-22">
-          11-22
-        </time>
-      </div>
-
-      <div class="post-title">
-          <a class="post-title-link" href="/2021/11/22/Docker-use-32-bit-centos-image/" itemprop="url">
-            <span itemprop="name">Docker use 32-bit centos image</span>
-          </a>
-      </div>
-
-      
-    </header>
-  </article>
+</div>
 
 
-    </div>
-  </div>
-  
-  
-  
 
+
+
+
+    <div class="comments gitalk-container"></div>
 </div>
   </main>
 
@@ -401,11 +460,11 @@
 
 
   <script src="https://cdn.jsdelivr.net/npm/quicklink@2.2.0/dist/quicklink.umd.js" integrity="sha256-4kQf9z5ntdQrzsBC3YSHnEz02Z9C1UeW/E9OgnvlzSY=" crossorigin="anonymous"></script>
-  <script class="next-config" data-name="quicklink" type="application/json">{"enable":true,"home":true,"archive":true,"delay":true,"timeout":3000,"priority":true,"ignores":null,"url":"https://ubin.top/archives/2021/11/"}</script>
+  <script class="next-config" data-name="quicklink" type="application/json">{"enable":true,"home":true,"archive":true,"delay":true,"timeout":3000,"priority":true,"ignores":null,"url":"https://ubin.top/2021/11/24/git-use-submodule/"}</script>
   <script src="/js/third-party/quicklink.js"></script>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/gitalk@1.7.2/dist/gitalk.css" integrity="sha256-AJnUHL7dBv6PGaeyPQJcgQPDjt/Hn/PvYZde1iqfp8U=" crossorigin="anonymous">
 
-<script class="next-config" data-name="gitalk" type="application/json">{"enable":true,"github_id":"bineyond","repo":"bineyond.github.io","client_id":"f7f877653d119a713c65","client_secret":"9c7421df94ce13acbf3e825f092635181616981f","admin_user":"bineyond","distraction_free_mode":false,"proxy":"https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token","language":"zh-CN","js":{"url":"https://cdn.jsdelivr.net/npm/gitalk@1.7.2/dist/gitalk.min.js","integrity":"sha256-Pmj85ojLaPOWwRtlMJwmezB/Qg8BzvJp5eTzvXaYAfA="},"path_md5":"ada17310706cc9d2f3c6300840ac817c"}</script>
+<script class="next-config" data-name="gitalk" type="application/json">{"enable":true,"github_id":"bineyond","repo":"bineyond.github.io","client_id":"f7f877653d119a713c65","client_secret":"9c7421df94ce13acbf3e825f092635181616981f","admin_user":"bineyond","distraction_free_mode":false,"proxy":"https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token","language":"zh-CN","js":{"url":"https://cdn.jsdelivr.net/npm/gitalk@1.7.2/dist/gitalk.min.js","integrity":"sha256-Pmj85ojLaPOWwRtlMJwmezB/Qg8BzvJp5eTzvXaYAfA="},"path_md5":"9f8a629221dfe6816cca457f15e702f5"}</script>
 <script src="/js/third-party/comments/gitalk.js"></script>
 
 </body>
