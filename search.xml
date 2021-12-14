@@ -1732,6 +1732,7 @@
 <h1 id="reference"><a href="#reference" class="headerlink" title="reference"></a>reference</h1><p><a href="https://www.coder.work/article/195027">sockets - Go net/http unix 域套接字连接</a></p>
 <p><a href="https://stackoverflow.com/questions/26223839/go-net-http-unix-domain-socket-connection">Go net/http unix domain socket connection</a></p>
 <p><a href="https://www.jianshu.com/p/1ea0020b233d">Go：Unix 域套接字</a></p>
+<p><a href="https://blog.csdn.net/qq_33399567/article/details/107691339">golang 中基于 http 和 unix socket 的通信代码实现（服务端基于 gin 框架）</a></p>
 ]]></content>
       <tags>
         <tag>http</tag>
