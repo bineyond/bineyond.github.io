@@ -1709,4 +1709,31 @@
         <tag>submodule</tag>
       </tags>
   </entry>
+  <entry>
+    <title>Go net/http unix 域套接字连接</title>
+    <url>/2021/12/14/go-http-unix-sockets/</url>
+    <content><![CDATA[<p>go package “net/http” 无法直接使用 unix 域套接字侦听的服务，会提示，不支持的协议。</p>
+<h1 id="方案"><a href="#方案" class="headerlink" title="方案"></a>方案</h1><ul>
+<li><p>实现自己的 <a href="https://pkg.go.dev/net/http#RoundTripper">RoundTripper</a> 支持 unix socket 。</p>
+</li>
+<li><p>伪造拨号功能并将其传递给传输:</p>
+</li>
+</ul>
+<figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">fakeDial</span><span class="params">(proto, addr <span class="keyword">string</span>)</span> <span class="params">(conn net.Conn, err error)</span></span> &#123;</span><br><span class="line">    <span class="keyword">return</span> net.Dial(<span class="string">&quot;unix&quot;</span>, sock) <span class="comment">// 为 sock path</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">tr := &amp;http.Transport&#123;</span><br><span class="line">    Dial: fakeDial,</span><br><span class="line">&#125;</span><br><span class="line">client := &amp;http.Client&#123;Transport: tr&#125;</span><br><span class="line">resp, err := client.Get(<span class="string">&quot;http://unix/test&quot;</span>)</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">	<span class="string">&quot;fmt&quot;</span></span><br><span class="line">	<span class="string">&quot;io&quot;</span></span><br><span class="line">	<span class="string">&quot;net&quot;</span></span><br><span class="line">	<span class="string">&quot;net/http&quot;</span></span><br><span class="line">	<span class="string">&quot;os&quot;</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">dieIf</span><span class="params">(err error)</span></span> &#123;</span><br><span class="line">	<span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">		fmt.Fprintf(os.Stderr, <span class="string">&quot;error: %v\n&quot;</span>, err)</span><br><span class="line">		os.Exit(<span class="number">1</span>)</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> sock = <span class="string">&quot;/tmp/dummy.sock&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">server</span><span class="params">()</span></span> &#123;</span><br><span class="line">	l, err := net.Listen(<span class="string">&quot;unix&quot;</span>, sock)</span><br><span class="line">	dieIf(err)</span><br><span class="line">	srv := &amp;http.Server&#123;</span><br><span class="line">		Handler: http.HandlerFunc(<span class="function"><span class="keyword">func</span><span class="params">(w http.ResponseWriter, r *http.Request)</span></span> &#123;</span><br><span class="line">			fmt.Fprintf(w, <span class="string">&quot;hello: %v\n&quot;</span>, r.RequestURI)</span><br><span class="line">		&#125;),</span><br><span class="line">	&#125;</span><br><span class="line">	srv.Serve(l)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">fakeDial</span><span class="params">(proto, addr <span class="keyword">string</span>)</span> <span class="params">(conn net.Conn, err error)</span></span> &#123;</span><br><span class="line">	<span class="keyword">return</span> net.Dial(<span class="string">&quot;unix&quot;</span>, sock)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	<span class="keyword">defer</span> os.Remove(sock)</span><br><span class="line">	<span class="keyword">go</span> server()</span><br><span class="line">	time.Sleep(time.Second)</span><br><span class="line">	tr := &amp;http.Transport&#123;</span><br><span class="line">		Dial: fakeDial,</span><br><span class="line">	&#125;</span><br><span class="line">	client := &amp;http.Client&#123;Transport: tr&#125;</span><br><span class="line">	resp, err := client.Get(<span class="string">&quot;http://unix/test&quot;</span>)</span><br><span class="line">	dieIf(err)</span><br><span class="line">	io.Copy(os.Stdout, resp.Body)</span><br><span class="line">	resp.Body.Close()</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p><a href="https://go.dev/play/p/SYlVQGGN5Ng">playground</a></p>
+<blockquote>
+<p><strong>警告</strong>，你所有的 client.Get/.Post 调用必须是有效的 url( <a href="http://xxxx.xxx/path">http://xxxx.xxx/path</a> 不是 unix://… )，域名无关紧要，因为它不会用于连接。</p>
+</blockquote>
+<h1 id="reference"><a href="#reference" class="headerlink" title="reference"></a>reference</h1><p><a href="https://www.coder.work/article/195027">sockets - Go net/http unix 域套接字连接</a></p>
+<p><a href="https://stackoverflow.com/questions/26223839/go-net-http-unix-domain-socket-connection">Go net/http unix domain socket connection</a></p>
+<p><a href="https://www.jianshu.com/p/1ea0020b233d">Go：Unix 域套接字</a></p>
+]]></content>
+      <tags>
+        <tag>http</tag>
+        <tag>UDS</tag>
+      </tags>
+  </entry>
 </search>
