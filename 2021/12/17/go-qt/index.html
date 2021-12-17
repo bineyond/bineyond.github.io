@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/cat1-01.svg">
+  <link rel="icon" type="image/png" sizes="32x32" href="/cat1-01.svg">
+  <link rel="icon" type="image/png" sizes="16x16" href="/cat1-01.svg">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.4/css/all.min.css" integrity="sha256-mUZM63G8m73Mcidfrv5E+Y61y7a12O5mW4ezU3bxqW4=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css" integrity="sha256-Vzbj7sDDS/woiFS3uNKo8eIuni59rjyNGtXfstRzStA=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"ubin.top","root":"/","images":"/images","scheme":"Gemini","darkmode":false,"version":"8.8.1","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":true,"bookmark":{"enable":true,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":true,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":true,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+<meta name="description" content="Install环境 macOS Monterey 12.1 go1.17.5 therecipe&#x2F;qt therecipe&#x2F;env_darwin_amd64_513 (Qt5.13) Xcode v13.2 &#x2F; xcode-select –install">
+<meta property="og:type" content="article">
+<meta property="og:title" content="go-qt">
+<meta property="og:url" content="https://ubin.top/2021/12/17/go-qt/index.html">
+<meta property="og:site_name" content="薛定谔の猫">
+<meta property="og:description" content="Install环境 macOS Monterey 12.1 go1.17.5 therecipe&#x2F;qt therecipe&#x2F;env_darwin_amd64_513 (Qt5.13) Xcode v13.2 &#x2F; xcode-select –install">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2021-12-17T14:52:13.000Z">
+<meta property="article:modified_time" content="2021-12-17T14:52:13.346Z">
+<meta property="article:author" content="薛定谔の猫">
+<meta property="article:tag" content="Qt">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://ubin.top/2021/12/17/go-qt/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://ubin.top/2021/12/17/go-qt/","path":"2021/12/17/go-qt/","title":"go-qt"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>go-qt | 薛定谔の猫</title>
+  
+  <script class="next-config" data-name="google_analytics" type="application/json">{"tracking_id":"UA-151051157-1","only_pageview":true}</script>
+  <script src="/js/third-party/analytics/google-analytics.js"></script>
+
+  <script src="/js/third-party/analytics/baidu-analytics.js"></script>
+  <script async src="https://hm.baidu.com/hm.js?306b44649c053ac56d4911f4894bcf16"></script>
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <h1 class="site-title">薛定谔の猫</h1>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">把酒诗代码，趁乱写年华</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu">
+        <li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li>
+        <li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li>
+        <li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li>
+        <li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+        <li class="menu-item menu-item-commonweal"><a href="/404/" rel="section"><i class="fa fa-heartbeat fa-fw"></i>公益 404</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Install"><span class="nav-number">1.</span> <span class="nav-text">Install</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%8E%AF%E5%A2%83"><span class="nav-number">1.1.</span> <span class="nav-text">环境</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#therecipe-qt-%E5%AE%89%E8%A3%85"><span class="nav-number">1.2.</span> <span class="nav-text">therecipe&#x2F;qt 安装</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#In-GOPATH-global-installation-mode-%EF%BC%88%E6%8E%A8%E8%8D%90%E4%BD%BF%E7%94%A8%E8%BF%99%E4%B8%AA%EF%BC%89"><span class="nav-number">1.2.1.</span> <span class="nav-text">In GOPATH (global installation) mode （推荐使用这个）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#In-Module-per-project-mode-to-work-around-the-GFW-you-can-use-a-proxy-like-this-GOPROXY-https-goproxy-io"><span class="nav-number">1.2.2.</span> <span class="nav-text">In Module (per project) mode (to work around the GFW you can use a proxy like this: GOPROXY&#x3D;https:&#x2F;&#x2F;goproxy.io)</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#deploy-%E6%89%93%E5%8C%85"><span class="nav-number">2.</span> <span class="nav-text">deploy 打包</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BA%A4%E5%8F%89%E7%BC%96%E8%AF%91"><span class="nav-number">3.</span> <span class="nav-text">交叉编译</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#reference"><span class="nav-number">4.</span> <span class="nav-text">reference</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="薛定谔の猫"
+      src="https://i.loli.net/2020/12/28/GsCnKm21pTdBUZo.jpg">
+  <p class="site-author-name" itemprop="name">薛定谔の猫</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">36</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">3</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">43</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author site-overview-item animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/bineyond%20|%20fab%20fa-github" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;bineyond | fab fa-github" rel="noopener" target="_blank">GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://www.jetbrains.com/?from=bineyond.github.io" title="GoLand → https:&#x2F;&#x2F;www.jetbrains.com&#x2F;?from&#x3D;bineyond.github.io" rel="noopener" target="_blank"><i class="thumbs-o-up fa-fw"></i>GoLand</a>
+      </span>
+  </div>
+
+
+  <div class="links-of-blogroll site-overview-item animated">
+    <div class="links-of-blogroll-title"><i class="fa fa-globe fa-fw"></i>
+      Links
+    </div>
+    <ul class="links-of-blogroll-list">
+        <li class="links-of-blogroll-item">
+          <a href="https://talkgo.org/night/" title="https:&#x2F;&#x2F;talkgo.org&#x2F;night&#x2F;" rel="noopener" target="_blank">Go 夜读</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://colobu.com/" title="https:&#x2F;&#x2F;colobu.com&#x2F;" rel="noopener" target="_blank">鸟窝</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://draveness.me/" title="https:&#x2F;&#x2F;draveness.me&#x2F;" rel="noopener" target="_blank">面向信仰编程</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://weread.qnmlgb.tech/" title="https:&#x2F;&#x2F;weread.qnmlgb.tech&#x2F;" rel="noopener" target="_blank">微信读书组队</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://mojotv.cn/" title="https:&#x2F;&#x2F;mojotv.cn&#x2F;" rel="noopener" target="_blank">致力于分享Go语言编程</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://eddycjy.com/posts/" title="https:&#x2F;&#x2F;eddycjy.com&#x2F;posts&#x2F;" rel="noopener" target="_blank">煎鱼</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://golang.design/under-the-hood/" title="https:&#x2F;&#x2F;golang.design&#x2F;under-the-hood&#x2F;" rel="noopener" target="_blank">《Go 语言原本》</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://xargin.com/" title="https:&#x2F;&#x2F;xargin.com&#x2F;" rel="noopener" target="_blank">No Headback</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://blog.changkun.de/posts/" title="https:&#x2F;&#x2F;blog.changkun.de&#x2F;posts&#x2F;" rel="noopener" target="_blank">欧长坤</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://qcrao.com/" title="https:&#x2F;&#x2F;qcrao.com&#x2F;" rel="noopener" target="_blank">码农桃花源</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://github.com/xx-zh/xx-zh-roadmap" title="https:&#x2F;&#x2F;github.com&#x2F;xx-zh&#x2F;xx-zh-roadmap" rel="noopener" target="_blank">中文在线翻译Books</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://www.golangroadmap.com/" title="https:&#x2F;&#x2F;www.golangroadmap.com&#x2F;" rel="noopener" target="_blank">Go开发者成长线路图</a>
+        </li>
+    </ul>
+  </div>
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+  <a role="button" class="book-mark-link book-mark-link-fixed"></a>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://ubin.top/2021/12/17/go-qt/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://i.loli.net/2020/12/28/GsCnKm21pTdBUZo.jpg">
+      <meta itemprop="name" content="薛定谔の猫">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="薛定谔の猫">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          go-qt
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2021-12-17 22:52:13" itemprop="dateCreated datePublished" datetime="2021-12-17T22:52:13+08:00">2021-12-17</time>
+    </span>
+
+  
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>6.6k</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>6 分钟</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <h1 id="Install"><a href="#Install" class="headerlink" title="Install"></a>Install</h1><h2 id="环境"><a href="#环境" class="headerlink" title="环境"></a>环境</h2><ul>
+<li>macOS Monterey 12.1</li>
+<li>go1.17.5</li>
+<li>therecipe/qt</li>
+<li>therecipe/env_darwin_amd64_513 (Qt5.13)</li>
+<li>Xcode v13.2 / xcode-select –install</li>
+</ul>
+<span id="more"></span>
+
+<h2 id="therecipe-qt-安装"><a href="#therecipe-qt-安装" class="headerlink" title="therecipe/qt 安装"></a>therecipe/qt 安装</h2><h3 id="In-GOPATH-global-installation-mode-（推荐使用这个）"><a href="#In-GOPATH-global-installation-mode-（推荐使用这个）" class="headerlink" title="In GOPATH (global installation) mode （推荐使用这个）"></a>In GOPATH (global installation) mode （推荐使用这个）</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">export</span> GO111MODULE=off; xcode-select --install; go get -v github.com/therecipe/qt/cmd/... &amp;&amp; $(go env GOPATH)/bin/qtsetup <span class="built_in">test</span> &amp;&amp; $(go env GOPATH)/bin/qtsetup -<span class="built_in">test</span>=<span class="literal">false</span></span><br><span class="line"></span><br><span class="line">xcode-select: error: <span class="built_in">command</span> line tools are already installed, use <span class="string">&quot;Software Update&quot;</span> to install updates</span><br><span class="line">github.com/therecipe/env_darwin_amd64_513 (download)</span><br><span class="line"></span><br><span class="line">INFO[0000] running: <span class="string">&#x27;qtsetup test darwin&#x27;</span> [docker=<span class="literal">false</span>] [vagrant=<span class="literal">false</span>]</span><br><span class="line">INFO[0000] testing showcases/wallet</span><br><span class="line">INFO[0073] testing qml/gallery</span><br><span class="line">INFO[0094] testing quick/calc</span><br><span class="line">INFO[0113] testing widgets/textedit</span><br><span class="line">INFO[0000] running: <span class="string">&#x27;qtsetup prep&#x27;</span></span><br><span class="line">INFO[0000] successfully created qtrcc symlink <span class="keyword">in</span> your PATH (/usr/<span class="built_in">local</span>/bin/qtrcc)</span><br><span class="line">INFO[0000] successfully created qtmoc symlink <span class="keyword">in</span> your PATH (/usr/<span class="built_in">local</span>/bin/qtmoc)</span><br><span class="line">INFO[0000] successfully created qtminimal symlink <span class="keyword">in</span> your PATH (/usr/<span class="built_in">local</span>/bin/qtminimal)</span><br><span class="line">INFO[0000] successfully created qtdeploy symlink <span class="keyword">in</span> your PATH (/usr/<span class="built_in">local</span>/bin/qtdeploy)</span><br><span class="line">INFO[0000] running: <span class="string">&#x27;qtsetup check darwin&#x27;</span> [docker=<span class="literal">false</span>] [vagrant=<span class="literal">false</span>]</span><br><span class="line">INFO[0000] GOOS:                        <span class="string">&#x27;darwin&#x27;</span></span><br><span class="line">INFO[0000] GOARCH:                      <span class="string">&#x27;amd64&#x27;</span></span><br><span class="line">INFO[0000] GOVERSION:                   <span class="string">&#x27;go1.17.5&#x27;</span></span><br><span class="line">INFO[0000] GOROOT:                      <span class="string">&#x27;/Users/foo/.gobrew/versions/1.17.5/go&#x27;</span></span><br><span class="line">INFO[0000] GOPATH:                      <span class="string">&#x27;/Users/foo/go&#x27;</span></span><br><span class="line">INFO[0000] GOBIN:                       <span class="string">&#x27;/Users/foo/go/bin&#x27;</span></span><br><span class="line">INFO[0000] GOMOD:                       <span class="string">&#x27;&#x27;</span></span><br><span class="line">INFO[0000] QT_HASH:                     <span class="string">&#x27;c0c124a5770d357908f16fa57e0aa0ec6ccd3f91&#x27;</span></span><br><span class="line">INFO[0000] QT_API:                      <span class="string">&#x27;&#x27;</span></span><br><span class="line">INFO[0000] QT_VERSION:                  <span class="string">&#x27;5.13.0&#x27;</span></span><br><span class="line">INFO[0000] QT_DIR:                   *  <span class="string">&#x27;/Users/foo/go/src/github.com/therecipe/env_darwin_amd64_513&#x27;</span></span><br><span class="line">INFO[0000] QT_STUB:                     <span class="string">&#x27;false&#x27;</span></span><br><span class="line">INFO[0000] QT_DEBUG:                    <span class="string">&#x27;false&#x27;</span></span><br><span class="line">INFO[0000] QT_QMAKE_DIR:                <span class="string">&#x27;&#x27;</span></span><br><span class="line">INFO[0000] QT_WEBKIT:                   <span class="string">&#x27;false&#x27;</span></span><br><span class="line">INFO[0000] QT_STATIC:                   <span class="string">&#x27;false&#x27;</span></span><br><span class="line">INFO[0000] QT_GEN_GO:                   <span class="string">&#x27;false&#x27;</span></span><br><span class="line">INFO[0000] QT_GEN_OPENGL:               <span class="string">&#x27;false&#x27;</span></span><br><span class="line">INFO[0000] QT_GEN_QUICK_EXTRAS:         <span class="string">&#x27;false&#x27;</span></span><br><span class="line">INFO[0000] QT_RESOURCES_BIG:            <span class="string">&#x27;false&#x27;</span></span><br><span class="line">INFO[0000] QT_NOT_CACHED:               <span class="string">&#x27;false&#x27;</span></span><br><span class="line">INFO[0000] QT_HOMEBREW:                 <span class="string">&#x27;false&#x27;</span></span><br><span class="line">INFO[0000] QT_MACPORTS:                 <span class="string">&#x27;false&#x27;</span></span><br><span class="line">INFO[0000] QT_NIX:                      <span class="string">&#x27;false&#x27;</span></span><br><span class="line">INFO[0000] QT_FELGO:                    <span class="string">&#x27;false&#x27;</span></span><br><span class="line">INFO[0000] XCODE_DIR:                   <span class="string">&#x27;/Applications/Xcode.app&#x27;</span></span><br><span class="line">INFO[0000] QT_PKG_CONFIG:               <span class="string">&#x27;false&#x27;</span></span><br><span class="line">INFO[0000] running: <span class="string">&#x27;qtsetup generate darwin&#x27;</span> [docker=<span class="literal">false</span>] [vagrant=<span class="literal">false</span>]</span><br><span class="line">INFO[0003] generating full qt/core</span><br><span class="line">INFO[0017] generating full qt/androidextras</span><br><span class="line">INFO[0018] generating full qt/gui</span><br><span class="line">INFO[0034] generating full qt/network</span><br><span class="line">INFO[0039] generating full qt/xml</span><br><span class="line">INFO[0041] generating full qt/dbus</span><br><span class="line">INFO[0043] generating full qt/nfc</span><br><span class="line">INFO[0045] generating full qt/script</span><br><span class="line">INFO[0046] generating full qt/sensors</span><br><span class="line">INFO[0051] generating full qt/positioning</span><br><span class="line">INFO[0053] generating full qt/widgets</span><br><span class="line">INFO[0090] generating full qt/sql</span><br><span class="line">INFO[0093] generating full qt/macextras</span><br><span class="line">INFO[0094] generating full qt/qml</span><br><span class="line">INFO[0097] generating full qt/websockets</span><br><span class="line">INFO[0098] generating full qt/xmlpatterns</span><br><span class="line">INFO[0099] generating full qt/bluetooth</span><br><span class="line">INFO[0102] generating full qt/webchannel</span><br><span class="line">INFO[0103] generating full qt/svg</span><br><span class="line">INFO[0105] generating full qt/multimedia</span><br><span class="line">INFO[0119] generating full qt/quick</span><br><span class="line">INFO[0124] generating full qt/<span class="built_in">help</span></span><br><span class="line">INFO[0128] generating full qt/location</span><br><span class="line">INFO[0130] generating full qt/scripttools</span><br><span class="line">INFO[0131] generating full qt/uitools</span><br><span class="line">INFO[0132] generating full qt/webengine</span><br><span class="line">INFO[0135] generating full qt/testlib</span><br><span class="line">INFO[0136] generating full qt/serialport</span><br><span class="line">INFO[0137] generating full qt/serialbus</span><br><span class="line">INFO[0139] generating full qt/printsupport</span><br><span class="line">INFO[0142] generating full qt/designer</span><br><span class="line">INFO[0146] generating full qt/scxml</span><br><span class="line">INFO[0148] generating full qt/gamepad</span><br><span class="line">INFO[0150] generating full qt/purchasing</span><br><span class="line">INFO[0151] generating full qt/datavisualization    [GPLv3]</span><br><span class="line">INFO[0157] generating full qt/charts               [GPLv3]</span><br><span class="line">INFO[0167] generating full qt/virtualkeyboard      [GPLv3]</span><br><span class="line">INFO[0169] generating full qt/speech</span><br><span class="line">INFO[0170] generating full qt/quickcontrols2</span><br><span class="line">INFO[0171] generating full qt/sailfish</span><br><span class="line">INFO[0171] generating full qt/webview</span><br><span class="line">INFO[0171] generating full qt/remoteobjects</span><br><span class="line">INFO[0175] running: <span class="string">&#x27;qtsetup install darwin&#x27;</span> [docker=<span class="literal">false</span>] [vagrant=<span class="literal">false</span>]</span><br><span class="line">INFO[0175] installing full qt/core</span><br><span class="line">INFO[0176] installing full qt/androidextras</span><br><span class="line">INFO[0176] installing full qt/gui</span><br><span class="line">INFO[0176] installing full qt/network</span><br><span class="line">INFO[0177] installing full qt/xml</span><br><span class="line">INFO[0177] installing full qt/dbus</span><br><span class="line">INFO[0177] installing full qt/nfc</span><br><span class="line">INFO[0178] installing full qt/script</span><br><span class="line">INFO[0178] installing full qt/sensors</span><br><span class="line">INFO[0178] installing full qt/positioning</span><br><span class="line">INFO[0178] installing full qt/widgets</span><br><span class="line">INFO[0179] installing full qt/sql</span><br><span class="line">INFO[0180] installing full qt/macextras</span><br><span class="line">INFO[0180] installing full qt/qml</span><br><span class="line">INFO[0180] installing full qt/websockets</span><br><span class="line">INFO[0181] installing full qt/xmlpatterns</span><br><span class="line">INFO[0181] installing full qt/bluetooth</span><br><span class="line">INFO[0181] installing full qt/webchannel</span><br><span class="line">INFO[0182] installing full qt/svg</span><br><span class="line">INFO[0182] installing full qt/multimedia</span><br><span class="line">INFO[0183] installing full qt/quick</span><br><span class="line">INFO[0184] installing full qt/<span class="built_in">help</span></span><br><span class="line">INFO[0185] installing full qt/location</span><br><span class="line">INFO[0185] installing full qt/scripttools</span><br><span class="line">INFO[0186] installing full qt/uitools</span><br><span class="line">INFO[0186] installing full qt/webengine</span><br><span class="line">INFO[0187] installing full qt/testlib</span><br><span class="line">INFO[0188] installing full qt/serialport</span><br><span class="line">INFO[0188] installing full qt/serialbus</span><br><span class="line">INFO[0188] installing full qt/printsupport</span><br><span class="line">INFO[0189] installing full qt/designer</span><br><span class="line">INFO[0189] installing full qt/scxml</span><br><span class="line">INFO[0190] installing full qt/gamepad</span><br><span class="line">INFO[0190] installing full qt/purchasing</span><br><span class="line">INFO[0190] installing full qt/datavisualization    [GPLv3]</span><br><span class="line">INFO[0191] installing full qt/charts               [GPLv3]</span><br><span class="line">INFO[0191] installing full qt/virtualkeyboard      [GPLv3]</span><br><span class="line">INFO[0192] installing full qt/speech</span><br><span class="line">INFO[0192] installing full qt/quickcontrols2</span><br><span class="line">INFO[0192] installing full qt/sailfish</span><br><span class="line">INFO[0193] installing full qt/webview</span><br><span class="line">INFO[0193] installing full qt/remoteobjects</span><br><span class="line">INFO[0193] installing full qt/internal/binding/runtime</span><br></pre></td></tr></table></figure>
+
+<h3 id="In-Module-per-project-mode-to-work-around-the-GFW-you-can-use-a-proxy-like-this-GOPROXY-https-goproxy-io"><a href="#In-Module-per-project-mode-to-work-around-the-GFW-you-can-use-a-proxy-like-this-GOPROXY-https-goproxy-io" class="headerlink" title="In Module (per project) mode (to work around the GFW you can use a proxy like this: GOPROXY=https://goproxy.io)"></a>In Module (per project) mode (to work around the GFW you can use a proxy like this: GOPROXY=<a target="_blank" rel="noopener" href="https://goproxy.io/">https://goproxy.io</a>)</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">export</span> GO111MODULE=on; xcode-select --install; go get -v github.com/therecipe/qt &amp;&amp; go install -v -tags=no_env github.com/therecipe/qt/cmd/... &amp;&amp; go mod vendor &amp;&amp; git <span class="built_in">clone</span> https://github.com/therecipe/env_darwin_amd64_513.git vendor/github.com/therecipe/env_darwin_amd64_513 &amp;&amp; $(go env GOPATH)/bin/qtsetup</span><br></pre></td></tr></table></figure>
+
+<h1 id="deploy-打包"><a href="#deploy-打包" class="headerlink" title="deploy 打包"></a>deploy 打包</h1><ul>
+<li>therecipe/qt 打包方式是使用 vendor 目录打包，而不是使用最新的 go mod。我们要把所有的依赖放到 vendor 目录下</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">go mod vendor</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>克隆环境依赖</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git <span class="built_in">clone</span> https://github.com/therecipe/env_$(go env GOOS)_amd64_513.git vendor/github.com/therecipe/env_$(go env GOOS)_amd64_513</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>编译</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">qtdeploy build dektop</span><br><span class="line">or</span><br><span class="line">qtdeploy <span class="built_in">test</span> desktop</span><br></pre></td></tr></table></figure>
+
+<h1 id="交叉编译"><a href="#交叉编译" class="headerlink" title="交叉编译"></a>交叉编译</h1><p>使用 Docker 容器交叉编译。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 编译 windows_64_shared 版本</span></span><br><span class="line">qtdeploy -docker build windows</span><br><span class="line"><span class="comment"># 编译 windows_64_static 版本</span></span><br><span class="line">qtdeploy -docker build windows_64_static</span><br></pre></td></tr></table></figure>
+
+<h1 id="reference"><a href="#reference" class="headerlink" title="reference"></a>reference</h1><p><a target="_blank" rel="noopener" href="https://studygolang.com/articles/31052">macOS 下搭建 golang 的 QT 开发环境</a></p>
+<p><a target="_blank" rel="noopener" href="https://simonding.com/post/2019/09/go-qt/">Go 语言 QT 开发踩坑</a></p>
+<p><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/191574722">Qt 开发之 Go 篇（一）</a></p>
+<p>系列文章 <a target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_43968923/category_9825462.html">Golang-Qt5</a></p>
+<p><del><a target="_blank" rel="noopener" href="https://www.takenoteonceonly.com/go-qt5-gui/#Q3">Go (Golang) | Qt5 GUI 開發</a></del></p>
+
+    </div>
+
+    
+    
+    
+      
+
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Qt/" rel="tag"># Qt</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2021/12/14/go-http-unix-sockets/" rel="prev" title="Go net/http unix 域套接字连接">
+                  <i class="fa fa-chevron-left"></i> Go net/http unix 域套接字连接
+                </a>
+            </div>
+            <div class="post-nav-item">
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    <div class="comments gitalk-container"></div>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="beian"><a href="https://beian.miit.gov.cn/" rel="noopener" target="_blank">浙ICP备19017268号-1 </a>
+  </div>
+
+<div class="copyright">
+  &copy; 2015 – 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">薛定谔の猫</span>
+</div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+    <span title="站点总字数">112k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="站点阅读时长">1:42</span>
+  </span>
+</div>
+
+    </div>
+  </footer>
+
+  
+  <script src="https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js" integrity="sha256-yt2kYMy0w8AbtF89WXb2P1rfjcP/HTHLT7097U8Y5b8=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/lozad@1.16.0/dist/lozad.min.js" integrity="sha256-mOFREFhqmHeQbXpK2lp4nA3qooVgACfh88fpJftLBbc=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script><script src="/js/bookmark.js"></script>
+
+  
+<script src="https://cdn.jsdelivr.net/npm/hexo-generator-searchdb@1.4.0/dist/search.js" integrity="sha256-vXZMYLEqsROAXkEw93GGIvaB2ab+QW6w3+1ahD9nXXA=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+
+  <script src="/js/third-party/fancybox.js"></script>
+
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"none","js":{"url":"https://cdn.jsdelivr.net/npm/mathjax@3.2.0/es5/tex-mml-chtml.js","integrity":"sha256-r+3itOMtGGjap0x+10hu6jW/gZCzxHsoKrOd7gyRSGY="}}</script>
+<script src="/js/third-party/math/mathjax.js"></script>
+
+
+  <script src="https://cdn.jsdelivr.net/npm/quicklink@2.2.0/dist/quicklink.umd.js" integrity="sha256-4kQf9z5ntdQrzsBC3YSHnEz02Z9C1UeW/E9OgnvlzSY=" crossorigin="anonymous"></script>
+  <script class="next-config" data-name="quicklink" type="application/json">{"enable":true,"home":true,"archive":true,"delay":true,"timeout":3000,"priority":true,"ignores":null,"url":"https://ubin.top/2021/12/17/go-qt/"}</script>
+  <script src="/js/third-party/quicklink.js"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/gitalk@1.7.2/dist/gitalk.css" integrity="sha256-AJnUHL7dBv6PGaeyPQJcgQPDjt/Hn/PvYZde1iqfp8U=" crossorigin="anonymous">
+
+<script class="next-config" data-name="gitalk" type="application/json">{"enable":true,"github_id":"bineyond","repo":"bineyond.github.io","client_id":"f7f877653d119a713c65","client_secret":"9c7421df94ce13acbf3e825f092635181616981f","admin_user":"bineyond","distraction_free_mode":false,"proxy":"https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token","language":"zh-CN","js":{"url":"https://cdn.jsdelivr.net/npm/gitalk@1.7.2/dist/gitalk.min.js","integrity":"sha256-Pmj85ojLaPOWwRtlMJwmezB/Qg8BzvJp5eTzvXaYAfA="},"path_md5":"cd92ed1400ae1afc52a8bf17f3939c36"}</script>
+<script src="/js/third-party/comments/gitalk.js"></script>
+
+</body>
+</html>
