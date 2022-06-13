@@ -31,8 +31,8 @@
 <meta property="article:published_time" content="2021-11-22T14:28:08.000Z">
 <meta property="article:modified_time" content="2021-11-23T09:11:52.396Z">
 <meta property="article:author" content="薛定谔の猫">
-<meta property="article:tag" content="git">
 <meta property="article:tag" content="docker">
+<meta property="article:tag" content="git">
 <meta property="article:tag" content="centos6">
 <meta property="article:tag" content="yum">
 <meta name="twitter:card" content="summary">
@@ -337,7 +337,7 @@
 
 <span id="more"></span>
 
-<h1 id="替换-centos6-yum-repo"><a href="#替换-centos6-yum-repo" class="headerlink" title="替换 centos6 yum repo"></a>替换 centos6 yum repo</h1><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">sed -i <span class="string">&quot;s|enabled=1|enabled=0|g&quot;</span> /etc/yum/pluginconf.d/fastestmirror.conf</span><br><span class="line">mv /etc/yum.repos.d/CentOS-Base.repo /etc/yum.repos.d/CentOS-Base.repo.backup</span><br><span class="line">curl -o /etc/yum.repos.d/CentOS-Base.repo https://www.xmpan.com/Centos-6-Vault-Aliyun.repo</span><br></pre></td></tr></table></figure>
+<h1 id="替换-centos6-yum-repo"><a href="#替换-centos6-yum-repo" class="headerlink" title="替换 centos6 yum repo"></a>替换 centos6 yum repo</h1><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">sed -i <span class="string">&quot;s|enabled=1|enabled=0|g&quot;</span> /etc/yum/pluginconf.d/fastestmirror.conf</span><br><span class="line"><span class="built_in">mv</span> /etc/yum.repos.d/CentOS-Base.repo /etc/yum.repos.d/CentOS-Base.repo.backup</span><br><span class="line">curl -o /etc/yum.repos.d/CentOS-Base.repo https://www.xmpan.com/Centos-6-Vault-Aliyun.repo</span><br></pre></td></tr></table></figure>
 
 <h1 id="使用-32bit-repo"><a href="#使用-32bit-repo" class="headerlink" title="使用 32bit repo"></a>使用 32bit repo</h1><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># arch --&gt; x86_64</span></span><br><span class="line">sed -i <span class="string">&#x27;s/\$arch/i686/g&#x27;</span> /etc/yum.repos.d/*</span><br><span class="line">sed -i <span class="string">&#x27;s/\$basearch/i386/g&#x27;</span> /etc/yum.repos.d/*</span><br><span class="line"></span><br><span class="line">yum clean all</span><br><span class="line">yum makecache</span><br></pre></td></tr></table></figure>
 
@@ -353,8 +353,8 @@
 
     <footer class="post-footer">
           <div class="post-tags">
-              <a href="/tags/git/" rel="tag"># git</a>
               <a href="/tags/docker/" rel="tag"># docker</a>
+              <a href="/tags/git/" rel="tag"># git</a>
               <a href="/tags/centos6/" rel="tag"># centos6</a>
               <a href="/tags/yum/" rel="tag"># yum</a>
           </div>
@@ -405,13 +405,13 @@
     <span class="post-meta-item-icon">
       <i class="fa fa-chart-line"></i>
     </span>
-    <span title="站点总字数">112k</span>
+    <span title="站点总字数">113k</span>
   </span>
   <span class="post-meta-item">
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="站点阅读时长">1:42</span>
+    <span title="站点阅读时长">1:43</span>
   </span>
 </div>
 

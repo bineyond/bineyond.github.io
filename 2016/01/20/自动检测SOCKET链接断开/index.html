@@ -348,13 +348,13 @@
 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">sk-&gt;keepalive_probes = <span class="number">3</span>;</span><br><span class="line">sk-&gt;keepalive_time   = <span class="number">30</span>;</span><br><span class="line">sk-&gt;keepalive_intvl  = <span class="number">1</span>;</span><br></pre></td></tr></table></figure>
 
 <p>意思就是说对于tcp连接，如果一直在socket上有数据来往就不会触发keepalive,但是如果<code>30秒</code>一直没有数据往来，则keep alive开始工作：发送探测包，受到响应则认为网络，是好的，结束探测；如果没有相应就每隔1秒发探测包，一共发送3次，3次后仍没有相应，就关闭连接，也就是从网络开始断到你的socket能够意识到网络异常，最多花<code>33秒</code>。但是如果没有设置keep alive，可能你在你的<code>socket（阻塞性）</code>的上面，接收: recv会一直阻塞不能返回，除非对端主动关闭连接，因为recv不知道socket断了。发送：取决于数据量的大小，只要底层协议站的buffer能放下你的发送数据，应用程序级别的send就会一直成功返回。 直到buffer满，甚至buffer满了还要阻塞一段时间试图等待buffer空闲。所以你对send的返回值的检查根本检测不到失败。开启了keep alive功能，你直接通过发送接收的函数返回值就可以知道网络是否异常。<br>设置的方法（应用层）：</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span> keepalive = <span class="number">1</span>; <span class="comment">// 开启keepalive属性</span></span><br><span class="line"><span class="keyword">int</span> keepidle = <span class="number">60</span>; <span class="comment">// 如该连接在60秒内没有任何数据往来,则进行探测</span></span><br><span class="line"><span class="keyword">int</span> keepinterval = <span class="number">5</span>; <span class="comment">// 探测时发包的时间间隔为5 秒</span></span><br><span class="line"><span class="keyword">int</span> keepcount = <span class="number">3</span>; <span class="comment">// 探测尝试的次数.如果第1次探测包就收到响应了,则后2次的不再发.</span></span><br><span class="line">setsockopt(rs, SOL_SOCKET, SO_KEEPALIVE, (<span class="keyword">void</span> *)&amp;keepalive , <span class="keyword">sizeof</span>(keepalive ));</span><br><span class="line">setsockopt(rs, SOL_TCP, TCP_KEEPIDLE, (<span class="keyword">void</span>*)&amp;keepidle , <span class="keyword">sizeof</span>(keepidle ));</span><br><span class="line">setsockopt(rs, SOL_TCP, TCP_KEEPINTVL, (<span class="keyword">void</span> *)&amp;keepinterval , <span class="keyword">sizeof</span>(keepinterval ));</span><br><span class="line">setsockopt(rs, SOL_TCP, TCP_KEEPCNT, (<span class="keyword">void</span> *)&amp;keepcount , <span class="keyword">sizeof</span>(keepcount ));</span><br></pre></td></tr></table></figure>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> keepalive = <span class="number">1</span>; <span class="comment">// 开启keepalive属性</span></span><br><span class="line"><span class="type">int</span> keepidle = <span class="number">60</span>; <span class="comment">// 如该连接在60秒内没有任何数据往来,则进行探测</span></span><br><span class="line"><span class="type">int</span> keepinterval = <span class="number">5</span>; <span class="comment">// 探测时发包的时间间隔为5 秒</span></span><br><span class="line"><span class="type">int</span> keepcount = <span class="number">3</span>; <span class="comment">// 探测尝试的次数.如果第1次探测包就收到响应了,则后2次的不再发.</span></span><br><span class="line">setsockopt(rs, SOL_SOCKET, SO_KEEPALIVE, (<span class="type">void</span> *)&amp;keepalive , <span class="keyword">sizeof</span>(keepalive ));</span><br><span class="line">setsockopt(rs, SOL_TCP, TCP_KEEPIDLE, (<span class="type">void</span>*)&amp;keepidle , <span class="keyword">sizeof</span>(keepidle ));</span><br><span class="line">setsockopt(rs, SOL_TCP, TCP_KEEPINTVL, (<span class="type">void</span> *)&amp;keepinterval , <span class="keyword">sizeof</span>(keepinterval ));</span><br><span class="line">setsockopt(rs, SOL_TCP, TCP_KEEPCNT, (<span class="type">void</span> *)&amp;keepcount , <span class="keyword">sizeof</span>(keepcount ));</span><br></pre></td></tr></table></figure>
 
 <ul>
-<li>2.select和keep alive的关系<br>select是为单个线程使用多个socket而设计的，跟检测连接无关，如果只是检测一个socket的话，没有必要使用select。开了keepalive机能的话，每次调用<code>recv或send</code>时检查<code>返回值</code>，判断是否出错或为0.如果出错，再检查<code>errno</code>查资料，看哪个或哪几个错误号表示链接断了或不存在就可以了。<br>另外，谁想定期检查连接状况,谁就启用keep alive。另一端可以不起，只是被动地对探测包进行响应，这种响应是tcp协议的基本要求，跟keep alive无关。并不需要客户端和服务器端都开启keep alive。</li>
-</ul>
-<ul>
-<li>3.测试结果<br>按照例★的值在一端的socket上开启keep alive，然后阻塞在一个recv或者不停的send，这个时候拔了网线，测试从拔掉网线到recv/send返回失败的时间。<br>在<code>linux kernel</code>里头的测试发现，对于<code>阻塞型</code>的socket，当recv的时候，如果没有设置keep alive，即使<code>网线拔掉或者ifdown</code>，recv很长时间不会返回，最长达<code>17分钟</code>，虽然这个时间比linux的默认超时时间（）短了很多。但是如果 设置了keep alive，基本都在<code>keepalive_time + keepalive_probes * keepalive_intvl</code> =33秒内返回错误。<blockquote>
+<li><p>2.select和keep alive的关系<br>select是为单个线程使用多个socket而设计的，跟检测连接无关，如果只是检测一个socket的话，没有必要使用select。开了keepalive机能的话，每次调用<code>recv或send</code>时检查<code>返回值</code>，判断是否出错或为0.如果出错，再检查<code>errno</code>查资料，看哪个或哪几个错误号表示链接断了或不存在就可以了。<br>另外，谁想定期检查连接状况,谁就启用keep alive。另一端可以不起，只是被动地对探测包进行响应，这种响应是tcp协议的基本要求，跟keep alive无关。并不需要客户端和服务器端都开启keep alive。</p>
+</li>
+<li><p>3.测试结果<br>按照例★的值在一端的socket上开启keep alive，然后阻塞在一个recv或者不停的send，这个时候拔了网线，测试从拔掉网线到recv&#x2F;send返回失败的时间。<br>在<code>linux kernel</code>里头的测试发现，对于<code>阻塞型</code>的socket，当recv的时候，如果没有设置keep alive，即使<code>网线拔掉或者ifdown</code>，recv很长时间不会返回，最长达<code>17分钟</code>，虽然这个时间比linux的默认超时时间（）短了很多。但是如果 设置了keep alive，基本都在<code>keepalive_time + keepalive_probes * keepalive_intvl</code> &#x3D;33秒内返回错误。</p>
+<blockquote>
 <p><font color=Red>但是对于循环不停send的socket，当拔掉网线后，会持续一段时间send返 回成功（0~10秒左右，取决 于发送数据的量），然后send<code>阻塞</code>，因为协议层的buffer满了，在等待buffer空闲，大概90秒左右后才会返回错误。由此看来，send的时 候，keep alive似乎没有起到作用，这个原因至今也不清楚。后来通过给send之前设置timer来解决的。</font></p>
 </blockquote>
 </li>
@@ -419,13 +419,13 @@
     <span class="post-meta-item-icon">
       <i class="fa fa-chart-line"></i>
     </span>
-    <span title="站点总字数">112k</span>
+    <span title="站点总字数">113k</span>
   </span>
   <span class="post-meta-item">
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="站点阅读时长">1:42</span>
+    <span title="站点阅读时长">1:43</span>
   </span>
 </div>
 

@@ -331,12 +331,12 @@
     
     <div class="post-body" itemprop="articleBody">
         <p>最近在生产服务上遇到 nginx 正向代理连接失败的问题。</p>
-<figure class="highlight vim"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">2019</span>/<span class="number">10</span>/<span class="number">22</span> <span class="number">15</span>:<span class="number">25</span>:<span class="number">21</span> [error] <span class="number">1930</span>#<span class="number">0</span>: *<span class="number">1482670</span> connect() <span class="keyword">to</span> [AAAA:BBBB:C:DDD:E:F:GGG:HHH]:<span class="number">443</span> failed (<span class="number">101</span>: Network <span class="keyword">is</span> unreachable) <span class="keyword">while</span> connecting <span class="keyword">to</span> upstream, clien<span class="variable">t:</span> AA.BB.CC.DD, server: example.<span class="keyword">com</span>, reques<span class="variable">t:</span> <span class="string">&quot;GET /download/file HTTP/1.0&quot;</span>, upstream: <span class="string">&quot;https://[AAAA:BBBB:C:DDD:E:F:GGG:HHH]:443/download/file&quot;</span>, hos<span class="variable">t:</span> <span class="string">&quot;example.com&quot;</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<figure class="highlight asciidoc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">2019/10/22 15:25:21 [error] 1930#0: *1482670 connect() to [AAAA:BBBB:C:DDD:E:F:GGG:HHH]:443 failed (101: Network is unreachable) while connecting to upstream, client: AA.BB.CC.DD, server: example.com, request: &quot;GET /download/file HTTP/1.0&quot;, upstream: &quot;<span class="link">https://</span>[<span class="string">AAAA:BBBB:C:DDD:E:F:GGG:HHH</span>]:443/download/file&quot;, host: &quot;example.com&quot;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
 
 <p>分析错误日志，应答是nginx尝试连接目标的 IPv6 地址端口时失败，错误<code>101: Network is unreachable</code></p>
 <p>服务器没有IPv6地址，那就禁用nginx的IPv6解析</p>
 <p>禁用IPv6很简单</p>
-<figure class="highlight apache"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="attribute">resolver</span> <span class="number">8.8.8.8</span> ipv<span class="number">6</span>=<span class="literal">off</span>;</span><br></pre></td></tr></table></figure>
+<figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="attribute">resolver</span> <span class="number">8.8.8.8</span> ipv6=<span class="literal">off</span>;</span><br></pre></td></tr></table></figure>
 
     </div>
 
@@ -398,13 +398,13 @@
     <span class="post-meta-item-icon">
       <i class="fa fa-chart-line"></i>
     </span>
-    <span title="站点总字数">112k</span>
+    <span title="站点总字数">113k</span>
   </span>
   <span class="post-meta-item">
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="站点阅读时长">1:42</span>
+    <span title="站点阅读时长">1:43</span>
   </span>
 </div>
 

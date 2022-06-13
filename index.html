@@ -319,9 +319,9 @@
           <h1 id="Install"><a href="#Install" class="headerlink" title="Install"></a>Install</h1><h2 id="环境"><a href="#环境" class="headerlink" title="环境"></a>环境</h2><ul>
 <li>macOS Monterey 12.1</li>
 <li>go1.17.5</li>
-<li>therecipe/qt</li>
-<li>therecipe/env_darwin_amd64_513 (Qt5.13)</li>
-<li>Xcode v13.2 / xcode-select –install</li>
+<li>therecipe&#x2F;qt</li>
+<li>therecipe&#x2F;env_darwin_amd64_513 (Qt5.13)</li>
+<li>Xcode v13.2 &#x2F; xcode-select –install</li>
 </ul>
           <!--noindex-->
             <div class="post-button">
@@ -396,7 +396,7 @@
         <i class="far fa-file-word"></i>
       </span>
       <span class="post-meta-item-text">本文字数：</span>
-      <span>1.5k</span>
+      <span>1.6k</span>
     </span>
     <span class="post-meta-item" title="阅读时长">
       <span class="post-meta-item-icon">
@@ -414,7 +414,7 @@
     
     
     <div class="post-body" itemprop="articleBody">
-          <p>go package “net/http” 无法直接使用 unix 域套接字侦听的服务，会提示，不支持的协议。</p>
+          <p>go package “net&#x2F;http” 无法直接使用 unix 域套接字侦听的服务，会提示，不支持的协议。</p>
 <h1 id="方案"><a href="#方案" class="headerlink" title="方案"></a>方案</h1><ul>
 <li><p>实现自己的 <a target="_blank" rel="noopener" href="https://pkg.go.dev/net/http#RoundTripper">RoundTripper</a> 支持 unix socket 。</p>
 </li>
@@ -611,7 +611,7 @@
 <figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br></pre></td><td class="code"><pre><span class="line">MariaDB [(<span class="keyword">none</span>)]<span class="operator">&gt;</span> <span class="keyword">show</span> variables <span class="keyword">like</span> <span class="string">&#x27;%dir%&#x27;</span>;</span><br><span class="line"><span class="operator">+</span><span class="comment">-----------------------------------------+----------------------------+</span></span><br><span class="line"><span class="operator">|</span> Variable_name                           <span class="operator">|</span> <span class="keyword">Value</span>                      <span class="operator">|</span></span><br><span class="line"><span class="operator">+</span><span class="comment">-----------------------------------------+----------------------------+</span></span><br><span class="line"><span class="operator">|</span> aria_sync_log_dir                       <span class="operator">|</span> NEWFILE                    <span class="operator">|</span></span><br><span class="line"><span class="operator">|</span> basedir                                 <span class="operator">|</span> <span class="operator">/</span>usr<span class="operator">/</span>                      <span class="operator">|</span></span><br><span class="line"><span class="operator">|</span> binlog_direct_non_transactional_updates <span class="operator">|</span> OFF                        <span class="operator">|</span></span><br><span class="line"><span class="operator">|</span> character_sets_dir                      <span class="operator">|</span> <span class="operator">/</span>usr<span class="operator">/</span>share<span class="operator">/</span>mysql<span class="operator">/</span>charsets<span class="operator">/</span> <span class="operator">|</span></span><br><span class="line"><span class="operator">|</span> datadir                                 <span class="operator">|</span> <span class="operator">/</span>var<span class="operator">/</span>lib<span class="operator">/</span>mysql             <span class="operator">|</span></span><br><span class="line"><span class="operator">|</span> ignore_db_dirs                          <span class="operator">|</span>                            <span class="operator">|</span></span><br><span class="line"><span class="operator">|</span> innodb_data_home_dir                    <span class="operator">|</span>                            <span class="operator">|</span></span><br><span class="line"><span class="operator">|</span> innodb_log_group_home_dir               <span class="operator">|</span> .<span class="operator">/</span>                         <span class="operator">|</span></span><br><span class="line"><span class="operator">|</span> innodb_max_dirty_pages_pct              <span class="operator">|</span> <span class="number">90.000000</span>                  <span class="operator">|</span></span><br><span class="line"><span class="operator">|</span> innodb_max_dirty_pages_pct_lwm          <span class="operator">|</span> <span class="number">0.000000</span>                   <span class="operator">|</span></span><br><span class="line"><span class="operator">|</span> innodb_tmpdir                           <span class="operator">|</span>                            <span class="operator">|</span></span><br><span class="line"><span class="operator">|</span> innodb_undo_directory                   <span class="operator">|</span> .<span class="operator">/</span>                         <span class="operator">|</span></span><br><span class="line"><span class="operator">|</span> lc_messages_dir                         <span class="operator">|</span>                            <span class="operator">|</span></span><br><span class="line"><span class="operator">|</span> plugin_dir                              <span class="operator">|</span> <span class="operator">/</span>usr<span class="operator">/</span>lib64<span class="operator">/</span>mysql<span class="operator">/</span>plugin<span class="operator">/</span>   <span class="operator">|</span></span><br><span class="line"><span class="operator">|</span> slave_load_tmpdir                       <span class="operator">|</span> <span class="operator">/</span>tmp                       <span class="operator">|</span></span><br><span class="line"><span class="operator">|</span> tmpdir                                  <span class="operator">|</span> <span class="operator">/</span>tmp                       <span class="operator">|</span></span><br><span class="line"><span class="operator">|</span> wsrep_data_home_dir                     <span class="operator">|</span> <span class="operator">/</span>var<span class="operator">/</span>lib<span class="operator">/</span>mysql             <span class="operator">|</span></span><br><span class="line"><span class="operator">|</span> wsrep_dirty_reads                       <span class="operator">|</span> OFF                        <span class="operator">|</span></span><br><span class="line"><span class="operator">+</span><span class="comment">-----------------------------------------+----------------------------+</span></span><br><span class="line"></span><br><span class="line">MariaDB [(<span class="keyword">none</span>)]<span class="operator">&gt;</span> status</span><br><span class="line"><span class="comment">--------------</span></span><br><span class="line">mysql  Ver <span class="number">15.1</span> Distrib <span class="number">10.7</span><span class="number">.1</span><span class="operator">-</span>MariaDB, <span class="keyword">for</span> Linux (x86_64) <span class="keyword">using</span> readline <span class="number">5.1</span></span><br><span class="line"></span><br><span class="line">Connection id:		<span class="number">4</span></span><br><span class="line"><span class="keyword">Current</span> database:</span><br><span class="line"><span class="keyword">Current</span> <span class="keyword">user</span>:		root<span class="variable">@localhost</span></span><br><span class="line">SSL:			<span class="keyword">Not</span> <span class="keyword">in</span> use</span><br><span class="line"><span class="keyword">Current</span> pager:		stdout</span><br><span class="line"><span class="keyword">Using</span> outfile:		<span class="string">&#x27;&#x27;</span></span><br><span class="line"><span class="keyword">Using</span> delimiter:	;</span><br><span class="line">Server:			MariaDB</span><br><span class="line">Server version:		<span class="number">10.7</span><span class="number">.1</span><span class="operator">-</span>MariaDB<span class="operator">-</span>log MariaDB Server</span><br><span class="line">Protocol version:	<span class="number">10</span></span><br><span class="line">Connection:		Localhost via UNIX socket</span><br><span class="line">Server characterset:	utf8mb4</span><br><span class="line">Db     characterset:	utf8mb4</span><br><span class="line">Client characterset:	utf8mb4</span><br><span class="line">Conn.  characterset:	utf8mb4</span><br><span class="line">UNIX socket:		<span class="operator">/</span>var<span class="operator">/</span>lib<span class="operator">/</span>mysql<span class="operator">/</span>mysql.sock</span><br><span class="line">Uptime:			<span class="number">9</span> min <span class="number">2</span> sec</span><br><span class="line"></span><br><span class="line">Threads: <span class="number">2</span>  Questions: <span class="number">5</span>  Slow queries: <span class="number">0</span>  Opens: <span class="number">16</span>  <span class="keyword">Open</span> tables: <span class="number">10</span>  Queries <span class="keyword">per</span> <span class="keyword">second</span> avg: <span class="number">0.009</span></span><br><span class="line"><span class="comment">--------------</span></span><br></pre></td></tr></table></figure>
 
 <blockquote>
-<p>查看 datadir 那一行所指的路径 /var/lib/mysql</p>
+<p>查看 datadir 那一行所指的路径 &#x2F;var&#x2F;lib&#x2F;mysql</p>
 </blockquote>
 <blockquote>
 <p>查看 UNIX socket</p>
@@ -812,10 +812,10 @@
     
     <div class="post-body" itemprop="articleBody">
           <h1 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h1><p>使用 docker 经常会遇到时区问题。<br>基本上都是UTC时间，默认时区为0时区，</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">docker run --name <span class="built_in">test</span> --rm -ti alpine /bin/sh</span><br><span class="line"><span class="comment"># date</span></span><br><span class="line">Mon Jan 11 02:52:18 UTC 2021</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">docker run --name <span class="built_in">test</span> --<span class="built_in">rm</span> -ti alpine /bin/sh</span><br><span class="line"><span class="comment"># date</span></span><br><span class="line">Mon Jan 11 02:52:18 UTC 2021</span><br></pre></td></tr></table></figure>
 
-<p>而我们主要用的是 CST 时间，北京时间，位于东八区。时区代号： Asia/Shanghai</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">docker run --name <span class="built_in">test</span> --rm -ti -v /etc/timezone:/etc/timezone:ro -v /etc/localtime:/etc/localtime:ro alpine /bin/sh</span><br><span class="line"><span class="comment"># date</span></span><br><span class="line">Mon Jan 11 10:53:06 CST 2021</span><br></pre></td></tr></table></figure>
+<p>而我们主要用的是 CST 时间，北京时间，位于东八区。时区代号： Asia&#x2F;Shanghai</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">docker run --name <span class="built_in">test</span> --<span class="built_in">rm</span> -ti -v /etc/timezone:/etc/timezone:ro -v /etc/localtime:/etc/localtime:ro alpine /bin/sh</span><br><span class="line"><span class="comment"># date</span></span><br><span class="line">Mon Jan 11 10:53:06 CST 2021</span><br></pre></td></tr></table></figure>
 
 <p>下面汇总几个方案：</p>
           <!--noindex-->
@@ -1112,7 +1112,7 @@
     
     
     <div class="post-body" itemprop="articleBody">
-          <h1 id="Supervisor简单介绍"><a href="#Supervisor简单介绍" class="headerlink" title="Supervisor简单介绍"></a>Supervisor简单介绍</h1><p>supervisor是一个 Client/Server模式的系统，允许用户在类unix操作系统上监视和控制多个进程，或者可以说是多个程序。supervisor与launchd，daemontools，runit等程序有着相同的功能，与其中某些程序不同的是，它并不作为“id 为 1的进程”而替代init。相反，它用于控制应用程序，像启动其它程序一样，通俗理解就是，把Supervisor服务管理的进程程序，它们作为supervisor的子进程来运行，而supervisor是父进程。supervisor来监控管理子进程的启动关闭和异常退出后的自动启动。</p>
+          <h1 id="Supervisor简单介绍"><a href="#Supervisor简单介绍" class="headerlink" title="Supervisor简单介绍"></a>Supervisor简单介绍</h1><p>supervisor是一个 Client&#x2F;Server模式的系统，允许用户在类unix操作系统上监视和控制多个进程，或者可以说是多个程序。supervisor与launchd，daemontools，runit等程序有着相同的功能，与其中某些程序不同的是，它并不作为“id 为 1的进程”而替代init。相反，它用于控制应用程序，像启动其它程序一样，通俗理解就是，把Supervisor服务管理的进程程序，它们作为supervisor的子进程来运行，而supervisor是父进程。supervisor来监控管理子进程的启动关闭和异常退出后的自动启动。</p>
 <p>至于为什么要用supervisor来管理进程，是因为相对于linux传统的进程管理(即系统自带的init 进程管理)方式来说，它有很多的优势：</p>
           <!--noindex-->
             <div class="post-button">
@@ -1193,7 +1193,7 @@
         <i class="far fa-file-word"></i>
       </span>
       <span class="post-meta-item-text">本文字数：</span>
-      <span>359</span>
+      <span>374</span>
     </span>
     <span class="post-meta-item" title="阅读时长">
       <span class="post-meta-item-icon">
@@ -1265,13 +1265,13 @@
     <span class="post-meta-item-icon">
       <i class="fa fa-chart-line"></i>
     </span>
-    <span title="站点总字数">112k</span>
+    <span title="站点总字数">113k</span>
   </span>
   <span class="post-meta-item">
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="站点阅读时长">1:42</span>
+    <span title="站点阅读时长">1:43</span>
   </span>
 </div>
 
